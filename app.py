@@ -8,17 +8,17 @@ def home():
 
     return render_template('home.html')
 
-@app.route('/about')
+@app.route('/ConsultaReserva')
 
-def about():
+def ConsultaReserva():
 
-    return render_template("about.html")
+    return render_template("ConsultaReserva.html")
 
-@app.route('/blog')
+@app.route('/Reservas')
 
-def blog():
+def Reservas():
 
-    return render_template("blog.html")
+    return render_template("Reservas.html")
 
 @app.route('/contact')
 
@@ -26,17 +26,17 @@ def contact():
 
     return render_template("contact.html")
 
-@app.route('/gallery')
+@app.route('/Galeria')
 
-def gallery():
+def Galeria():
 
-    return render_template("gallery.html")
+    return render_template("Galeria.html")
 
-@app.route('/room')
+@app.route('/NuestrosHoteles')
 
-def room():
+def NuestrosHoteles():
 
-    return render_template("room.html")
+    return render_template("NuestrosHoteles.html")
 
 if __name__ == "__main__":
     app.run("127.0.0.1", port="8080", debug=True)
