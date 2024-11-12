@@ -48,7 +48,7 @@
                      <div class="full">
                         <div class="center-desk">
                            <div class="logo">
-                              <a href="{{url_for('home')}}"><img src="{{ url_for('static', filename = 'images/logo.png')  }}" alt="#" /></a>
+                              <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename = 'images/logo.png') }}" alt="#" /></a>
                            </div>
                         </div>
                      </div>
@@ -61,22 +61,22 @@
                         <div class="collapse navbar-collapse" id="navbarsExample04">
                            <ul class="navbar-nav mr-auto">
                               <li class="nav-item active">
-                                 <a class="nav-link" href="{{url_for('home')}}">Inicio</a>
+                                 <a class="nav-link" href="{{ url_for('home') }}">Inicio</a>
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('ConsultaReserva')}}">Consulte su Reserva</a>
+                                 <a class="nav-link" href="{{ url_for('NuestrosHoteles') }}">Nuestros Hoteles</a>
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('NuestrosHoteles')}}">Nuestros Hoteles</a>
+                                 <a class="nav-link" href="{{ url_for('Galeria') }}">Galería</a>
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('Galeria')}}">Galería</a>
+                                 <a class="nav-link" href="{{ url_for('Reservas') }}">Reservas</a>                                
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('Reservas')}}">Reservas</a>
+                                 <a class="nav-link" href="{{ url_for('ConsultaReserva') }}">Consulte su Reserva</a>
                               </li>
                               <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('contact')}}">Contáctenos</a>
+                                 <a class="nav-link" href="{{ url_for('contact') }}">Contáctenos</a>
                               </li>
                            </ul>
                         </div>

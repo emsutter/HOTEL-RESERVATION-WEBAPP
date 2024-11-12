@@ -8,23 +8,11 @@ def home():
 
     return render_template('home.html')
 
-@app.route('/ConsultaReserva')
+@app.route('/NuestrosHoteles')
 
-def ConsultaReserva():
+def NuestrosHoteles():
 
-    return render_template("ConsultaReserva.html")
-
-@app.route('/Reservas')
-
-def Reservas():
-
-    return render_template("Reservas.html")
-
-@app.route('/contact')
-
-def contact():
-
-    return render_template("contact.html")
+    return render_template("NuestrosHoteles.html")
 
 @app.route('/Galeria')
 
@@ -32,11 +20,23 @@ def Galeria():
 
     return render_template("Galeria.html")
 
-@app.route('/NuestrosHoteles')
+@app.route('/Reservas')
 
-def NuestrosHoteles():
+def Reservas():
 
-    return render_template("NuestrosHoteles.html")
+    return render_template("Reservas.html")
+
+@app.route('/ConsultaReserva')
+
+def ConsultaReserva():
+
+    return render_template("ConsultaReserva.html")
+
+@app.route('/contact')
+
+def contact():
+
+    return render_template("contact.html")
 
 if __name__ == "__main__":
     app.run("127.0.0.1", port="8080", debug=True)
