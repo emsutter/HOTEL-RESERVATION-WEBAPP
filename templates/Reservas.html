@@ -3,71 +3,117 @@
 {% block title %}Inicio - Mi Página Web{% endblock %}
 
 {% block content %}
-
+   <div class="page-container" style="display: flex; flex-direction: column; height: 100vh;">
       <!-- end header inner -->
       <!-- end header -->
+      <div class="top-half" style="flex: 1;">
         <div class="back_re">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="title">
-                      <h2>Blog</h2>
+                      <h2>HACE TU RESERVA</h2>
+                      <div style="height: 5px;"></div>
                   </div>
                </div>
             </div>
          </div>
       </div>
+   </div>
       <!-- blog -->
-      <div  class="blog">
+   <div class="bottom-half" style="background-color: white; flex: 1;">
+      <div class="back_re">
          <div class="container">
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                    
-                     <p class="margin_0">Lorem Ipsum available, but the majority have suffered </p>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-4">
-                  <div class="blog_box">
-                     <div class="blog_img">
-                        <figure><img src="{{ url_for('static', filename = 'images/blog1.jpg')  }}" alt="#"/></figure>
-                     </div>
-                     <div class="blog_room">
-                        <h3>Bed Room</h3>
-                        <span>The standard chunk </span>
-                        <p>If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generatorsIf you are   </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-4">
-                  <div class="blog_box">
-                     <div class="blog_img">
-                        <figure><img src="{{ url_for('static', filename = 'images/blog2.jpg')  }}"alt="#"/></figure>
-                     </div>
-                     <div class="blog_room">
-                        <h3>Bed Room</h3>
-                        <span>The standard chunk </span>
-                        <p>If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generatorsIf you are   </p>
-                     </div>
-                  </div>
-               </div>
-               <div class="col-md-4">
-                  <div class="blog_box">
-                     <div class="blog_img">
-                        <figure><img src="{{ url_for('static', filename = 'images/blog3.jpg')  }}" alt="#"/></figure>
-                     </div>
-                     <div class="blog_room">
-                        <h3>Bed Room</h3>
-                        <span>The standard chunk </span>
-                        <p>If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generatorsIf you are   </p>
-                     </div>
+                    <p class="margin_0">COMPLETAR LAS INFORMACIONES</p>
                   </div>
                </div>
             </div>
          </div>
       </div>
+   </div>     
+
+      <!--empieza el formulario-->
+      <form action="/submit" method="POST" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+         <!-- nombre -->
+         <div class="form-group">
+         <label for="name">FIRST NAME*：</label>
+         <input type="text" id="name" name="name" required>
+         </div>
+ 
+         <!-- apellido -->
+         <div class="form-group">
+         <label for="last name">LAST NAME*：</label>
+         <input type="last name " id="last name" name="email" required>
+         </div>  
+ 
+         <!-- nacion -->
+         <div class="form-group">
+         <label for="country">NATIONALITY：</label>
+         <select id="country" name="country" required></select>
+         </div>
+ 
+         <!-- correo -->
+         <div class="form-group">
+         <label for="correo">CORREO：</label>
+         <textarea id="correo" name="correo" rows="1" cols="30"required></textarea>
+         </div>
+         <!-- numero de contacto -->
+         <div class="form-group">
+         <label for="numero">CORREO：</label>
+         <textarea id="numero" name="numero" rows="1" cols="30"required ></textarea>
+         </div>
+         <button type="submit">提交</button>
+         <div class="form-group"></div>
+            <label for="pais">NATIONALITY：</label>
+            <select id="pais" name="numero" required>
+               <option value="">Seleccione un país</option>
+               <!-- Países se llenarán aquí -->
+            </select>
+         </div>
+
+         <div class="form-group">
+            <label for="phone">PHONE NUMBER*：</label>
+            <input type="tel" id="phone" name="phone" pattern="^[0-9]{10}$" required placeholder="Ej. 1234567890">
+            <small>Debe ingresar 10 dígitos</small>
+         </div>
+     </form>
+     <script>
+      fetch('https://restcountries.com/v3.1/all')
+          .then(response => response.json())
+          .then(data => {
+            data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+              const select = document.getElementById('country');
+              data.forEach(country => {
+                  const option = document.createElement('option');
+                  option.value = country.name.common;
+                  option.text = country.name.common;
+                  select.appendChild(option);
+              });
+          })
+          .catch(error => console.error('paso error：', error));
+  </script>
+  <script>
+   // Usamos Fetch API para cargar el archivo JSON
+   fetch('/static/codes.json')
+      .then(response => response.json())  // Parseamos el JSON
+      .then(data => {
+         // Obtenemos el elemento select donde se mostrarán los países
+         const select = document.getElementById('country_code');
+         
+         // Iteramos a través de los países en el JSON
+         data.forEach(country => {
+            // Creamos una opción para cada país
+            const option = document.createElement('option');
+            option.value = country.dial_code;  // Usamos el código del país como valor
+            option.text = `${country.name} ${country.dial_code}`;  // Mostramos el nombre del país y su código
+            select.appendChild(option);  // Añadimos la opción al select
+         });
+      })
+      .catch(error => console.error('Error al cargar el archivo JSON:', error));
+   </script>
       <!-- end blog -->
      
       <!--  footer -->
