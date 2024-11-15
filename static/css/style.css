@@ -478,6 +478,24 @@ button {
      float: right;
 }
 
+.about .titlepage .cons_reserva label {
+     position: relative;
+     border-bottom: 2px;
+     margin: auto;
+     font-size: medium;
+     transition: 0.15s ease;
+     color: black;
+}
+
+.about .titlepage .cons_reserva input {
+     width: 50%;
+     height: 30px;
+     color: black;
+     background: white;
+     border-color: black;
+     font-size: small;
+}
+
 .about .titlepage h2 {
      margin-bottom: 35px;
 }

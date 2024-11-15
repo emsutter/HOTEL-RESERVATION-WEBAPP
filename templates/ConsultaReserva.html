@@ -22,13 +22,23 @@
             <div class="row">
                <div class="col-md-5">
                   <div class="titlepage">
-                     <h1>Ingrese su número de reserva:</h1>
-                     <a class="read_more" href="Javascript:void(0)"> Read More</a>
+                     <div class="cons_reserva">
+                        <h1>A continuación, ingrese los datos solicitados</h1>
+                        <br>
+                        <label for="num_reserva">Ingrese su número de reserva:</label>
+                        <form>
+                           <input type="text" id="num_reserva" name="num_reserva">
+                        </form>
+                        <br>
+                        <br>
+                        <a class="read_more" href="Javascript:void(0)"> Contratar una excursión</a>
+                        <a class="read_more" href="Javascript:void(0)"> Cancelar reserva</a>
+                     </div>
                   </div>
                </div>
                <div class="col-md-7">
                   <div class="about_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/about.png')  }}" alt="#"/></figure>
+                     <figure><img src="{{ url_for('static', filename = 'images/singapur.jpg')  }}" alt="#"/></figure>
                   </div>
                </div>
             </div>
