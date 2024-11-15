@@ -14,15 +14,19 @@ def run_query(query, parameters=None):
 
 
 
-def reserva_by_id(id_reserva):
-    """busca una reserva atraves de ID"""
+def Reserva_by_id(id_reserva):
+    """busca una reserva atraves de ID, Devuelve NONE  en caso de que no exista esa reserva   """
     ...
 
-def insertar_reserva(data):
+def Insertar_reserva(data):
     """agrega una reserva a la base de datos, se pasa por parametro """
     ...
 
 
-def borrar_reserva(id_reserva):
-    """elimina la reserva"""
+def Borrar_reserva(id_reserva):
+    """elimina la reserva, devuelve NONE en caso de que no exista la reserva """
     ...
+
+
+def Mostrar_reservas():
+    """muestra todas las reservas a modo de diccionario, si no hay reservas devuelve NONE"""
