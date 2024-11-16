@@ -560,7 +560,8 @@ button {
 }
 
 .our_room .room .room_img figure img {
-     width: 100%;
+     width: 880px;
+     height: 260px;
      transition: all .5s;
 }
 
