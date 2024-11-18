@@ -8,15 +8,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.marma.reservashoteltpcolapinto.databinding.ActivityMainBinding;
+import com.marma.reservashoteltpcolapinto.databinding.ActivityServicioBinding;
 
-public class MainActivity extends AppCompatActivity {
-    private ActivityMainBinding binding;
+public class ServicioActivity extends AppCompatActivity {
+
+    private ActivityServicioBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-
+        binding = ActivityServicioBinding.inflate(getLayoutInflater());
     }
 }
