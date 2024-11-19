@@ -13,10 +13,18 @@ import com.marma.reservashoteltpcolapinto.databinding.ActivityServicioBinding;
 public class ServicioActivity extends AppCompatActivity {
 
     private ActivityServicioBinding binding;
+    private Servicio servicio;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityServicioBinding.inflate(getLayoutInflater());
+        this.binding = ActivityServicioBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        this.servicio = Global.getInstance().servicio;
+        setView();
+    }
+
+    private void setView() {
+        this.binding.nombreServicio.setText(this.servicio.getNombre());
     }
 }

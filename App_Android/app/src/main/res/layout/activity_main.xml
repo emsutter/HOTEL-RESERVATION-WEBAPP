@@ -30,17 +30,19 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="5dp">
-            <LinearLayout
+            <View
+                android:id="@+id/viewServicios"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
                 android:background="@color/secondary"/>
-            <LinearLayout
+            <View
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
                 android:background="@color/white"/>
-            <LinearLayout
+            <View
+                android:id="@+id/viewReservas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
@@ -52,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="55dp">
             <TextView
+                android:id="@+id/servicios"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -67,15 +70,17 @@
                 android:gravity="center"
                 android:layout_marginBottom="4dp"
                 android:src="@drawable/logo"/>
+
             <TextView
+                android:id="@+id/reservas"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:text="Contacto"
                 android:fontFamily="@font/poppins_bold"
-                android:textColor="@color/primary"
                 android:gravity="center"
-                android:textSize="15dp"/>
+                android:text="Reservas"
+                android:textColor="@color/primary"
+                android:textSize="15dp" />
         </LinearLayout>
 
     </LinearLayout>

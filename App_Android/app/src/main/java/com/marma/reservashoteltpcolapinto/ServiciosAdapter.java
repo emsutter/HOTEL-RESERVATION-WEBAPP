@@ -1,11 +1,13 @@
 package com.marma.reservashoteltpcolapinto;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 
@@ -33,21 +35,21 @@ public class ServiciosAdapter extends RecyclerView.Adapter<ServiciosAdapter.VerS
 
     @Override
     public void onBindViewHolder(@NonNull VerServiciosViewHolder holder, int position) {
-        Servicio servicio = filteredServiciosList.get(position); // Usar la lista filtrada
+        Servicio servicio = filteredServiciosList.get(position);
         holder.bind(servicio);
     }
 
 
     @Override
     public int getItemCount() {
-        return filteredServiciosList.size(); // Tamaño de la lista filtrada
+        return filteredServiciosList.size();
     }
 
 
     public void filter(String query) {
         filteredServiciosList.clear();
         if (query.isEmpty()) {
-            filteredServiciosList.addAll(serviciosList); // Mostrar todos
+            filteredServiciosList.addAll(serviciosList);
         } else {
             for (Servicio servicio : serviciosList) {
                 if (servicio.getNombre().toLowerCase().contains(query.toLowerCase())) {
@@ -71,9 +73,15 @@ public class ServiciosAdapter extends RecyclerView.Adapter<ServiciosAdapter.VerS
 
         void bind(Servicio servicio) {
             this.nombre.setText(servicio.getNombre());
-            Glide.with(itemView.getContext())
+            Glide.with(this.itemView.getContext())
                     .load(servicio.getUrlImagen())
                     .into(this.imagen);
+
+            this.itemView.setOnClickListener(v -> {
+                Global.getInstance().servicio = servicio;
+                Intent intent = new Intent(this.itemView.getContext(), ServicioActivity.class);
+                this.itemView.getContext().startActivity(intent);
+            });
         }
     }
 }
