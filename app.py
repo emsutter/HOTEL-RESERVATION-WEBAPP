@@ -38,5 +38,11 @@ def contact():
 
     return render_template("contact.html", endpoint=request.endpoint)
 
+@app.route('/registro')
+
+def registro():
+
+    return render_template("registro.html", endpoint=request.endpoint)
+
 if __name__ == "__main__":
     app.run("127.0.0.1", port="8080", debug=True)

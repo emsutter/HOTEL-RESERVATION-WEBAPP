@@ -623,7 +623,7 @@ button {
 /** end gallery  section **/
 
 
-/** blog section **/
+/** reserva section **/
 
 .blog {
      background: url(../images/blog_bg.jpg);
@@ -700,7 +700,26 @@ button {
 }
 
 
-/** end blog section **/
+.form-group label {
+     position: relative;
+     border-bottom: 2px;
+     margin: auto;
+     font-size: medium;
+     transition: 0.15s ease;
+     color: black;
+}
+
+.form-group input {
+     width: 20%;
+     height: 30px;
+     color: black;
+     background: white;
+     border-color: black;
+     font-size: small;
+}
+
+
+/** end reserva section **/
 
 
 /** contact section **/
@@ -773,6 +792,27 @@ button {
 
 /** end contact section **/
 
+/** register section **/
+
+.register label {
+     position: relative;
+     border-bottom: 2px;
+     margin: auto;
+     font-size: medium;
+     transition: 0.15s ease;
+     color: black;
+}
+
+.register input {
+     width: 50%;
+     height: 30px;
+     color: black;
+     background: white;
+     border-color: black;
+     font-size: small;
+}
+
+/** end register section **/
 
 /** footer **/
 

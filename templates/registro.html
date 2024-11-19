@@ -1,0 +1,71 @@
+{% extends "bloque.html" %}
+
+{% block title %}Inicio - Mi Página Web{% endblock %}
+
+{% block content %}
+        <div class="back_re">
+            <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="title">
+                        <h2>Regístrese</h2>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+        <br>
+      <!--empieza el formulario-->
+      <form action="/submit" method="POST" style="display: grid; grid-template-columns: 1fr fr; gap: 20px;">
+         <!-- nombre -->
+         <div class="register">
+         <label for="name">Mail*：</label>
+         <input type="text" id="mail" name="mail" required>
+         </div>
+ 
+         <!-- apellido -->
+         <div class="register">
+         <label for="nombre">Nombre y Apellido*：</label>
+         <input type="text" id="nombre" name="nombre y apellido" required>
+         </div>  
+ 
+        <div style="grid-column: span 2;text-align: center;justify-content: center">
+            <button type="submit" style="padding: 30px 40px;">Registrarse</button>
+        </div>
+
+     </form>
+     <script>
+      fetch('https://restcountries.com/v3.1/all')
+          .then(response => response.json())
+          .then(data => {
+            data.sort((a, b) => a.name.common.localeCompare(b.name.common));
+              const select = document.getElementById('country');
+              data.forEach(country => {
+                  const option = document.createElement('option');
+                  option.value = country.name.common;
+                  option.text = country.name.common;
+                  select.appendChild(option);
+              });
+          })
+          .catch(error => console.error('paso error：', error));
+      </script>
+      <script>
+   // Cargar códigos de país desde el archivo JSON (para el código de teléfono)
+         fetch('/static/codes.json')
+          .then(response => response.json())
+         .then(data => {
+           const select = document.getElementById('country_code');
+           data.forEach(country => {
+               const option = document.createElement('option');
+               option.value = country.dial_code;
+               option.text = `${country.name} (${country.dial_code})`;
+               select.appendChild(option);
+           });
+         })
+         .catch(error => console.error('Error al cargar el archivo JSON:', error));
+      </script>
+      <!-- end blog -->
+     
+      <!--  footer -->
+      {% endblock %}	
+</html>

@@ -72,10 +72,13 @@
                                  <a class="nav-link" href="{{ url_for('Reservas') }}">Reservar</a>                                
                               </li>
                               <li class="nav-item {% if endpoint == 'ConsultaReserva' %}active{% endif %}">
-                                 <a class="nav-link", href="{{ url_for('ConsultaReserva') }}">Tus Reservas</a>
+                                 <a class="nav-link", href="{{ url_for('ConsultaReserva') }}">Sus Reservas</a>
                               </li>
                               <li class="nav-item {% if endpoint == 'contact' %}active{% endif %}">
                                  <a class="nav-link" href="{{ url_for('contact') }}">Contáctenos</a>
+                              </li>
+                              <li class="nav-item {% if endpoint == 'registro' %}active{% endif %}">
+                                 <a class="nav-link" href="{{ url_for('registro') }}">Registrarse</a>
                               </li>
                            </ul>
                         </div>
@@ -99,12 +102,12 @@
                     <ul class="conta">
                        <li><i class="fa fa-map-marker" aria-hidden="true"></i> Dirección</li>
                        <li><i class="fa fa-mobile" aria-hidden="true"></i> +01 1234569540</li>
-                       <li> <i class="fa fa-envelope" aria-hidden="true"></i><a href="#"> demo@gmail.com</a></li>
+                       <li> <i class="fa fa-envelope" aria-hidden="true"></i><a href="#"> Continental@gmail.com</a></li>
                     </ul>
                  </div>
                  <div class=" col-md-4">
                  </div>
-                 <div class="col-md-4">
+                 <div class="col-md-5">
                     <h3>Links</h3>
                     <ul class="link_menu">
                        <li class="active"><a href="#">Inicio</a></li>
@@ -113,6 +116,7 @@
                        <li><a href="{{url_for('Reservas')}}">Reservas</a></li>
                        <li><a href="{{url_for('ConsultaReserva')}}">Consulte su reserva</a></li>
                        <li><a href="{{url_for('contact')}}">Contáctanos</a></li>
+                       <li><a href="{{url_for('registro')}}">Registrarse</a></li>
                     </ul>
                  </div>
               </div>
