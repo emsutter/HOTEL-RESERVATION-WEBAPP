@@ -3,29 +3,27 @@ import consultas
 
 app = Flask(__name__)
 
-API_URL = 'http://127.0.0.1:5000'
 
-@app.route('/cliente_reserva', methods = ["GET", "POST"])
+def metodo_post(funcion):
 
-def cliente_reserva():
-    """recibe el post del form de reserva y envia 
-    un post a la base de datos donde crea la reserva"""
-
+    """recibe los datos enviados desde el app.py del front y maneja los casos de tipo POST, en los cuales hay que agregar datos en la base de datos. 
+    Como agregando un usuario o una reserva"""
+     
     if request.method == "POST":
         try:
 
-            reserva = request.get_json()
-            datos_necesarios = []
+            respuesta = request.get_json()
+            
 
-            for variables in reserva:
+            for variables in respuesta:
                 
-                if reserva[variables] == "":
+                if respuesta[variables] == "":
                     
                     return jsonify({"error": "Datos incompletos, asegúrate de enviar todo" }), 400
 
-            consultas.insertar_reserva(reserva)
+            funcion(respuesta)
 
-            return jsonify({"mensaje": "Reserva creada correctamente"}), 202
+            return jsonify({"mensaje": "se ha  creado correctamente"}), 202
         
         except Exception as e:
             return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500 
@@ -33,61 +31,77 @@ def cliente_reserva():
     
     return jsonify({"error": "no se envio el cuestionario"}), 405
 
+def metodo_get(funcion, id):
+    """maneja los casos de tipo GET y DELETE, buscando la informacion que se necesita de la base de datos o elminando la reserva especificada """
+    try:
+        
+        data = funcion(id)
+
+        if data is not None:
+
+            if data ==  True:
+                return jsonify({"mensaje": "Reserva eliminada correctamente"}), 200
+            
+            else:
+                return jsonify(data), 200
+            
+        else:
+            return jsonify({"error": "Reserva no encontrada"}), 404
+        
+    except Exception as e:
+            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500 
+
+    
+
+@app.route('/cliente_reserva', methods = ["POST"])
+
+def cliente_reserva():
+    """llama a la funcion metodo post para agregar una reserva en la base de datos"""
+
+    return metodo_post(consultas.Insertar_reserva)
+
 
 @app.route('/consultar_reserva/<int:id>', methods = ["GET"])
 
 def consultar_reserva(id):
-    """consulta reserva por ID de reserva"""
+    """recibe el id de reserva enviado desde el app.py del front
+    y llama a la funcion metodo get para consultasr reserva por ID de reserva"""
 
-    if request.method == "GET":
-        try:
-            
-            reserva = consultas.reserva_by_id(id)
+    return metodo_get(consultas.Reserva_by_id, id)
 
-            if not reserva:
-                return jsonify({"error": "la reserva ingresada no existe"}), 404
-            
 
-            return jsonify(reserva), 200
-        
-        except Exception as e:
-            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
 
 @app.route('/eliminar_reserva/<int:id>', methods = ["DELETE"])
 
 def eliminar_reserva(id):
+    """recibe el id de reserva enviado desde el app.py del front
+    y llama a la funcion metodo get para eliminar la reserva por ID de reserva"""
 
-        """elimina una reserva por su ID"""
+    return metodo_get(consultas.Borrar_reserva, id)
 
-        try:
+     
 
-            reserva = consultas.borrar_reserva(id)
+@app.route('/registrarse', methods = ['POST'])
 
-            if not reserva:
-                return jsonify({"error": "la reserva ingresada no existe"}), 404
-            
-        except Exception as e:
-            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
-        
+def registarse():
+    """llama a la funcion metodo post crear un usuario en la base de datos"""
+
+    return metodo_post(consultas.insertar_usuario)
 
 
-@app.route('/mostrar_listado_reservas', methods = ["GET"])
+@app.route('reservas_por_usuario<str:mail>', methods = ["GET"])
 
-def mostrar_listado_reservas():
-    """envia todas las reservas en formato JSON"""
+def reservas_por_usuario(mail):
+    """recibe el mail del usuario enviado desde el app.py del front
+    y llama a la funcion metodo get para mostrar las reservas del usuario"""
 
-    if request.method == "GET":
-        try:
+    return metodo_get(consultas.Reserva_del_usuario, mail)
+    
 
-            reservas = consultas.Mostrar_reservas()
 
-            if not reservas:
-                return jsonify({"error": "No se ha hecho ninguna reserva"}), 404 
 
-            return jsonify(reservas) 
-            
-        except Exception as e:
-            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
+
+
 
             
 
