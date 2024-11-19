@@ -1,12 +1,9 @@
 package com.marma.reservashoteltpcolapinto;
 
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.marma.reservashoteltpcolapinto.databinding.ActivityMainBinding;
 
@@ -17,6 +14,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setUpFragments();
+    }
 
+    private void setUpFragments() {
+        Fragment servicios = new ServiciosFragment();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.add(R.id.fragment_container, servicios, "Servicios");
+        transaction.commit();
     }
 }
