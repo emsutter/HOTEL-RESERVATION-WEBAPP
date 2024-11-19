@@ -1,0 +1,19 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.marma.reservashoteltpcolapinto.app-mergeDebugResources-42:/values-h720dp-v13/values-h720dp-v13.xml",
+            "map": [
+                {
+                    "source": "/Users/marcomasciulli/.gradle/caches/transforms-4/15b1788e7e8451411f3973c9a5032446/transformed/appcompat-1.7.0/res/values-h720dp-v13/values-h720dp-v13.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "66",
+                        "endOffsets": "117"
+                    }
+                }
+            ]
+        }
+    ]
+}

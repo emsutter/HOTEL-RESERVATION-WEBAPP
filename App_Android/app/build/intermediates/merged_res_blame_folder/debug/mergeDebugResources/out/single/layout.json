@@ -1,0 +1,30 @@
+[
+    {
+        "merged": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/item_servicio.xml",
+        "source": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-main-46:/layout/item_servicio.xml"
+    },
+    {
+        "merged": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/activity_iniciar_sesion.xml",
+        "source": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-main-46:/layout/activity_iniciar_sesion.xml"
+    },
+    {
+        "merged": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/fragment_servicios.xml",
+        "source": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-main-46:/layout/fragment_servicios.xml"
+    },
+    {
+        "merged": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/activity_servicio.xml",
+        "source": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-main-46:/layout/activity_servicio.xml"
+    },
+    {
+        "merged": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/activity_main.xml",
+        "source": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-main-46:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/item_servicio.xml",
+        "source": "com.marma.reservashoteltpcolapinto.app-main-46:/layout/item_servicio.xml"
+    },
+    {
+        "merged": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-mergeDebugResources-43:/layout/content_servicio.xml",
+        "source": "/Users/marcomasciulli/.gradle/daemon/8.6/com.marma.reservashoteltpcolapinto.app-main-46:/layout/content_servicio.xml"
+    }
+]
