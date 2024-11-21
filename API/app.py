@@ -98,6 +98,15 @@ def reservas_por_usuario(mail):
     return metodo_get(consultas.Reserva_del_usuario, mail)
     
 
+##que falta
+
+#GET PARA TRAER HOTELES DE LA BASE DE DATOS
+#GET PARA LAS HAITACIONES O PARA TRAER LA PARTE DE GALERIA
+#POST PARA CONTRATAR UN SERVICIO
+#DELETE PARA ELIMINAR UN SERVICIO
+
+
+
 
 
 

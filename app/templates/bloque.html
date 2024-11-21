@@ -8,7 +8,7 @@
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>keto</title>
+      <title>El Continental</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -16,7 +16,6 @@
       <link rel="stylesheet" href="{{ url_for('static', filename = 'css/bootstrap.min.css')  }}">
       <!-- style css -->
       <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')  }}">
-      =
       <!-- Responsive-->
       <link rel="stylesheet" href="{{ url_for('static', filename = 'css/responsive.css')  }}">
       <!-- fevicon -->
@@ -48,7 +47,7 @@
                      <div class="full">
                         <div class="center-desk">
                            <div class="logo">
-                              <a href="{{url_for('index')}}"><img src="images/logo.png" alt="#" /></a>
+                              <a href="{{ url_for('home') }}"><img src="{{ url_for('static', filename = 'images/logo_hotel.png') }}" alt="#" /></a>
                            </div>
                         </div>
                      </div>
@@ -60,23 +59,23 @@
                         </button>
                         <div class="collapse navbar-collapse" id="navbarsExample04">
                            <ul class="navbar-nav mr-auto">
-                              <li class="nav-item active">
-                                 <a class="nav-link" href="{{url_for('index')}}">Home</a>
+                              <li class="nav-item {% if endpoint == 'home' %}active{% endif %}">
+                                 <a class="nav-link" href="{{ url_for('home') }}">Inicio</a>
                               </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('about')}}">About</a>
+                              <li class="nav-item {% if endpoint == 'NuestrosHoteles' %}active{% endif %}">
+                                 <a class="nav-link" href="{{ url_for('NuestrosHoteles') }}">Sucursales</a>
                               </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('room')}}">Our room</a>
+                              <li class="nav-item {% if endpoint == 'Galeria' %}active{% endif %}">
+                                 <a class="nav-link" href="{{ url_for('Galeria') }}">Galería</a>
                               </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('gallery')}}">Gallery</a>
+                              <li class="nav-item {% if endpoint == 'Reservas' %}active{% endif %}">
+                                 <a class="nav-link" href="{{ url_for('Reservas') }}">Reservar</a>                                
                               </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('blog')}}">Blog</a>
+                              <li class="nav-item {% if endpoint == 'ConsultaReserva' %}active{% endif %}">
+                                 <a class="nav-link", href="{{ url_for('ConsultaReserva') }}">Tus Reservas</a>
                               </li>
-                              <li class="nav-item">
-                                 <a class="nav-link" href="{{url_for('contact')}}">Contact Us</a>
+                              <li class="nav-item {% if endpoint == 'contact' %}active{% endif %}">
+                                 <a class="nav-link" href="{{ url_for('contact') }}">Contáctenos</a>
                               </li>
                            </ul>
                         </div>
@@ -96,51 +95,25 @@
            <div class="container">
               <div class="row">
                  <div class=" col-md-4">
-                    <h3>Contact US</h3>
+                    <h3>Contactanos</h3>
                     <ul class="conta">
-                       <li><i class="fa fa-map-marker" aria-hidden="true"></i> Address</li>
+                       <li><i class="fa fa-map-marker" aria-hidden="true"></i> Dirección</li>
                        <li><i class="fa fa-mobile" aria-hidden="true"></i> +01 1234569540</li>
                        <li> <i class="fa fa-envelope" aria-hidden="true"></i><a href="#"> demo@gmail.com</a></li>
                     </ul>
                  </div>
+                 <div class=" col-md-4">
+                 </div>
                  <div class="col-md-4">
-                    <h3>Menu Link</h3>
+                    <h3>Links</h3>
                     <ul class="link_menu">
-                       <li class="active"><a href="#">Home</a></li>
-                       <li><a href="{{url_for('about')}}"> about</a></li>
-                       <li><a href="{{url_for('room')}}">Our Room</a></li>
-                       <li><a href="{{url_for('gallery')}}">Gallery</a></li>
-                       <li><a href="{{url_for('blog')}}">Blog</a></li>
-                       <li><a href="{{url_for('contact')}}">Contact Us</a></li>
+                       <li class="active"><a href="#">Inicio</a></li>
+                       <li><a href="{{url_for('NuestrosHoteles')}}">Nuestros Hoteles</a></li>
+                       <li><a href="{{url_for('Galeria')}}">Galería</a></li>
+                       <li><a href="{{url_for('Reservas')}}">Reservas</a></li>
+                       <li><a href="{{url_for('ConsultaReserva')}}">Consulte su reserva</a></li>
+                       <li><a href="{{url_for('contact')}}">Contáctanos</a></li>
                     </ul>
-                 </div>
-                 <div class="col-md-4">
-                    <h3>News letter</h3>
-                    <form class="bottom_form">
-                       <input class="enter" placeholder="Enter your email" type="text" name="Enter your email">
-                       <button class="sub_btn">subscribe</button>
-                    </form>
-                    <ul class="social_icon">
-                       <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                       <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                       <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-                       <li><a href="#"><i class="fa fa-youtube-play" aria-hidden="true"></i></a></li>
-                    </ul>
-                 </div>
-              </div>
-           </div>
-           <div class="copyright">
-              <div class="container">
-                 <div class="row">
-                    <div class="col-md-10 offset-md-1">
-                       
-                       <p>
-                       © 2019 All Rights Reserved. Design by <a href="https://html.design/"> Free Html Templates</a>
-                       <br><br>
-                       Distributed by <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-                       </p>
-
-                    </div>
                  </div>
               </div>
            </div>

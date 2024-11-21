@@ -10,7 +10,7 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="title">
-                     <h2>About Us</h2>
+                     <h2>Consulte su reserva</h2>
                   </div>
                </div>
             </div>
@@ -22,14 +22,23 @@
             <div class="row">
                <div class="col-md-5">
                   <div class="titlepage">
-                    
-                     <p class="margin_0">The passage experienced a surge in popularity during the 1960s when Letraset used it on their dry-transfer sheets, and again during the 90s as desktop publishers bundled the text with their software. Today it's seen all around the web; on templates, websites, and stock designs. Use our generator to get your own, or read on for the authoritative history of lorem ipsum. </p>
-                     <a class="read_more" href="Javascript:void(0)"> Read More</a>
+                     <div class="cons_reserva">
+                        <h1>A continuación, ingrese los datos solicitados</h1>
+                        <br>
+                        <label for="num_reserva">Ingrese su número de reserva:</label>
+                        <form>
+                           <input type="text" id="num_reserva" name="num_reserva">
+                        </form>
+                        <br>
+                        <br>
+                        <a class="read_more" href="Javascript:void(0)"> Contratar una excursión</a>
+                        <a class="read_more" href="Javascript:void(0)"> Cancelar reserva</a>
+                     </div>
                   </div>
                </div>
                <div class="col-md-7">
                   <div class="about_img">
-                     <figure><img src="images/about.png" alt="#"/></figure>
+                     <figure><img src="{{ url_for('static', filename = 'images/singapur.jpg')  }}" alt="#"/></figure>
                   </div>
                </div>
             </div>

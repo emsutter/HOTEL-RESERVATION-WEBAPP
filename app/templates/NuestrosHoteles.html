@@ -1,0 +1,127 @@
+{% extends "bloque.html" %}
+
+{% block title %}Inicio - Mi Página Web{% endblock %}
+
+{% block content %}
+      <!-- end header inner -->
+      <!-- end header -->
+      <div class="back_re">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="title">
+                     <h2>Nuestros Hoteles</h2>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- our_room -->
+      <div  class="our_room">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="titlepage">
+                     <p  class="margin_0">A continuación puede ver nuestros hoteles</p>
+                  </div>
+               </div>
+            </div>
+            <div class="row">
+               <div class="col-md-4 col-sm-6">
+                  <div id="serv_hover"  class="room">
+                     <div class="room_img">
+                        <figure><img src="{{ url_for('static', filename = 'images/paris.jpg')  }}" alt="#" width="150" height="150"/></figure>
+                     </div>
+                     <div class="bed_room">
+                        <h3>París</h3>
+                        <p>Hotel en el centro parisino con espectacular vista a la Torre Eiffel y vía directa al arco del triunfo</p>
+                        <a href="https://www.google.com/maps/place/Pullman+Paris+Tour+Eiffel/@48.8556488,2.2928584,15z/data=!4m10!3m9!1s0x47e6702219eadc43:0xb7764685dcef7ac5!5m3!1s2025-05-04!4m1!1i2!8m2!3d48.8556488!4d2.2928584!16s%2Fg%2F1tgs07dt?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" target="_blank">Ver ubicación</a>
+                        <p>
+                           <img src="{{ url_for('static', filename = 'images/icono_telefono.jpg')  }}" alt="Icono" height="18" width="18">+33 775 552 967
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-6">
+                  <div id="serv_hover"  class="room">
+                     <div class="room_img">
+                        <figure><img src="{{ url_for('static', filename = 'images/berlin.jpg')  }}" alt="#" width="150" height="150"/></figure>
+                     </div>
+                     <div class="bed_room">
+                        <h3>Berlín</h3>
+                        <p>Hotel en el centro de la capital Alemana, a escasos metros del museo Classic Remise de Berlín, un museo de autos de todo tipo</p>
+                        <a href="https://www.google.com/maps/place/Hotel+Adlon+Kempinski+Berlin/@52.5160431,13.3799442,15z/data=!4m2!3m1!1s0x0:0x19e4dfebf31b7ed9?sa=X&ved=1t:2428&ictx=111" target="_blank">Ver ubicación</a>
+                        <p>
+                           <img src="{{ url_for('static', filename = 'images/icono_telefono.jpg')  }}" alt="Icono" height="18" width="18">+49 172 555 7372
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-6">
+                  <div id="serv_hover"  class="room">
+                     <div class="room_img">
+                        <figure><img src="{{ url_for('static', filename = 'images/dubai.jpg')  }}" alt="#" width="150" height="150"/></figure>
+                     </div>
+                     <div class="bed_room">
+                        <h3>Dubai</h3>
+                        <p>Este lujoso hotel en los Emiratos Arabes Unidos, posee el skybar mas famoso del hemisferio norte</p>
+                        <a href="https://www.google.com/maps/place/Burj+Al+Arab/@25.1411914,55.1852468,15z/data=!4m10!3m9!1s0x3e5f6a576414cf2d:0xb3da71b879f0e038!5m3!1s2025-05-04!4m1!1i2!8m2!3d25.1411914!4d55.1852468!16zL20vMDJtem05?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" target="_blank">Ver ubicación</a>
+                        <p>
+                           <img src="{{ url_for('static', filename = 'images/icono_telefono.jpg')  }}" alt="Icono" height="18" width="18">+971 585 554 594
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-6">
+                  <div id="serv_hover"  class="room">
+                     <div class="room_img">
+                        <figure><img src="{{ url_for('static', filename = 'images/buenosaires.jpg')  }}" alt="#" width="150" height="150"/></figure>
+                     </div>
+                     <div class="bed_room">
+                        <h3>Buenos Aires</h3>
+                        <p>Situado en Puerto Madero, se encuentra nuestro Hotel Faena, el mas exclusivo de toda América del Sur</p>
+                        <a href="https://www.google.com/maps/place/Hotel+Faena/@-34.6139869,-58.3617792,15z/data=!4m2!3m1!1s0x0:0xdb7e986debba8d17?sa=X&ved=1t:2428&ictx=111" target="_blank">Ver ubicación</a>
+                        <p>
+                           <img src="{{ url_for('static', filename = 'images/icono_telefono.jpg')  }}" alt="Icono" height="18" width="18">+54 11 5554 5545
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-6">
+                  <div id="serv_hover"  class="room">
+                     <div class="room_img">
+                        <figure><img src="{{ url_for('static', filename = 'images/singapur.jpg')  }}" alt="#" width="150" height="150"/></figure>
+                     </div>
+                     <div class="bed_room">
+                        <h3>Singapur</h3>
+                        <p>Precioso hotel con vistas al océano pacífico. En el último piso cuenta con restaurant y una piscina olímpica</p>
+                        <a href="https://www.google.com/maps/place/V+Hotel+Lavender/@1.3079973,103.8627806,15z/data=!4m9!3m8!1s0x31da19ca075e41cf:0xc1b5e2e2e33067b6!5m2!4m1!1i2!8m2!3d1.3079973!4d103.8627806!16s%2Fg%2F1tj502_c?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" target="_blank">Ver ubicación</a>
+                        <p>
+                           <img src="{{ url_for('static', filename = 'images/icono_telefono.jpg')  }}" alt="Icono" height="18" width="18">+65 955 581 13
+                        </p>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-4 col-sm-6">
+                  <div id="serv_hover"  class="room">
+                     <div class="room_img">
+                        <figure><img src="{{ url_for('static', filename = 'images/suiza.jpg')  }}" alt="#" width="150" height="150"/></figure>
+                     </div>
+                     <div class="bed_room">
+                        <h3>Suiza</h3>
+                        <p>Conozca nuestro hotel a los píes de los Alpes Suizos, y disfrute de las actividades de invierno como el sky</p>
+                        <a href="https://www.google.com/maps/place/Hotel+Walther+Pontresina/@46.4877374,9.9075906,15z/data=!4m9!3m8!1s0x47837c09f54f088f:0xa7abc47482d0af16!5m2!4m1!1i2!8m2!3d46.4877374!4d9.9075906!16s%2Fg%2F11g_6x7r2?entry=ttu&g_ep=EgoyMDI0MTExMy4xIKXMDSoASAFQAw%3D%3D" target="_blank">Ver ubicación</a>
+                        <p>
+                           <img src="{{ url_for('static', filename = 'images/icono_telefono.jpg')  }}" alt="Icono" height="18" width="18">+41 785 557 451
+                        </p>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+      <!-- end our_room -->
+     
+      <!--  footer -->
+      {% endblock %}	
+</html>

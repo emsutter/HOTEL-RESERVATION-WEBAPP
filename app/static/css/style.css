@@ -249,6 +249,11 @@ button {
 
 /*-- header area --*/
 
+.logo {
+     position: relative;
+     top: -10px;
+     width: 110px;
+}
 
 /*--------------------------------------------------------------------- top banner area ---------------------------------------------------------------------*/
 
@@ -473,6 +478,24 @@ button {
      float: right;
 }
 
+.about .titlepage .cons_reserva label {
+     position: relative;
+     border-bottom: 2px;
+     margin: auto;
+     font-size: medium;
+     transition: 0.15s ease;
+     color: black;
+}
+
+.about .titlepage .cons_reserva input {
+     width: 50%;
+     height: 30px;
+     color: black;
+     background: white;
+     border-color: black;
+     font-size: small;
+}
+
 .about .titlepage h2 {
      margin-bottom: 35px;
 }
@@ -537,7 +560,8 @@ button {
 }
 
 .our_room .room .room_img figure img {
-     width: 100%;
+     width: 880px;
+     height: 260px;
      transition: all .5s;
 }
 
@@ -754,9 +778,9 @@ button {
 /** footer **/
 
 .footer {
-     background: #0f1521;
-     margin-top: 90px;
-     padding-top: 60px;
+     background: black;
+     margin-top: 100px;
+     padding-top: 25px;
      text-align: center;
 }
 
@@ -764,18 +788,18 @@ button {
      font-weight: 600;
      font-size: 25px;
      line-height: 24px;
-     text-align: left;
+     text-align: center;
      color: #fff;
      margin-bottom: 15px;
      border-bottom: #ff0909 solid 3px;
      padding-bottom: 3px;
-     display: table;
+     display: center;
 }
 
 ul.conta li {
      color: #fff;
-     text-align: left;
-     padding-bottom: 20px;
+     text-align: center;
+     padding-bottom: 15px;
      font-size: 16px;
 }
 
@@ -791,7 +815,7 @@ ul.conta li a {
 
 ul.link_menu li {
      display: block;
-     text-align: left;
+     text-align: center;
 }
 
 ul.link_menu li.active a {
@@ -800,8 +824,8 @@ ul.link_menu li.active a {
 
 ul.link_menu li a {
      color: #fff;
-     font-size: 17px;
-     line-height: 28px;
+     font-size: 16px;
+     line-height: 24px;
      display: block;
      width: -moz-max-content;
 }
@@ -820,7 +844,7 @@ ul.link_menu li a:hover {
      font-weight: 600;
      font-size: 20px;
      line-height: 25px;
-     text-align: left;
+     text-align: center;
      color: #fff;
      padding-top: 12px;
      margin-right: 93px;
@@ -837,7 +861,7 @@ ul.link_menu li a:hover {
      color: #ccc8c8;
      font-size: 17px;
      font-weight: 300;
-     float: left;
+     float: center;
      margin-bottom: 20px;
 }
 
@@ -863,8 +887,8 @@ ul.link_menu li a:hover {
 ul.social_icon {
      padding-top: 24px;
      width: 100%;
-     float: left;
-     text-align: left;
+     float: center;
+     text-align: center;
 }
 
 ul.social_icon li {
@@ -884,34 +908,6 @@ ul.social_icon li a {
 ul.social_icon li a:hover {
      color: #ff0909;
 }
-
-.copyright {
-     margin-top: 60px;
-     padding-bottom: 20px;
-     background-color: #fff;
-     border: #ff0909 solid 3px;
-     border-right: inherit;
-     border-left: inherit;
-}
-
-.copyright p {
-     color: #000;
-     font-size: 18px;
-     line-height: 22px;
-     text-align: center;
-     border-top: #a3aec6 solid 1px;
-     padding-top: 25px;
-     font-weight: normal;
-}
-
-.copyright a {
-     color: #000;
-}
-
-.copyright a:hover {
-     color: #ff0909;
-}
-
 
 /** end footer **/
 
