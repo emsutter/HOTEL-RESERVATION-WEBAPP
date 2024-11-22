@@ -1,0 +1,25 @@
+Usuario: No hace falta. Debido a que para poder manejar el usuario a traves de toda la aplicacion necesitamos
+variables globales y no tenemos permitido usarlas. 
+Una reserva se puede hacer unicamente ingresando el mail. (y resto de los datos requeridos).
+Luego la reserva se puede consultar con el mail o codigo de reserva (que llegara una vez registre una reserva a su mail)
+
+Ver ubicacion en hoteles como lo manejamos?
+
+Instale -> pipenv install flask mail
+
+Clave api expuesta. Hay que buscar manera de hacer llamado al back y desde ahi traer la info para el map
+
+Hay que: Cambiar nombres y formas de llegar a los html. O comezamos todo en mayuscula, o todo en minuscula.
+
+Verificar email ingresado sea correcto.
+Verificar que las fechas sean validas (Actuales).
+
+Servicios -> Google maps, Flask mail.
+
+Crear gmail para la app.
+Mejorar el mail que se envia.
+
+Tus reservas -> Ingresaria el numero de reserva par ver los detalles. Luego, pondria boton de contrar servicio y canclear reserva.
+
+Footer -> Agregamos nombres y padrones, buscar la manera de que quede estetico.
+
