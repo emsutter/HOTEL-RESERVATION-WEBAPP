@@ -68,17 +68,18 @@ document.addEventListener("DOMContentLoaded", function() {
             alert('Error al agregar el hotel');
         });
     });
-});
 
+    // aca empieza el codigo para deshabilitar hotel
 
-document.addEventListener("DOMContentLoaded", function() {
-    // Add event listener to all deshabilitar buttons
-    document.querySelectorAll('.deshabilitar-hotel-btn').forEach(button => {
-        button.addEventListener('click', function() {
-            const hotelId = this.getAttribute('data-hotel-id');
+    const buttons = document.getElementsByClassName('deshabilitar_hotel_btn')
+    
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function(event) {
+            console.log('click');
+            const hotelId = event.target.dataset.hotelId;
             deshabilitarHotel(hotelId);
         });
-    });
+    }
 });
 
 function deshabilitarHotel(hotelId) {
@@ -89,7 +90,6 @@ function deshabilitarHotel(hotelId) {
         .then(response => {
             if (response.ok) {
                 alert('Hotel deshabilitado correctamente');
-                // Optionally, you can remove the hotel row from the table
                 document.getElementById(`hotel-row-${hotelId}`).remove();
             } else {
                 alert('Hubo un error al deshabilitar el hotel');
@@ -100,7 +100,6 @@ function deshabilitarHotel(hotelId) {
         });
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector('form[action="admin_actions.php"]');
