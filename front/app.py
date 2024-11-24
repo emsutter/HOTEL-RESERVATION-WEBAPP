@@ -47,8 +47,6 @@ def ConsultaReserva():
 def contact():
     return render_template("contact.html", endpoint=request.endpoint)
 
-
-
 @app.route('/admin')
 def admin():
     hoteles = consultas.obtener_hoteles()

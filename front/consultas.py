@@ -32,7 +32,6 @@ def obtener_hoteles():
 def obtener_habitaciones():
     return run_get_all_query(QUERY_OBTENER_HABITACIONES)
 
-
 def obtener_reservas():
     return run_get_all_query(QUERY_OBTENER_RESERVAS)
 
@@ -45,11 +44,8 @@ def obtener_usuarios():
 def obtener_imagenes():
     return run_get_all_query(QUERY_OBTENER_IMAGENES)
 
-
 def obtener_hoteles_con_imagen():
-    hoteles = run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
-    return hoteles
-
+    return run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
 
 QUERY_AGREGAR_HOTEL = "INSERT INTO HOTELES (nombre, descripcion, ubicacion) VALUES (:nombre, :descripcion, :ubicacion)"
 QUERY_AGREGAR_HABITACION = "INSERT INTO HABITACIONES (capacidad, hotel_id) VALUES (:capacidad, :hotel_id)"
@@ -75,8 +71,6 @@ def agregar_hotel(nombre, descripcion, ubicacion):
 def agregar_habitacion(capacidad, hotel_id):
     return run_insert_query(QUERY_AGREGAR_HABITACION, {"capacidad": capacidad, "hotel_id": hotel_id})
 
-
-
 def agregar_reserva(email, ingreso, egreso, hotel_id):
     return run_insert_query(QUERY_AGREGAR_RESERVA, {
         "email": email,
@@ -88,8 +82,8 @@ def agregar_reserva(email, ingreso, egreso, hotel_id):
 def agregar_servicio(nombre, descripcion, url_imagen, ubicacion):
     return run_insert_query(QUERY_AGREGAR_SERVICIO, {"nombre": nombre, "descripcion": descripcion, "url_imagen": url_imagen, "ubicacion": ubicacion})
 
-def agregar_usuario(nombre, email, telefono):
-    return run_insert_query(QUERY_AGREGAR_USUARIO, {"nombre": nombre, "email": email, "telefono": telefono})
+# def agregar_usuario(nombre, email, telefono):
+#     return run_insert_query(QUERY_AGREGAR_USUARIO, {"nombre": nombre, "email": email, "telefono": telefono})
 
 def agregar_imagenes(hotel_id, imagenes):
     for url in imagenes:
@@ -103,33 +97,35 @@ QUERY_ELIMINAR_SERVICIO = "DELETE FROM SERVICIOS WHERE id = :id"
 QUERY_ELIMINAR_USUARIO = "DELETE FROM USUARIOS WHERE id = :id"
 QUERY_ELIMINAR_IMAGEN = "DELETE FROM IMAGENES WHERE id = :id"
 
-
-def eliminar_por_id(query, id):
+def anular_por_id(query, id):
     with Session() as session:
         try:
-            session.execute(text(query), {"id": id})
-            session.commit()
+            # session.execute(text(query), {"id": id})
+            # session.commit()
+            # TODO: Anulate instead of removing
             print(f"Elemento con id {id} eliminado correctamente.")
         except Exception as e:
             session.rollback()
             print(f"Error al eliminar el elemento con id {id}: {str(e)}")
             raise e
+
+# TODO: remake - don't remove elements but anulate them
         
 def eliminar_hotel(id):
-    eliminar_por_id(QUERY_ELIMINAR_HOTEL, id)
+    anular_por_id(QUERY_ELIMINAR_HOTEL, id)
 
 def eliminar_habitacion(id):
-    eliminar_por_id(QUERY_ELIMINAR_HABITACION, id)
+    anular_por_id(QUERY_ELIMINAR_HABITACION, id)
 
 def eliminar_reserva(id):
-    eliminar_por_id(QUERY_ELIMINAR_RESERVA, id)
+    anular_por_id(QUERY_ELIMINAR_RESERVA, id)
 
 def eliminar_servicio(id):
-    eliminar_por_id(QUERY_ELIMINAR_SERVICIO, id)
+    anular_por_id(QUERY_ELIMINAR_SERVICIO, id)
 
 def eliminar_usuario(id):
-    eliminar_por_id(QUERY_ELIMINAR_USUARIO, id)
+    anular_por_id(QUERY_ELIMINAR_USUARIO, id)
 
 def eliminar_imagen(id):
-    eliminar_por_id(QUERY_ELIMINAR_IMAGEN, id)
+    anular_por_id(QUERY_ELIMINAR_IMAGEN, id)
        

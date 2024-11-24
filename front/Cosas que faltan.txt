@@ -3,8 +3,6 @@ variables globales y no tenemos permitido usarlas.
 Una reserva se puede hacer unicamente ingresando el mail. (y resto de los datos requeridos).
 Luego la reserva se puede consultar con el mail o codigo de reserva (que llegara una vez registre una reserva a su mail)
 
-Ver ubicacion en hoteles como lo manejamos?
-
 Instale -> pipenv install flask mail
 
 Clave api expuesta. Hay que buscar manera de hacer llamado al back y desde ahi traer la info para el map
