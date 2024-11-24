@@ -1,3 +1,19 @@
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/get_google_maps_api_key')
+        .then(response => response.json())
+        .then(data => {
+            const apiKey = data.api_key;
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        })
+        .catch(error => {
+            console.error('Error fetching the Google Maps API key:', error);
+        });
+});
+
 function submitReserva(event) {
     event.preventDefault(); // Evitar el envío tradicional del formulario
 
@@ -50,9 +66,9 @@ function submitReserva(event) {
    const egreso = document.getElementById("Egreso").value;
    const hotelId = document.getElementById("hotel_id").value;
 
- 
    if (!email || !ingreso || !egreso || !hotelId) {
        alert("Por favor, completa todos los campos.");
+       console.log(email, ingreso, egreso, hotelId);
        return;
    }
 

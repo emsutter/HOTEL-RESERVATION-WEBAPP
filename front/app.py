@@ -2,7 +2,14 @@ from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import consultas
 from flask_mail import Mail, Message
+from flask_cors import CORS
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
+
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/apc_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -16,6 +23,12 @@ app.config['MAIL_DEFAULT_SENDER'] = 'noreply@argentinaporcolpinto.com'
 
 mail = Mail(app)
 db = SQLAlchemy(app)
+
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
+
+@app.route('/get_google_maps_api_key')
+def get_google_maps_api_key():
+    return jsonify({'api_key': GOOGLE_MAPS_API_KEY})
 
 @app.route('/')
 def home():
