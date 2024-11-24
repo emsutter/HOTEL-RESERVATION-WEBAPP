@@ -21,46 +21,13 @@
          <div class="container">
            
             <div class="row">
+               {% for imagen in imagenes %}
                <div class="col-md-3 col-sm-6">
                   <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery1.jpg')  }}" alt="#"/></figure>
+                     <figure><img src="{{ imagen.url  }}" alt="{{ imagen.id  }}"/></figure>
                   </div>
                </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery2.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery3.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery4.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery5.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery6.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery7.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
-               <div class="col-md-3 col-sm-6">
-                  <div class="gallery_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/gallery8.jpg')  }}" alt="#"/></figure>
-                  </div>
-               </div>
+               {% endfor %}
             </div>
          </div>
       </div>

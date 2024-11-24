@@ -51,6 +51,19 @@ def metodo_get(funcion, id):
     except Exception as e:
             return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500 
 
+
+def get_todos(funcion):
+    """maneja los casos donde hay que traer todo lo que esta en la tabla"""
+
+    try:
+
+        data = funcion()
+
+        return jsonify(data), 200
+    
+    except Exception as e:
+            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
+
     
 
 @app.route('/cliente_reserva', methods = ["POST"])
@@ -97,6 +110,41 @@ def reservas_por_usuario(mail):
 
     return metodo_get(consultas.Reserva_del_usuario, mail)
     
+@app.route('obtener_hoteles', methods = ["GET"] ) 
+
+def obtener_hoteles():
+
+    return get_todos(consultas.obtener_hoteles())
+
+@app.route('obtener_habitaciones', methods = ["GET"] ) 
+
+def obtener_habitaciones():
+
+    return get_todos(consultas.obtener_habitaciones())
+
+
+@app.route('obtener_reservas', methods = ["GET"] ) 
+
+def obtener_reservas():
+
+    return get_todos(consultas.obtener_reservas())
+
+
+@app.route('obtener_servicios', methods = ["GET"] ) 
+
+def obtener_servicios():
+
+    return get_todos(consultas.obtener_servicios())
+
+
+@app.route('obtener_usuarios', methods = ["GET"] ) 
+
+def obtener_usuarios():
+
+    return get_todos(consultas.obtener_usuarios())
+
+
+
 
 ##que falta
 

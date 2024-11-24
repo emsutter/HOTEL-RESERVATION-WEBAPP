@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
+    
+</head>
+<body class="admin">
+    <header class="admin_header">
+        <h1>Panel de Administración</h1>                      
+    </header>
+
+    <main>
+        <section id="hoteles">
+            <h2>Gestión de Hoteles</h2>
+            <form id="form-agregar-hotel">
+                <input type="hidden" name="action" value="add_hotel">
+            
+                <label for="nombre_hotel">Nombre del Hotel:</label>
+                <input type="text" id="nombre_hotel" name="nombre_hotel" required>
+
+                <label for="descripcion_hotel">Descripción:</label>
+                <input type="text" id="descripcion_hotel" name="descripcion_hotel" required>
+
+                <label for="ubicacion_hotel">Ubicación:</label>
+                <input type="text" id="ubicacion_hotel" name="ubicacion_hotel" required>
+            
+                <label for="imagenes_hotel">URLs de las Imágenes del Hotel:</label>
+                <div id="imagenes-container">
+                    
+                </div>
+                <button type="button" id="agregar-imagen">Agregar más imágenes</button>
+                <button type="submit">Agregar Hotel</button>
+            </form>
+
+            <!-- Tabla de Hoteles -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+
+                    </tr>
+                </thead>
+                <tbody id="hoteles-table-body">
+                    {% for hotel in hoteles %}
+                        <tr id="hotel-row-{{ hotel.id }}">
+                            <td>{{ hotel.id }}</td>
+                            <td>{{ hotel.nombre }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </section>
+
+        <!-- Sección Habitaciones -->
+        <section id="habitaciones">
+            <h2>Gestión de Habitaciones</h2>
+            <!-- Formulario para agregar/editar habitación -->
+            <form action="admin_actions.php" method="POST">
+                <input type="hidden" name="action" value="add_habitacion">
+                <label for="capacidad">Capacidad:</label>
+                <input type="number" id="capacidad" name="capacidad" required>
+                <label for="hotel_id">ID del Hotel:</label>
+                <select id="hotel_id" name="hotel_id">
+                    {% for hotel in hoteles %}
+                    <option value="{{ hotel.id }}">{{ hotel.nombre }}</option>
+                    {% endfor %}
+        
+                </select>
+                <button type="submit">Agregar Habitación</button>
+            </form>
+
+            <!-- Tabla de Habitaciones -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Capacidad</th>
+                        <th>Hotel</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for habitacion in habitaciones %}
+                        <tr>
+                            <td>{{ habitacion.habitacion_id }}</td>
+                            <td>{{ habitacion.capacidad }}</td>
+                            <td>{{ habitacion.hotel_id }}</td>
+                        
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        
+        <!-- Sección Servicios -->
+        <section id="servicios">
+            <h2>Gestión de Servicios</h2>
+            <form id="form-agregar-servicio">
+                <input type="hidden" name="action" value="add_servicio">
+
+                <label for="nombre_servicio">Nombre del Servicio:</label>
+                <input type="text" id="nombre_servicio" name="nombre_servicio" required>
+
+                <label for="descripcion_servicio">Descripción:</label>
+                <textarea id="descripcion_servicio" name="descripcion_servicio" required></textarea>
+
+                <label for="url_imagen">URL de Imagen:</label>
+                <input type="text" id="url_imagen" name="url_imagen" required>
+
+                <label for="ubicacion_servicio">Ubicación:</label>
+                <input type="text" id="ubicacion_servicio" name="ubicacion_servicio" required>
+                <button type="submit">Agregar Servicio</button>
+            </form>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                    </tr>
+                </thead>
+                <tbody id="servicios-table-body">
+                    {% for servicio in servicios %}
+                        <tr id="servicio-row-{{ servicio.servicio_id }}">
+                            <td>{{ servicio.servicio_id  }}</td>
+                            <td>{{ servicio.nombre }}</td>
+                            <td>{{ servicio.descripcion }}</td>
+                           
+                        </tr>
+                    {% endfor %}
+                </tbody>
+                
+            </table>
+        </section>
+    </main>
+    <script src=  "{{ url_for('static', filename = 'js/admin.js')  }}"></script>
+</body>
+</html>

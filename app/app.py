@@ -1,7 +1,21 @@
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, jsonify, request, render_template
 import requests
-
+from flask_sqlalchemy import SQLAlchemy
+from flask_mail import Mail, Message
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:Elias100gallinas@@localhost:3306/apc_db'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USE_SSL'] = True
+app.config['MAIL_USERNAME'] = 'marcomasciullidev@gmail.com' 
+app.config['MAIL_PASSWORD'] = 'cisx vxak ezgy htga'
+app.config['MAIL_DEFAULT_SENDER'] = 'noreply@argentinaporcolpinto.com'
+
+mail = Mail(app)
+db = SQLAlchemy(app)
 
 
 API_URL = 'http://127.0.0.1:5000/'
@@ -81,11 +95,15 @@ def consultas_de_reserva(tipo):
    
     return get_informacion(url)
 
+
+
 @app.route('/')
 
 def home():
 
-    return render_template('home.html', endpoint=request.endpoint)
+    imagenes = "..." #consultas obtenerimagenes
+
+    return render_template('home.html', imagenes=imagenes, endpoint=request.endpoint)
 
 @app.route('/NuestrosHoteles')
 
@@ -101,7 +119,7 @@ def NuestrosHoteles():
 
     hoteles = get_informacion(url)
 
-    return render_template("NuestrosHoteles.html", endpoint=hoteles)
+    return render_template("NuestrosHoteles.html", endpoint=".")
 
 @app.route('/Galeria')
 
@@ -116,7 +134,7 @@ def Galeria():
 
     habitaciones = get_informacion(url)
 
-    return render_template("Galeria.html", habitaciones=request.endpoint)
+    return render_template("Galeria.html", imagenes=".")
 
 @app.route('/Reservas')
 
@@ -166,6 +184,18 @@ def registro():
 
     return generacion(url,'...' )
 
+
+#-----------------------------------------------------------------------------------------------
+
+@app.route('/admin')
+def admin():
+    hoteles = "hoteles"
+    habitaciones = "habitaciones"
+    reservas = "reservas"
+    servicios = "servicios"
+    usuarios = "usuarios"#remplazar por la parte de la api
+
+    return render_template('admin.html', hoteles=hoteles, habitaciones=habitaciones, reservas=reservas, servicios=servicios, usuarios=usuarios)
 
 #------------------------------------------------------------------------------------
 
