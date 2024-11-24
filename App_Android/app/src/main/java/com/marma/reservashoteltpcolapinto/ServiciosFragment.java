@@ -16,7 +16,6 @@ import com.marma.reservashoteltpcolapinto.databinding.FragmentServiciosBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class ServiciosFragment extends Fragment {
 
     private FragmentServiciosBinding binding;
