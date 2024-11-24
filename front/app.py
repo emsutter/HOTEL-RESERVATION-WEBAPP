@@ -3,13 +3,10 @@ from flask_sqlalchemy import SQLAlchemy
 import consultas
 from flask_mail import Mail, Message
 from flask_cors import CORS
-<<<<<<< HEAD
 import os
 from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
-=======
->>>>>>> 836bb4953bd8d0601d4dc78125874ba9cedce3cb
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
