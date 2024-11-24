@@ -90,42 +90,81 @@ def agregar_imagenes(hotel_id, imagenes):
         run_insert_query(QUERY_AGREGAR_IMAGEN, {"hotel_id": hotel_id, "url": url})
     
         
-QUERY_ELIMINAR_HOTEL = "DELETE FROM HOTELES WHERE id = :id"
-QUERY_ELIMINAR_HABITACION = "DELETE FROM HABITACIONES WHERE id = :id"
-QUERY_ELIMINAR_RESERVA = "DELETE FROM RESERVAS WHERE id = :id"
-QUERY_ELIMINAR_SERVICIO = "DELETE FROM SERVICIOS WHERE id = :id"
-QUERY_ELIMINAR_USUARIO = "DELETE FROM USUARIOS WHERE id = :id"
-QUERY_ELIMINAR_IMAGEN = "DELETE FROM IMAGENES WHERE id = :id"
+QUERY_DESHABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 0 WHERE hotel_id = :id"
+QUERY_DESHABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 0 WHERE habitacion_id = :id"
+QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE reserva_id = :id"
+QUERY_DESHABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 0 WHERE servicio_id = :id"
+QUERY_DESHABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 0 WHERE usuario_iid = :id"
+QUERY_DESHABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 0 WHERE imagen_id = :id"
 
 def anular_por_id(query, id):
     with Session() as session:
         try:
-            # session.execute(text(query), {"id": id})
-            # session.commit()
+            session.execute(text(query), {"id": id})
+            session.commit()
             # TODO: Anulate instead of removing
-            print(f"Elemento con id {id} eliminado correctamente.")
+            print(f"Elemento con id {id} deshabilitado correctamente.")
         except Exception as e:
             session.rollback()
-            print(f"Error al eliminar el elemento con id {id}: {str(e)}")
+            print(f"Error al deshabilitar el elemento con id {id}: {str(e)}")
             raise e
 
 # TODO: remake - don't remove elements but anulate them
         
-def eliminar_hotel(id):
-    anular_por_id(QUERY_ELIMINAR_HOTEL, id)
+def deshabilitar_hotel(id):
+    anular_por_id(QUERY_DESHABILITAR_HOTEL, id)
 
-def eliminar_habitacion(id):
-    anular_por_id(QUERY_ELIMINAR_HABITACION, id)
+def deshabilitar_habitacion(id):
+    anular_por_id(QUERY_DESHABILITAR_HABITACION, id)
 
-def eliminar_reserva(id):
-    anular_por_id(QUERY_ELIMINAR_RESERVA, id)
+def deshabilitar_reserva(id):
+    anular_por_id(QUERY_DESHABILITAR_RESERVA, id)
 
-def eliminar_servicio(id):
-    anular_por_id(QUERY_ELIMINAR_SERVICIO, id)
+def deshabilitar_servicio(id):
+    anular_por_id(QUERY_DESHABILITAR_SERVICIO, id)
 
-def eliminar_usuario(id):
-    anular_por_id(QUERY_ELIMINAR_USUARIO, id)
+def deshabilitar_usuario(id):
+    anular_por_id(QUERY_DESHABILITAR_USUARIO, id)
 
-def eliminar_imagen(id):
-    anular_por_id(QUERY_ELIMINAR_IMAGEN, id)
-       
+def deshabilitar_imagen(id):
+    anular_por_id(QUERY_DESHABILITAR_IMAGEN, id)
+
+
+QUERY_HABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 1 WHERE hotel_id = :id"
+QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE habitacion_id = :d"
+QUERY_HABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 1 WHERE reserva_id = :id"
+QUERY_HABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 1 WHERE servicio_id = :id"
+QUERY_HABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 1 WHERE usuario_id = :id"
+QUERY_HABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 1 WHERE imagen_id = :id"
+
+def habilitar_por_id(query, id):
+    with Session() as session:
+        try:
+            session.execute(text(query), {"id": id})
+            session.commit()
+            # TODO: Anulate instead of removing
+            print(f"Elemento con id {id} habilitado correctamente.")
+        except Exception as e:
+            session.rollback()
+            print(f"Error al habilitar el elemento con id {id}: {str(e)}")
+            raise e
+
+# TODO: remake - don't remove elements but anulate them
+        
+def habilitar_hotel(id):
+    anular_por_id(QUERY_HABILITAR_HOTEL, id)
+
+def habilitar_habitacion(id):
+    anular_por_id(QUERY_HABILITAR_HABITACION, id)
+
+def habilitar_reserva(id):
+    anular_por_id(QUERY_HABILITAR_RESERVA, id)
+
+def habilitar_servicio(id):
+    anular_por_id(QUERY_HABILITAR_SERVICIO, id)
+
+def habilitar_usuario(id):
+    anular_por_id(QUERY_HABILITAR_USUARIO, id)
+
+def habilitar_imagen(id):
+    anular_por_id(QUERY_HABILITAR_IMAGEN, id)

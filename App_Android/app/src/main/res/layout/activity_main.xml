@@ -42,7 +42,7 @@
                 android:layout_weight="0.8"
                 android:background="@color/white"/>
             <View
-                android:id="@+id/viewReservas"
+                android:id="@+id/view_contratados"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="0.8"
@@ -72,13 +72,13 @@
                 android:src="@drawable/logo"/>
 
             <TextView
-                android:id="@+id/reservas"
+                android:id="@+id/contratados"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:fontFamily="@font/poppins_bold"
                 android:gravity="center"
-                android:text="Reservas"
+                android:text="Contratados"
                 android:textColor="@color/primary"
                 android:textSize="15dp" />
         </LinearLayout>
