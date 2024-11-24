@@ -41,14 +41,15 @@
                     <tr>
                         <th>ID</th>
                         <th>Nombre</th>
-
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="hoteles-table-body">
                     {% for hotel in hoteles %}
-                        <tr id="hotel-row-{{ hotel.id }}">
+                    <tr id="hotel-row-{{ hotel.id }}">
                             <td>{{ hotel.id }}</td>
                             <td>{{ hotel.nombre }}</td>
+                            <td><button class="deshabilitar_hotel">X</button></td>
                         </tr>
                     {% endfor %}
                 </tbody>

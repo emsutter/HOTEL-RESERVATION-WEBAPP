@@ -84,11 +84,11 @@ def agregar_hotel():
         print(f"Error al agregar el hotel: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
-@app.route('/admin/eliminar_hotel/<int:hotel_id>', methods=['DELETE'])
-def eliminar_hotel(hotel_id):
+@app.route('/admin/deshabilitar_hotel/<int:hotel_id>', methods=['DELETE'])
+def deshabilitar_hotel(hotel_id):
     try:
-        consultas.eliminar_hotel(hotel_id)
-        return jsonify({"message": "Hotel eliminado correctamente"}), 200
+        consultas.deshabilitar_hotel(hotel_id)
+        return jsonify({"message": "Hotel deshabilitado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     

@@ -128,4 +128,43 @@ def deshabilitar_usuario(id):
 
 def deshabilitar_imagen(id):
     anular_por_id(QUERY_DESHABILITAR_IMAGEN, id)
-       
+
+
+QUERY_HABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 1 WHERE id = :id"
+QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE id = :id"
+QUERY_HABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 1 WHERE id = :id"
+QUERY_HABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 1 WHERE id = :id"
+QUERY_HABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 1 WHERE id = :id"
+QUERY_HABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 1 WHERE id = :id"
+
+def habilitar_por_id(query, id):
+    with Session() as session:
+        try:
+            session.execute(text(query), {"id": id})
+            session.commit()
+            # TODO: Anulate instead of removing
+            print(f"Elemento con id {id} habilitado correctamente.")
+        except Exception as e:
+            session.rollback()
+            print(f"Error al habilitar el elemento con id {id}: {str(e)}")
+            raise e
+
+# TODO: remake - don't remove elements but anulate them
+        
+def habilitar_hotel(id):
+    anular_por_id(QUERY_HABILITAR_HOTEL, id)
+
+def habilitar_habitacion(id):
+    anular_por_id(QUERY_HABILITAR_HABITACION, id)
+
+def habilitar_reserva(id):
+    anular_por_id(QUERY_HABILITAR_RESERVA, id)
+
+def habilitar_servicio(id):
+    anular_por_id(QUERY_HABILITAR_SERVICIO, id)
+
+def habilitar_usuario(id):
+    anular_por_id(QUERY_HABILITAR_USUARIO, id)
+
+def habilitar_imagen(id):
+    anular_por_id(QUERY_HABILITAR_IMAGEN, id)
