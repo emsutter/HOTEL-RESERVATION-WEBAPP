@@ -6,10 +6,10 @@ from flask_cors import CORS
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env file
+load_dotenv()  # Carga las variables de entorno desde .env
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+CORS(app)  # Activa CORS para todos los endpoints
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/apc_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
