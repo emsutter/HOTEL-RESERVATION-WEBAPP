@@ -78,11 +78,11 @@ DROP TABLE IF EXISTS `IMAGENES`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `IMAGENES` (
-  `imgen_id` int NOT NULL AUTO_INCREMENT,
+  `imagen_id` int NOT NULL AUTO_INCREMENT,
   `hotel_id` int NOT NULL,
   `url` text,
   `habilitado` tinyint(1) NOT NULL DEFAULT TRUE,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`imagen_id`),
   KEY `hotel_id` (`hotel_id`),
   CONSTRAINT `imagenes_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`hotel_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
