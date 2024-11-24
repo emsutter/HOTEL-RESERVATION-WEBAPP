@@ -3,10 +3,13 @@ from flask_sqlalchemy import SQLAlchemy
 import consultas
 from flask_mail import Mail, Message
 from flask_cors import CORS
+<<<<<<< HEAD
 import os
 from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env file
+=======
+>>>>>>> 836bb4953bd8d0601d4dc78125874ba9cedce3cb
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -88,7 +91,7 @@ def agregar_hotel():
             consultas.agregar_imagenes(hotel_id, imagenes)
         
 
-        nuevo_hotel = {"id": hotel_id, "nombre": nombre}
+        nuevo_hotel = {"hotel_id": hotel_id, "nombre": nombre}
         return jsonify({"message": "Hotel agregado correctamente", "hotel": nuevo_hotel}), 201
 
     
@@ -97,11 +100,19 @@ def agregar_hotel():
         print(f"Error al agregar el hotel: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
-@app.route('/admin/eliminar_hotel/<int:hotel_id>', methods=['DELETE'])
-def eliminar_hotel(hotel_id):
+@app.route('/admin/deshabilitar_hotel/<int:hotel_id>', methods=['POST'])
+def deshabilitar_hotel(hotel_id):
     try:
-        consultas.eliminar_hotel(hotel_id)
-        return jsonify({"message": "Hotel eliminado correctamente"}), 200
+        consultas.deshabilitar_hotel(hotel_id)
+        return jsonify({"message": "Hotel deshabilitado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/admin/habilitar_hotel/<int:hotel_id>', methods=['POST'])
+def habilitar_hotel(hotel_id):
+    try:
+        consultas.habilitar_hotel(hotel_id)
+        return jsonify({"message": "Hotel habilitado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     

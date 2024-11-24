@@ -41,13 +41,19 @@ document.addEventListener("DOMContentLoaded", function() {
             
             if (data.hotel) {
                 const hotelesTable = document.getElementById('hoteles-table-body');
+
                 
                 const newRow = document.createElement('tr');
-                newRow.id = `hotel-row-${data.hotel.id}`;
-
+                newRow.id = `hotel-row-${data.hotel.hotel_id }`;
+                // Todo: Al agregar un nuevo hotel se debe poder modificar si esta habilitado o deshabilitado
                 newRow.innerHTML = `
-                    <td>${data.hotel.id}</td>
-                    <td>${data.hotel.nombre}</td>
+                        <td>${data.hotel.hotel_id}</td>
+                        <td>${data.hotel.nombre}</td>
+                        <td>
+                            <button class="toggle-hotel-btn ${habilitadoClass}" data-hotel-id="${data.hotel.hotel_id}">
+                                ${buttonText}
+                            </button>
+                        </td>
                 `;
                 
                 hotelesTable.appendChild(newRow);
@@ -68,30 +74,45 @@ document.addEventListener("DOMContentLoaded", function() {
             alert('Error al agregar el hotel');
         });
     });
+
+    // Aca empieza el codigo para deshabilitar hotel
+
+    const buttons = document.getElementsByClassName('toggle-hotel-btn');
+    
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function(event) {
+            const hotelId = event.target.dataset.hotelId;
+            toggleHotelStatus(hotelId, event.target);
+        });
+    }
 });
 
+function toggleHotelStatus(hotelId, button) {
+    const isDeshabilitado = button.classList.contains('deshabilitado');
+    const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
+    const confirmMessage = isDeshabilitado ? 
+        "¿Estás seguro de que quieres habilitar este hotel?" : 
+        "¿Estás seguro de que quieres deshabilitar este hotel?";
 
-function deleteHotel(hotelId) {
-    if (confirm("¿Estás seguro de que quieres eliminar este hotel?")) {
-        // Enviar una solicitud DELETE a la API para eliminar el hotel
-        fetch(`/admin/eliminar_hotel/${hotelId}`, {
-            method: 'DELETE',
+    if (confirm(confirmMessage)) {
+        fetch(`/admin/${action}_hotel/${hotelId}`, {
+            method: 'POST',
         })
         .then(response => {
             if (response.ok) {
-                alert('Hotel eliminado correctamente');
-                // Opcionalmente, puedes recargar la página o eliminar el hotel de la lista
-                location.reload(); // Recarga la página para actualizar la lista de hoteles
+                alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
+                button.classList.toggle('deshabilitado');
+                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                document.getElementById(`hotel-row-${hotelId}`).classList.toggle('deshabilitado');
             } else {
-                alert('Hubo un error al eliminar el hotel');
+                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
             }
         })
         .catch(error => {
-            alert('Error al eliminar el hotel: ' + error);
+            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
         });
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector('form[action="admin_actions.php"]');

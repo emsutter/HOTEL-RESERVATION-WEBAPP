@@ -21,3 +21,5 @@ Tus reservas -> Ingresaria el numero de reserva par ver los detalles. Luego, pon
 
 Footer -> Agregamos nombres y padrones, buscar la manera de que quede estetico.
 
+
+Al agregar un nuevo hotel se debe poder modificar si esta habilitado o deshabilitado

@@ -37,21 +37,25 @@ public class ServiciosFragment extends Fragment {
     }
 
     private void initUI() {
-        List<Servicio> serviciosList = new ArrayList<>();
+        List<Categoria> categorias = new ArrayList<>();
 
         String url = "https://media.istockphoto.com/id/1324283285/es/foto/ciervos-mulos-de-las-montañas-rocosas-vadeando-en-el-lago-al-atardecer.jpg?s=612x612&w=0&k=20&c=Lv8KwJTep66Dt4mwYphQHQBJkzlVTeO28ixb5h6fa4s=";
         String nombre = "Excursiones";
-        serviciosList.add(new Servicio(url, nombre));
+        Categoria categoria1 = new Categoria(nombre, url);
+        categoria1.addSerivicio(new Servicio("Montana", "Una descripcion", url, "Tucumán 451, C1049 Cdad. Autónoma de Buenos Aires", true));
+        categoria1.addSerivicio(new Servicio("Lago", "Una descripcion", url, "Tucumán 451, C1049 Cdad. Autónoma de Buenos Aires", true));
+        categoria1.addSerivicio(new Servicio("Museo", "Una descripcion", url, "Tucumán 451, C1049 Cdad. Autónoma de Buenos Aires", true));
+        categorias.add(categoria1);
 
         url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8qCH2yT7EYH-DZPXPWiSoSZKAdb_q6xY9Qg&s";
         nombre = "spa";
-        serviciosList.add(new Servicio(url, nombre));
+        categorias.add(new Categoria(nombre, url));
 
         url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR_Nr0WT6H41xKTW3D_-ZJzQm0eyBxEVq4SPw&s";
         nombre = "pileta";
-        serviciosList.add(new Servicio(url, nombre));
+        categorias.add(new Categoria(nombre, url));
 
-        ServiciosAdapter adapter = new ServiciosAdapter(serviciosList);
+        Adapter adapter = new Adapter(categorias);
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
