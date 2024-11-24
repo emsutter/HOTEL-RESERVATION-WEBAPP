@@ -1,0 +1,63 @@
+{% extends "bloque.html" %}
+
+{% block title %}Inicio - Mi Página Web{% endblock %}
+
+{% block content %}
+   <div class="page-container" style="display: flex; flex-direction: column; height: 100vh;">
+      <div class="top-half" style="flex: 2;">
+        <div class="back_re">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-12">
+                  <div class="title">
+                      <h2>HACE TU RESERVA</h2>
+                      <div style="height: 5px;"></div>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+   <div class="row">
+      <div class="col-md-6">
+         <form id="request" class="main_form" onsubmit="submitReserva(event)">
+            <div class="row">
+               <div class="col-md-12">
+                  <input class="contactus" placeholder="Email" type="email" name="Email" id="Email"> 
+               </div>
+               <div class="col-md-12">
+                  <input class="contactus" placeholder="Fecha de ingreso" type="date" id="Ingreso" name="Ingreso">                          
+               </div>
+               <div class="col-md-12">
+                  <input class="contactus" placeholder="Fecha de egreso" type="date" id="Egreso" name="Egreso">                          
+               </div>
+               <div class="col-md-12">
+                  <select class="contactus" id="hotel_id" name="hotel_id">
+                     <option value="" disabled {% if hotel_id is none %}selected{% endif %}>Selecciona un hotel</option>
+                     {% for hotel in hoteles %}
+                         <option value="{{ hotel.id }}" data-ubicacion="{{ hotel.ubicacion }}"
+                             {% if hotel.id == hotel_id %}selected{% endif %}>
+                             {{ hotel.nombre }}
+                         </option>
+                     {% endfor %}
+                 </select>
+               </div>
+               <div class="col-md-12">
+                  <button class="send_btn" type="submit">Enviar</button>
+               </div>
+            </div>
+         </form>
+      </div>
+      <div class="col-md-6 padding-top">
+         <div id="map" style="width: 100%; height: 100%;"></div>
+      </div>
+   </div>
+           
+
+   <script src="{{ url_for('static', filename = 'js/reservas.js') }}"></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSfQgPP5Nt20kWRzgOqmxFN2bIKWpvFOc&callback=initMap" async defer></script>
+   <script src="{{ url_for('static', filename = 'js/google-map.js') }}">
+    
+   </script>
+   
+{% endblock %}	
