@@ -29,7 +29,7 @@ CREATE TABLE `HABITACIONES` (
   `habilitado` tinyint(1) NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`habitacion_id`),
   KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `HABITACIONES_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`id`)
+  CONSTRAINT `HABITACIONES_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`hotel_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -84,7 +84,7 @@ CREATE TABLE `IMAGENES` (
   `habilitado` tinyint(1) NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`id`),
   KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `imagenes_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`id`) ON DELETE CASCADE
+  CONSTRAINT `imagenes_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`hotel_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -114,7 +114,7 @@ CREATE TABLE `RESERVAS` (
   `habilitado` tinyint(1) NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`reservas_id`),
   KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`id`)
+  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`hotel_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
