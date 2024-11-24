@@ -41,13 +41,19 @@ document.addEventListener("DOMContentLoaded", function() {
             
             if (data.hotel) {
                 const hotelesTable = document.getElementById('hoteles-table-body');
+
                 
                 const newRow = document.createElement('tr');
-                newRow.id = `hotel-row-${data.hotel.id}`;
-
+                newRow.id = `hotel-row-${data.hotel.hotel_id }`;
+                // Todo: Al agregar un nuevo hotel se debe poder modificar si esta habilitado o deshabilitado
                 newRow.innerHTML = `
-                    <td>${data.hotel.id}</td>
-                    <td>${data.hotel.nombre}</td>
+                        <td>${data.hotel.hotel_id}</td>
+                        <td>${data.hotel.nombre}</td>
+                        <td>
+                            <button class="toggle-hotel-btn ${habilitadoClass}" data-hotel-id="${data.hotel.hotel_id}">
+                                ${buttonText}
+                            </button>
+                        </td>
                 `;
                 
                 hotelesTable.appendChild(newRow);

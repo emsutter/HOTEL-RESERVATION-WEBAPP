@@ -28,7 +28,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
     private void setListeners(){
         binding.ingresar.setOnClickListener(v -> {
             String mail = binding.mail.getText().toString();
-            if(!mail.equals("tp@colapinto.com")){
+            if(mail.equals("tp@colapinto.com")){
                 Toast.makeText(this, "Mail invalido", Toast.LENGTH_SHORT).show();
             }
             else {

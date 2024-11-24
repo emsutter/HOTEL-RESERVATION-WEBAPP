@@ -78,7 +78,7 @@ def agregar_hotel():
             consultas.agregar_imagenes(hotel_id, imagenes)
         
 
-        nuevo_hotel = {"id": hotel_id, "nombre": nombre}
+        nuevo_hotel = {"hotel_id": hotel_id, "nombre": nombre}
         return jsonify({"message": "Hotel agregado correctamente", "hotel": nuevo_hotel}), 201
 
     

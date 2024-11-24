@@ -15,7 +15,6 @@ public class MainActivity extends AppCompatActivity {
     private static final String SERVICIOS = "Servicios";
     private static final String CONTACTO = "Contacto";
     private ActivityMainBinding binding;
-    private String currentFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +34,12 @@ public class MainActivity extends AppCompatActivity {
         transaction.add(R.id.fragment_container, servicios, SERVICIOS);
         transaction.add(R.id.fragment_container, contacto, CONTACTO);
         transaction.hide(contacto);
-        this.currentFragment = SERVICIOS;
         transaction.commit();
     }
 
     private void setListener(){
-        binding.contacto.setOnClickListener(v -> {
-            cambiarColorDeTexto(binding.contacto, binding.viewContacto);
+        binding.contratados.setOnClickListener(v -> {
+            cambiarColorDeTexto(binding.contratados, binding.viewContratados);
             showFragment(CONTACTO);
         });
 
@@ -68,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
             );
         }
 
-        this.currentFragment = tag;
         for (Fragment fragment : manager.getFragments()) {
             if(fragment.getTag() != null && fragment.getTag().equals(tag)) {
                 transaction.show(fragment);
@@ -85,9 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void cambiarColorDeTexto(TextView tv, View view) {
         binding.servicios.setTextColor(getResources().getColor(R.color.primary));
-        binding.contacto.setTextColor(getResources().getColor(R.color.primary));
+        binding.contratados.setTextColor(getResources().getColor(R.color.primary));
 
-        binding.viewContacto.setVisibility(View.INVISIBLE);
+        binding.viewContratados.setVisibility(View.INVISIBLE);
         binding.viewServicios.setVisibility(View.INVISIBLE);
 
         tv.setTextColor(getResources().getColor(R.color.secondary));

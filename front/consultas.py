@@ -90,12 +90,12 @@ def agregar_imagenes(hotel_id, imagenes):
         run_insert_query(QUERY_AGREGAR_IMAGEN, {"hotel_id": hotel_id, "url": url})
     
         
-QUERY_DESHABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 0 WHERE id = :id"
-QUERY_DESHABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 0 WHERE id = :id"
-QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE id = :id"
-QUERY_DESHABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 0 WHERE id = :id"
-QUERY_DESHABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 0 WHERE id = :id"
-QUERY_DESHABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 0 WHERE id = :id"
+QUERY_DESHABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 0 WHERE hotel_id = :id"
+QUERY_DESHABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 0 WHERE habitacion_id = :id"
+QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE reserva_id = :id"
+QUERY_DESHABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 0 WHERE servicio_id = :id"
+QUERY_DESHABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 0 WHERE usuario_iid = :id"
+QUERY_DESHABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 0 WHERE imagen_id = :id"
 
 def anular_por_id(query, id):
     with Session() as session:
@@ -130,12 +130,12 @@ def deshabilitar_imagen(id):
     anular_por_id(QUERY_DESHABILITAR_IMAGEN, id)
 
 
-QUERY_HABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 1 WHERE id = :id"
-QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE id = :id"
-QUERY_HABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 1 WHERE id = :id"
-QUERY_HABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 1 WHERE id = :id"
-QUERY_HABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 1 WHERE id = :id"
-QUERY_HABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 1 WHERE id = :id"
+QUERY_HABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 1 WHERE hotel_id = :id"
+QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE habitacion_id = :d"
+QUERY_HABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 1 WHERE reserva_id = :id"
+QUERY_HABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 1 WHERE servicio_id = :id"
+QUERY_HABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 1 WHERE usuario_id = :id"
+QUERY_HABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 1 WHERE imagen_id = :id"
 
 def habilitar_por_id(query, id):
     with Session() as session:
