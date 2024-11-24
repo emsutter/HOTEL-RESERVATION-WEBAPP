@@ -66,7 +66,6 @@ CREATE TABLE `HOTELES` (
 
 LOCK TABLES `HOTELES` WRITE;
 /*!40000 ALTER TABLE `HOTELES` DISABLE KEYS */;
-INSERT INTO `HOTELES` VALUES (16,'The Peninsula Paris','The Peninsula Paris, a palace recognised by Lartisien for its excellence. Enter a world of elegance and absolute luxury. Lartisien - For exceptional hotel stays. Membership Benefits.','19 Av. Kléber, 75116 Paris, Francia',0),(17,'Adlon Kempinski Berlin','Früh buchen & mehr sparen — Buchen Sie jetzt und genießen Sie exklusive Angebote für Suiten im Kempinski Adlon Berlin','Unter den Linden 77, 10117 Berlin, Alemania',0),(18,' Four Seasons Buenos Aires','Hotel de lujo en Buenos Aires — Descubra suites y habitaciones espaciosas con amplias vistas de La Mansión y la ciudad. Gastronomia gourmet. Piscina al aire libre. Masage Tango Porteño. Gimnasio.','Posadas 1086 88, C1011ABB Cdad. Autónoma de Buenos Aires',0),(19,'Hotel de prueba','prueba','una ubicacion',0);
 /*!40000 ALTER TABLE `HOTELES` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -94,7 +93,6 @@ CREATE TABLE `IMAGENES` (
 
 LOCK TABLES `IMAGENES` WRITE;
 /*!40000 ALTER TABLE `IMAGENES` DISABLE KEYS */;
-INSERT INTO `IMAGENES` VALUES (21,16,'https://res.cloudinary.com/grand-luxury/image/upload/w_1440,q_50,f_auto,c_fill,g_center,dpr_2/remote_glh/original/76412-root-hotel-setting-city-view.jpg',0),(22,17,'https://lh3.googleusercontent.com/p/AF1QipMguKmAp0EEBrzCCtfHmIoMqq5HOpsnNbwHeefr=s680-w680-h510',0),(23,18,'https://lh3.googleusercontent.com/p/AF1QipNeo4Kj5pLocfHK5O2MloETHtDhQ1ZJkzOcyje5=s1360-w1360-h1020',0),(24,19,'http://www.unaimagen.com',0);
 /*!40000 ALTER TABLE `IMAGENES` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +122,6 @@ CREATE TABLE `RESERVAS` (
 
 LOCK TABLES `RESERVAS` WRITE;
 /*!40000 ALTER TABLE `RESERVAS` DISABLE KEYS */;
-INSERT INTO `RESERVAS` VALUES (1,'marcomasciulli96@gmail.com','2024-11-23','2024-11-22',16,0),(2,'marcomasciulli96@gmail.com','2024-11-17','2024-12-01',17,0),(3,'marcomasciulli96@gmail.com','2024-12-05','2024-10-12',18,0),(4,'marcomasciulli96@gmail.com','2024-11-23','2024-11-24',16,0),(5,'marcomasciulli96@gmail.com','2024-11-23','2024-11-24',16,0),(6,'marcomasciulli96@gmail.com','2024-11-24','2024-11-30',17,0),(7,'marcomasciulli96@gmail.com','2024-11-24','2024-11-23',16,0);
 /*!40000 ALTER TABLE `RESERVAS` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -153,7 +150,6 @@ CREATE TABLE `SERVICIOS` (
 
 LOCK TABLES `SERVICIOS` WRITE;
 /*!40000 ALTER TABLE `SERVICIOS` DISABLE KEYS */;
-INSERT INTO `SERVICIOS` VALUES (6,'Servicio de prueba','Una descripcion','http://www.unaImagen.com','Una ubicacion',0),(7,'Otro servicio','una descripcion\n','http://www.unaImagen.com','Una ubicacion',0);
 /*!40000 ALTER TABLE `SERVICIOS` ENABLE KEYS */;
 UNLOCK TABLES;
 
