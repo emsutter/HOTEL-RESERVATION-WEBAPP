@@ -1084,7 +1084,7 @@ line-height: 35px;
  .admin table td button {
      padding: 5px 10px;
      margin-right: 5px;
-     background-color: #28a745;
+     background-color: #007bff;
      color: white;
      border: none;
      border-radius: 4px;
@@ -1094,7 +1094,7 @@ line-height: 35px;
  }
  
  .admin table td button:hover {
-     background-color: #218838;
+     background-color: #912415;
  }
  
  .admin table td button:nth-child(2) {

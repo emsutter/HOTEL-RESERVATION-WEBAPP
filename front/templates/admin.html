@@ -49,7 +49,7 @@
                     <tr id="hotel-row-{{ hotel.id }}">
                             <td>{{ hotel.id }}</td>
                             <td>{{ hotel.nombre }}</td>
-                            <td><button class="deshabilitar_hotel">X</button></td>
+                            <td><button class="deshabilitar_hotel_btn" data-hotel-id="{{ hotel.id }}">X</button></td>
                         </tr>
                     {% endfor %}
                 </tbody>

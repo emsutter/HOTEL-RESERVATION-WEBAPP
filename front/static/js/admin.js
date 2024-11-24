@@ -71,23 +71,32 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 
-function deleteHotel(hotelId) {
-    if (confirm("¿Estás seguro de que quieres eliminar este hotel?")) {
-        // Enviar una solicitud DELETE a la API para eliminar el hotel
-        fetch(`/admin/eliminar_hotel/${hotelId}`, {
+document.addEventListener("DOMContentLoaded", function() {
+    // Add event listener to all deshabilitar buttons
+    document.querySelectorAll('.deshabilitar-hotel-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const hotelId = this.getAttribute('data-hotel-id');
+            deshabilitarHotel(hotelId);
+        });
+    });
+});
+
+function deshabilitarHotel(hotelId) {
+    if (confirm("¿Estás seguro de que quieres deshabilitar este hotel?")) {
+        fetch(`/admin/deshabilitar_hotel/${hotelId}`, {
             method: 'DELETE',
         })
         .then(response => {
             if (response.ok) {
-                alert('Hotel eliminado correctamente');
-                // Opcionalmente, puedes recargar la página o eliminar el hotel de la lista
-                location.reload(); // Recarga la página para actualizar la lista de hoteles
+                alert('Hotel deshabilitado correctamente');
+                // Optionally, you can remove the hotel row from the table
+                document.getElementById(`hotel-row-${hotelId}`).remove();
             } else {
-                alert('Hubo un error al eliminar el hotel');
+                alert('Hubo un error al deshabilitar el hotel');
             }
         })
         .catch(error => {
-            alert('Error al eliminar el hotel: ' + error);
+            alert('Error al deshabilitar el hotel: ' + error);
         });
     }
 }
