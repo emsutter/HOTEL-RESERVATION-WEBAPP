@@ -21,8 +21,4 @@ Tus reservas -> Ingresaria el numero de reserva par ver los detalles. Luego, pon
 
 Footer -> Agregamos nombres y padrones, buscar la manera de que quede estetico.
 
-Agregar en admin habilitacion de habitaciones
-
-Agregar en admin en creacion de servicios categoria y habilitacion
-
 Checkear habilitado en creacion de reserva
