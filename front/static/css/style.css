@@ -1102,7 +1102,13 @@ line-height: 35px;
  }
  
  .admin table td button:nth-child(2):hover {
-     background-color: #c82333;
+     background-color: #912415;
+ }
+
+ .deshabilitado {
+     background-color: #da1212;
+     color: white;
+     border: #000 solid 1.5px;
  }
  
  /* Reajustes de estilo para dispositivos pequeños */

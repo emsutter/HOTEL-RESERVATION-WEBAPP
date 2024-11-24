@@ -69,34 +69,41 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     });
 
-    // aca empieza el codigo para deshabilitar hotel
+    // Aca empieza el codigo para deshabilitar hotel
 
-    const buttons = document.getElementsByClassName('deshabilitar_hotel_btn')
+    const buttons = document.getElementsByClassName('toggle-hotel-btn');
     
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener('click', function(event) {
-            console.log('click');
             const hotelId = event.target.dataset.hotelId;
-            deshabilitarHotel(hotelId);
+            toggleHotelStatus(hotelId, event.target);
         });
     }
 });
 
-function deshabilitarHotel(hotelId) {
-    if (confirm("¿Estás seguro de que quieres deshabilitar este hotel?")) {
-        fetch(`/admin/deshabilitar_hotel/${hotelId}`, {
-            method: 'DELETE',
+function toggleHotelStatus(hotelId, button) {
+    const isDeshabilitado = button.classList.contains('deshabilitado');
+    const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
+    const confirmMessage = isDeshabilitado ? 
+        "¿Estás seguro de que quieres habilitar este hotel?" : 
+        "¿Estás seguro de que quieres deshabilitar este hotel?";
+
+    if (confirm(confirmMessage)) {
+        fetch(`/admin/${action}_hotel/${hotelId}`, {
+            method: 'POST',
         })
         .then(response => {
             if (response.ok) {
-                alert('Hotel deshabilitado correctamente');
-                document.getElementById(`hotel-row-${hotelId}`).remove();
+                alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
+                button.classList.toggle('deshabilitado');
+                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                document.getElementById(`hotel-row-${hotelId}`).classList.toggle('deshabilitado');
             } else {
-                alert('Hubo un error al deshabilitar el hotel');
+                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
             }
         })
         .catch(error => {
-            alert('Error al deshabilitar el hotel: ' + error);
+            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
         });
     }
 }

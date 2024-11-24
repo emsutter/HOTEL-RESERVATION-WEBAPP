@@ -46,14 +46,17 @@
                 </thead>
                 <tbody id="hoteles-table-body">
                     {% for hotel in hoteles %}
-                    <tr id="hotel-row-{{ hotel.id }}">
-                            <td>{{ hotel.id }}</td>
-                            <td>{{ hotel.nombre }}</td>
-                            <td><button class="deshabilitar_hotel_btn" data-hotel-id="{{ hotel.id }}">X</button></td>
-                        </tr>
+                    <tr id="hotel-row-{{ hotel.id }}" class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
+                        <td>{{ hotel.id }}</td>
+                        <td>{{ hotel.nombre }}</td>
+                        <td>
+                            <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}" data-hotel-id="{{ hotel.id }}">
+                                {% if hotel.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                            </button>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
-                
             </table>
         </section>
 
