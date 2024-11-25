@@ -154,13 +154,15 @@ document.addEventListener("DOMContentLoaded", function() {
         const descripcionServicio = document.getElementById('descripcion_servicio').value;
         const urlImagen = document.getElementById('url_imagen').value;
         const ubicacionServicio = document.getElementById('ubicacion_servicio').value;
+        const categoriaServicio = document.getElementById('categoria_servicio').value;
         
 
         const data = {
             nombre: nombreServicio,
             descripcion: descripcionServicio,
             url_imagen: urlImagen,
-            ubicacion: ubicacionServicio
+            ubicacion: ubicacionServicio,
+            categoria: categoriaServicio
         };
 
         fetch('http://127.0.0.1:5000/admin/agregar_servicio', {
@@ -183,6 +185,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td>${data.servicio.servicio_id}</td>
                     <td>${data.servicio.nombre}</td>
                     <td>${data.servicio.descripcion}</td>
+                    <td>${categoriaServicio}</td>
                 
                 `;
                 

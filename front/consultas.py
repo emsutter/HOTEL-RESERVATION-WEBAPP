@@ -15,6 +15,13 @@ SELECT h.*,
 FROM HOTELES h;
 """
 
+QUERY_OBTENER_SERVICIOS_POR_RESERVA = """
+SELECT s.servicio_id, s.nombre
+FROM reservas_servicios rs
+INNER JOIN servicios s ON rs.servicio_id = s.servicio_id
+WHERE rs.reserva_id = %s;
+"""
+
 
 engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
 
@@ -47,11 +54,16 @@ def obtener_imagenes():
 def obtener_hoteles_con_imagen():
     return run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
 
+def obtener_servicios_por_reserva(id):
+    return run_get_all_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, (id,))
+
+
 QUERY_AGREGAR_HOTEL = "INSERT INTO HOTELES (nombre, descripcion, ubicacion) VALUES (:nombre, :descripcion, :ubicacion)"
 QUERY_AGREGAR_HABITACION = "INSERT INTO HABITACIONES (capacidad, hotel_id) VALUES (:capacidad, :hotel_id)"
 QUERY_AGREGAR_RESERVA = "INSERT INTO RESERVAS (email, fecha_ingreso, fecha_egreso, hotel_id) VALUES (:email, :fecha_ingreso, :fecha_egreso, :hotel_id)"
-QUERY_AGREGAR_SERVICIO = "INSERT INTO SERVICIOS (nombre, descripcion, url_imagen, ubicacion) VALUES (:nombre, :descripcion, :url_imagen, :ubicacion)"
+QUERY_AGREGAR_SERVICIO = "INSERT INTO SERVICIOS (nombre, descripcion, url_imagen, ubicacion, categoria) VALUES (:nombre, :descripcion, :url_imagen, :ubicacion, :categoria)"
 QUERY_AGREGAR_IMAGEN = "INSERT INTO IMAGENES (hotel_id, url) VALUES (:hotel_id, :url)"
+QUERY_AGREGAR_RESERVA_SERVICIO = "INSERT INTO USUARIO_SERVICIOS (servicio_id, reserva_id) VALUES (:servicio_id, :reserva_id)"
     
 def run_insert_query(query, params):
     with Session() as session:
@@ -79,8 +91,11 @@ def agregar_reserva(email, ingreso, egreso, hotel_id):
         "hotel_id": hotel_id
     })
 
-def agregar_servicio(nombre, descripcion, url_imagen, ubicacion):
-    return run_insert_query(QUERY_AGREGAR_SERVICIO, {"nombre": nombre, "descripcion": descripcion, "url_imagen": url_imagen, "ubicacion": ubicacion})
+def agregar_servicio(nombre, descripcion, url_imagen, ubicacion, categoria):
+    return run_insert_query(QUERY_AGREGAR_SERVICIO, {"nombre": nombre, "descripcion": descripcion, "url_imagen": url_imagen, "ubicacion": ubicacion, "categoria": categoria})
+
+def agregar_reserva_servicio(id_reserva, id_servicio):
+    return run_insert_query(QUERY_AGREGAR_RESERVA_SERVICIO, {"servicio_id": id_servicio, "reserva_id": id_reserva})
 
 # def agregar_usuario(nombre, email, telefono):
 #     return run_insert_query(QUERY_AGREGAR_USUARIO, {"nombre": nombre, "email": email, "telefono": telefono})
