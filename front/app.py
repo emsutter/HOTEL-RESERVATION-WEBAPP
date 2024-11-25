@@ -36,6 +36,8 @@ def home():
     imagenes = consultas.obtener_imagenes()
     return render_template('home.html', imagenes=imagenes, endpoint=request.endpoint)
 
+
+
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
     hoteles = consultas.obtener_hoteles_con_imagen()
@@ -53,9 +55,38 @@ def Reservas():
 
     return render_template("Reservas.html", hoteles=hoteles, hotel_id=hotel_id, endpoint=request.endpoint)
 
-@app.route('/ConsultaReserva')
+@app.route('/ConsultaReserva', methods=['GET', 'POST'])
 def ConsultaReserva():
-    return render_template("ConsultaReserva.html", endpoint=request.endpoint)
+    if request.method == 'POST':  
+        email = request.form.get('email')  
+
+        reservas_por_usuario = buscar_usuario(email)
+        
+        if email and reservas_por_usuario.status_code == 200:
+            session['email'] = email  
+            session['reservas'] = reservas_por_usuario
+            return redirect('/mis_reservas')  
+        else:
+            error = "mail incorrecto"
+            return render_template("ConsultaReserva.html", error=error)
+
+    # Si es un GET, simplemente renderiza el formulario de login.
+    return render_template("ConsultaReserva.html")
+
+@app.route('/mis_reservas')
+def mis_reservas():
+    mail = session.get('email')
+
+    if  mail:
+        reservas = session.get('reservas', [])
+        return render_template("mis_reservas.html", reservas = reservas)
+    else:
+        return redirect('/ConsultaReserva')
+    
+@app.route('/logout')
+def logout():
+    session.pop('email', None)  
+    return redirect('/')
 
 @app.route('/contact')
 def contact():
@@ -271,6 +302,22 @@ def eliminar_servicio_reserva_endpoint(servicio_id, reserva_id):
         return jsonify({"error": "Ocurrió un error interno"}), 500
 
 
+
+@app.route('/admin/buscar_usuario/<mail>', methods = ['GET']) 
+
+def buscar_usuario(mail):
+    """trae el usuario de la base de datos junto a todas las reservas del mismo"""
+    try:
+        
+        data = consultas.traer_reservas_por_usuario(mail)
+
+        if data is None:
+            return jsonify({'error':'no se ha encontrado el usuario'})
+    
+        return jsonify(data), 200
+        
+    except Exception as e:
+            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
 
 
 def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):

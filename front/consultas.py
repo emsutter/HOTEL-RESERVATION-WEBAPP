@@ -268,6 +268,32 @@ def habilitar_usuario(id):
 def habilitar_imagen(id):
     anular_por_id(QUERY_HABILITAR_IMAGEN, id)
 
+#OBTENER
+
+query_reservas_por_usuario = "SELECT * FROM reservas WHERE email = :mail"
+
+def traer_reservas_por_usuario(mail):
+    """Trae todas las reservas del usuario en un diccionario."""
+    try:
+        # Abre una sesión
+        with Session() as session:
+            # Ejecuta la consulta con el parámetro del email
+            resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
+            
+            # Verifica si hay resultados
+            if not resultados:
+                return None
+            
+            # Transforma los resultados en una lista de diccionarios
+            reservas = [
+                dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
+            ]
+            return reservas
+    
+    except Exception as e:
+        return {"error": f"Ocurrió un error: {str(e)}"}
+
+
 
 
 
