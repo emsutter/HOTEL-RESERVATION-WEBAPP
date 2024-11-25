@@ -37,7 +37,6 @@ def home():
     return render_template('home.html', imagenes=imagenes, endpoint=request.endpoint)
 
 
-
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
     hoteles = consultas.obtener_hoteles_con_imagen()
@@ -304,7 +303,6 @@ def eliminar_servicio_reserva_endpoint(servicio_id, reserva_id):
 
 
 @app.route('/admin/buscar_usuario/<mail>', methods = ['GET']) 
-
 def buscar_usuario(mail):
     """trae el usuario de la base de datos junto a todas las reservas del mismo"""
     try:
@@ -318,6 +316,46 @@ def buscar_usuario(mail):
         
     except Exception as e:
             return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
+
+
+@app.route('/admin/obtener_servicios', methods=['GET'])
+def obtener_servicios():
+    return consultas.obtener_servicios()
+
+@app.route('/admin/crear_reserva_servicio', methods=['POST'])
+def crear_reserva_servicio():
+    data = request.get_json()
+    id_reserva = data.get("id_reserva")
+    id_servicio = data.get("id_servicio")
+
+    if not id_reserva or not id_servicio:
+        return jsonify({"error": "Faltan datos obligatorios"}), 400
+    resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
+
+    # Retornar una respuesta
+    if resultado:
+        return jsonify({"mensaje": "Reserva creada exitosamente"}), 201
+    else:
+        return jsonify({"error": "No se pudo crear la reserva"}), 500
+
+
+
+@app.route('/admin/obtener_servicios_reserva/<int:id_reserva>', methods=['GET'])
+def obtener_servicios_reserva(id_reserva):
+    try:
+        servicios = consultas.obtener_servicios_por_reserva(id_reserva)
+
+        if servicios:
+            return jsonify(servicios), 200
+        else:
+            return jsonify({"mensaje": "No se encontraron servicios para esta reserva"}), 404
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {e}"}), 500
+
+
+
+
+
 
 
 def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):

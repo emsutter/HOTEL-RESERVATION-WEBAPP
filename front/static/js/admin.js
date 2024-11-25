@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const urlImagen = document.getElementById('url_imagen').value;
         const ubicacionServicio = document.getElementById('ubicacion_servicio').value;
         const categoriaServicio = document.getElementById('categoria_servicio').value;
-
+        
 
         const data = {
             nombre: nombreServicio,
@@ -186,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td>${data.servicio.nombre}</td>
                     <td>${data.servicio.descripcion}</td>
                     <td>${categoriaServicio}</td>
-
+                
                 `;
 
                 serviciosTable.appendChild(newRow);
