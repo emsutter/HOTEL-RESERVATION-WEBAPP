@@ -29,4 +29,8 @@ public class Categoria {
     public List<Servicio> getServicioList() {
         return servicioList;
     }
+
+    public boolean contiene(Servicio servicio){
+        return this.servicioList.contains(servicio);
+    }
 }

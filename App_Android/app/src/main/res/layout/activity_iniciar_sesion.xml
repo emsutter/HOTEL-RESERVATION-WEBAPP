@@ -26,7 +26,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_marginTop="50dp"
-        android:hint="Ingresar mail"
+        android:hint="Ingresar ID de reserva"
         android:fontFamily="@font/poppins_regular"
         android:textColorHint="@color/hint"
         android:textSize="15dp"
