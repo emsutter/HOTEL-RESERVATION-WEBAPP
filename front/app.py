@@ -388,7 +388,7 @@ def crear_reserva_servicio():
         return {"error": f"Ocurrió un error: {str(e)}"}
     
 
-import traceback
+
 
 @app.route('/admin/obtener_servicios_reserva/<int:id_reserva>', methods=['GET'])
 def obtener_servicios_reserva(id_reserva):
@@ -399,10 +399,7 @@ def obtener_servicios_reserva(id_reserva):
         else:
             return jsonify({"mensaje": "No se encontraron servicios para esta reserva"}), 404
     except Exception as e:
-        # Capturar el traceback completo
-        error_trace = traceback.format_exc()
-        print(error_trace)  # Imprimir el error en la consola del servidor
-        return jsonify({"error": f"Ocurrió un error: {error_trace}"}), 500
+        return jsonify({"error": f"Ocurrió un error: {e}"}), 500
 
 
 @app.route('/admin/obtener_reserva/<int:reservas_id>', methods=['GET'])
@@ -418,6 +415,28 @@ def obtener_reserva(reservas_id):
         print(f"Error: {e}")  # Esto imprimirá el error en la consola de Flask
         return jsonify({"error": f"Ocurrió un error: {e}"}), 500
 
+
+@app.route('/admin/eliminar_servicio_reserva', methods=['DELETE'])
+def eliminar_servicio_reserva_endpoint():
+    try:
+        data = request.get_json()
+        reserva_id = data.get("reserva_id")
+        servicio_id = data.get("servicio_id")
+
+        if not reserva_id or not servicio_id:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+
+        # Llama a la función que elimina el registro
+        resultado = consultas.eliminar_servicio_reserva(servicio_id, reserva_id)
+
+        if resultado:
+            return jsonify({"mensaje": "Registro eliminado exitosamente"}), 200
+        else:
+            return jsonify({"error": "No se encontró un registro para eliminar"}), 404
+
+    except Exception as e:
+        print(f"Error al procesar la solicitud: {e}")
+        return jsonify({"error": "Ocurrió un error interno"}), 500
 
 
 

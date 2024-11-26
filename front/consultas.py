@@ -301,6 +301,28 @@ def habilitar_usuario(id):
 def habilitar_imagen(id):
     anular_por_id(QUERY_HABILITAR_IMAGEN, id)
 
+
+QUERY_ELIMINAR_SERVICIO_RESERVA = "DELETE FROM USUARIO_SERVICIOS WHERE servicio_id = :servicio_id AND reserva_id = :reserva_id"
+
+def eliminar_servicio_reserva(servicio_id, reserva_id):
+    try:
+        with Session() as session:
+            result = session.execute(
+                text(QUERY_ELIMINAR_SERVICIO_RESERVA),
+                {"servicio_id": servicio_id, "reserva_id": reserva_id}
+            )
+            session.commit()
+
+            # Verificar si se eliminaron filas
+            if result.rowcount > 0:
+                return True
+            else:
+                return False
+
+    except Exception as e:
+        print(f"Error al eliminar el servicio y la reserva: {e}")
+        return False
+
 #OBTENER
 
 query_reservas_por_usuario = "SELECT * FROM reservas WHERE email = :mail"
