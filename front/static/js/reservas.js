@@ -66,9 +66,17 @@ function submitReserva(event) {
    const egreso = document.getElementById("Egreso").value;
    const hotelId = document.getElementById("hotel_id").value;
 
-   if (!email || !ingreso || !egreso || !hotelId) {
-       alert("Por favor, completa todos los campos.");
-       console.log(email, ingreso, egreso, hotelId);
+ 
+   if (!email ){
+    alert("Por favor, completa todos los campos email.");} if (!ingreso){
+        alert("Por favor, completa todos los campos.");}
+    
+    if (!egreso){
+        alert("Por favor, completa todos los campos Egreso.");
+    }   
+    if (!hotelId) {
+       alert("Por favor, completa todos los campos hotel.");
+    
        return;
    }
 

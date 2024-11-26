@@ -323,7 +323,7 @@ def eliminar_servicio_reserva(servicio_id, reserva_id):
 #OBTENER
 
 
-query_reservas_por_usuario = "SELECT * FROM reservas WHERE email = :mail"
+query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
 
 def traer_reservas_por_usuario(mail):
     """Trae todas las reservas del usuario en un diccionario."""
@@ -332,7 +332,7 @@ def traer_reservas_por_usuario(mail):
         with Session() as session:
             # Ejecuta la consulta con el parámetro del email
             resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
-
+            
             # Verifica si hay resultados
             if not resultados:
                 return None
@@ -342,6 +342,10 @@ def traer_reservas_por_usuario(mail):
                 dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
             ]
             return reservas
-
+    
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
+
+
+
+
