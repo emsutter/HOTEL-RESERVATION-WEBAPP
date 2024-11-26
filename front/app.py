@@ -131,6 +131,22 @@ def habilitar_hotel(hotel_id):
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
+@app.route('/admin/deshabilitar_servicio/<int:servicio_id>', methods=['POST'])
+def deshabilitar_servicio(servicio_id):
+    try:
+        consultas.deshabilitar_servicio(servicio_id)
+        return jsonify({"message": "servicio deshabilitado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/admin/habilitar_servicio/<int:servicio_id>', methods=['POST'])
+def habilitar_servicio(servicio_id):
+    try:
+        consultas.habilitar_servicio(servicio_id)
+        return jsonify({"message": "servicio habilitado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/admin/deshabilitar_habitacion/<int:habitacion_id>', methods=['POST'])
 def deshabilitar_habitacion(habitacion_id):
     try:
@@ -191,7 +207,9 @@ def agregar_servicio():
             "servicio_id": servicio_id,
             "nombre": nombre,
             "descripcion": descripcion,
-            "url_imagen": url_imagen
+            "url_imagen": url_imagen,
+            "categoria": categoria,
+            "habilitado": 1
         }
 
         return jsonify({"message": "Servicio agregado correctamente", "servicio": nuevo_servicio}), 201
