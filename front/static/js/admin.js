@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const ubicacionHotel = document.getElementById('ubicacion_hotel').value;
         const imagenesInputs = document.querySelectorAll('input[name="imagenes_hotel[]"]');
         const imagenesHotel = Array.from(imagenesInputs).map(input => input.value.trim());
-
+        
         const data = {
             nombre: nombreHotel,
             descripcion: descripcionHotel,
@@ -93,6 +93,9 @@ function toggleHotelStatus(hotelId, button) {
     const confirmMessage = isDeshabilitado ? 
         "¿Estás seguro de que quieres habilitar este hotel?" : 
         "¿Estás seguro de que quieres deshabilitar este hotel?";
+
+    
+        
 
     if (confirm(confirmMessage)) {
         fetch(`/admin/${action}_hotel/${hotelId}`, {

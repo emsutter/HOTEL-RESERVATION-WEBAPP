@@ -8,6 +8,10 @@ from flask import redirect
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
+from datetime import timedelta
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)    
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/apc_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -17,6 +21,7 @@ app.config['MAIL_USE_SSL'] = True
 app.config['MAIL_USERNAME'] = 'marcomasciullidev@gmail.com' 
 app.config['MAIL_PASSWORD'] = 'cisx vxak ezgy htga'
 app.config['MAIL_DEFAULT_SENDER'] = 'noreply@argentinaporcolpinto.com'
+app.config['SECRET_KEY'] = 'colapinto'
 
 mail = Mail(app)
 db = SQLAlchemy(app)
@@ -26,6 +31,13 @@ def home():
     imagenes = consultas.obtener_imagenes()
     return render_template('home.html', imagenes=imagenes, endpoint=request.endpoint)
 
+
+@app.route('/prueba')
+
+def prueba():
+
+    prueba = session.get('reservas', [])
+    return render_template("pruebas.html", prueba=prueba)
 
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
@@ -37,7 +49,7 @@ def Galeria():
     imagenes = consultas.obtener_imagenes()
     return render_template("Galeria.html", imagenes=imagenes, endpoint=request.endpoint)
 
-@app.route('/Reservas')
+@app.route('/Reservas', methods = ['GET', 'POST'])
 def Reservas():
     hoteles = consultas.obtener_hoteles()
     hotel_id = request.args.get('hotel_id')
@@ -46,21 +58,24 @@ def Reservas():
 
 @app.route('/ConsultaReserva', methods=['GET', 'POST'])
 def ConsultaReserva():
+
     if request.method == 'POST':  
-        email = request.form.get('email')  
+        email = request.form.get("email")  
 
         reservas_por_usuario = buscar_usuario(email)
         
-        if email and reservas_por_usuario.status_code == 200:
+        if 'error' not in reservas_por_usuario:
             session['email'] = email  
-            session['reservas'] = reservas_por_usuario
+            session['reservas'] = reservas_por_usuario.get('data')
+            session.permanent = True 
             return redirect('/mis_reservas')  
         else:
-            error = "mail incorrecto"
+            error = f"mail incorrecto {str(reservas_por_usuario[1])}"
             return render_template("ConsultaReserva.html", error=error)
 
-    # Si es un GET, simplemente renderiza el formulario de login.
-    return render_template("ConsultaReserva.html")
+    if not 'email' in session:
+        return render_template("ConsultaReserva.html")
+    return redirect('/mis_reservas')    
 
 @app.route('/mis_reservas')
 def mis_reservas():
@@ -72,9 +87,9 @@ def mis_reservas():
     else:
         return redirect('/ConsultaReserva')
     
-@app.route('/logout')
+@app.route('/logout', methods = ['POST'])
 def logout():
-    session.pop('email', None)  
+    session.clear() 
     return redirect('/')
 
 @app.route('/contact')
@@ -206,18 +221,18 @@ def agregar_reserva():
 
 @app.route('/admin/buscar_usuario/<mail>', methods = ['GET']) 
 def buscar_usuario(mail):
-    """trae el usuario de la base de datos junto a todas las reservas del mismo"""
+    """Trae el usuario de la base de datos junto a todas las reservas del mismo."""
     try:
-        
-        data = consultas.traer_reservas_por_usuario(mail)
+        data = consultas.traer_reservas_por_usuario(mail)  # Llama directamente a la consulta
 
-        if data is None:
-            return jsonify({'error':'no se ha encontrado el usuario'})
+        if "error" in data:
+            return {"error": data["error"]}  # Devuelve un diccionario con el error
     
-        return jsonify(data), 200
+        return {"data": data}  # Devuelve un diccionario con los datos
         
     except Exception as e:
-            return jsonify({"error": f"Ocurrió un error: {str(e)}"}), 500
+        return {"error": f"Ocurrió un error: {str(e)}"}
+
 
 
 @app.route('/admin/obtener_servicios', methods=['GET'])

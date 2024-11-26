@@ -35,7 +35,7 @@
                   <select class="contactus" id="hotel_id" name="hotel_id">
                      <option value="" disabled {% if hotel_id is none %}selected{% endif %}>Selecciona un hotel</option>
                      {% for hotel in hoteles %}
-                         <option value="{{ hotel.id }}" data-ubicacion="{{ hotel.ubicacion }}"
+                         <option value="{{ hotel.hotel_id }}" data-ubicacion="{{ hotel.ubicacion }}"
                              {% if hotel.id == hotel_id %}selected{% endif %}>
                              {{ hotel.nombre }}
                          </option>

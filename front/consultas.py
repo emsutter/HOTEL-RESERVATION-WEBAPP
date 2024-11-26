@@ -76,7 +76,6 @@ def run_insert_query(query, params):
             print(f"Error al ejecutar la consulta: {str(e)}")
             raise e
 
-
 def agregar_hotel(nombre, descripcion, ubicacion):
     return run_insert_query(QUERY_AGREGAR_HOTEL, {"nombre": nombre, "descripcion": descripcion, "ubicacion": ubicacion})
 
@@ -186,7 +185,7 @@ def habilitar_imagen(id):
 
 #OBTENER
 
-query_reservas_por_usuario = "SELECT * FROM reservas WHERE email = :mail"
+query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
 
 def traer_reservas_por_usuario(mail):
     """Trae todas las reservas del usuario en un diccionario."""
@@ -196,14 +195,15 @@ def traer_reservas_por_usuario(mail):
             # Ejecuta la consulta con el parámetro del email
             resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
             
-            # Verifica si hay resultados
             if not resultados:
-                return None
+                return []
             
             # Transforma los resultados en una lista de diccionarios
             reservas = [
                 dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
+
             ]
+            
             return reservas
     
     except Exception as e:
