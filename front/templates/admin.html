@@ -125,13 +125,6 @@
                 <label for="categoria_servicio">Categoria:</label>
                 <input type="text" id="categoria_servicio" name="categoria_servicio" required>
 
-                <select id="hotel_id" name="hotel_id">
-                    {% for hotel in hoteles %}
-                    <option value="{{ hotel.hotel_id  }}">{{ hotel.nombre }}</option>
-                    {% endfor %}
-        
-                </select>
-
                 <button type="submit">Agregar Servicio</button>
             </form>
 
