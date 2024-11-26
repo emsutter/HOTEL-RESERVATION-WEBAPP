@@ -196,7 +196,6 @@ document.addEventListener("DOMContentLoaded", function() {
         const urlImagen = document.getElementById('url_imagen').value;
         const ubicacionServicio = document.getElementById('ubicacion_servicio').value;
         const categoriaServicio = document.getElementById('categoria_servicio').value;
-        
 
         const data = {
             nombre: nombreServicio,
@@ -217,31 +216,73 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             alert(data.message);
             if (data.servicio) {
-                const serviciosTable = document.getElementById('servicios-table-body');
-
-                const newRow = document.createElement('tr');
-                newRow.id = `servicio-row-${data.servicio.servicio_id}`;
-
-                newRow.innerHTML = `
-                    <td>${data.servicio.servicio_id}</td>
-                    <td>${data.servicio.nombre}</td>
-                    <td>${data.servicio.descripcion}</td>
-                    <td>${categoriaServicio}</td>
-                
-                `;
-
-                serviciosTable.appendChild(newRow);
+                addServicioRow(data.servicio);
+                form.reset();
             }
-
-            document.getElementById('nombre_servicio').value = '';
-            document.getElementById('descripcion_servicio').value = '';
-            document.getElementById('url_imagen').value = '';
-            document.getElementById('ubicacion_servicio').value = '';
-
-        })
+        }
+        )
         .catch((error) => {
             console.error('Error:', error);
             alert('Error al agregar el servicio');
         });
-    });
+    }
+    );
 });
+
+function addServicioRow(servicio) {
+    const tableBody = document.getElementById('servicios-table-body');
+    const row = document.createElement('tr');
+    row.id = `servicio-row-${servicio.servicio_id}`;
+    row.className = servicio.habilitado ? '' : 'deshabilitado';
+
+    const habilitadoClass = servicio.habilitado ? '' : 'deshabilitado';
+    const buttonText = servicio.habilitado ? 'Deshabilitar' : 'Habilitar';
+
+    row.innerHTML = `
+        <td>${servicio.servicio_id}</td>
+        <td>${servicio.nombre}</td>
+        <td>${servicio.descripcion}</td>
+        <td>${servicio.categoria}</td>
+        <td>
+            <button class="toggle-servicio-btn ${habilitadoClass}" data-servicio-id="${servicio.servicio_id}">
+                ${buttonText}
+            </button>
+        </td>
+        `;
+
+    tableBody.appendChild(row);
+
+    // Attach event listener to the new button
+    const button = row.querySelector('.toggle-servicio-btn');
+    button.addEventListener('click', function(event) {
+        const servicioId = event.target.dataset.servicioId;
+        toggleServicioStatus(servicioId, event.target);
+    });
+}
+
+function toggleServicioStatus(servicioId, button) {
+    const isDeshabilitado = button.classList.contains('deshabilitado');
+    const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
+    const confirmMessage = isDeshabilitado ? 
+        "¿Estás seguro de que quieres habilitar este servicio?" : 
+        "¿Estás seguro de que quieres deshabilitar este servicio?";
+
+    if (confirm(confirmMessage)) {
+        fetch(`/admin/${action}_servicio/${servicioId}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.ok) {
+                alert(`servicio ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
+                button.classList.toggle('deshabilitado');
+                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                document.getElementById(`servicio-row-${servicioId}`).classList.toggle('deshabilitado');
+            } else {
+                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el servicio`);
+            }
+        })
+        .catch(error => {
+            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el servicio: ` + error);
+        });
+    }
+}
