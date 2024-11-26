@@ -146,7 +146,7 @@ def deshabilitar_imagen(id):
 
 
 QUERY_HABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 1 WHERE hotel_id = :id"
-QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE habitacion_id = :d"
+QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE habitacion_id = :id"
 QUERY_HABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 1 WHERE reserva_id = :id"
 QUERY_HABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 1 WHERE servicio_id = :id"
 QUERY_HABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 1 WHERE usuario_id = :id"
