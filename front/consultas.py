@@ -15,8 +15,10 @@ SELECT h.*,
 FROM HOTELES h;
 """
 
+QUERY_OBTENER_RESERVA_POR_ID = "SELECT * FROM RESERVAS WHERE reservas_id = :reservas_id"
+
 QUERY_OBTENER_SERVICIOS_POR_RESERVA = """
-SELECT s.servicio_id, s.nombre
+SELECT s.servicio_id, s.nombre, s.descripcion, s.url_imagen, s.ubicacion, s.habilitado, s.categoria
 FROM USUARIO_SERVICIOS us
 INNER JOIN SERVICIOS s ON us.servicio_id = s.servicio_id
 WHERE us.reserva_id = :id_reserva;
@@ -42,6 +44,26 @@ def run_get_query(query, params=None):
     except Exception as e:
         print(f"Error al ejecutar la consulta: {e}")
         return None
+
+def run_get_query2(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            
+            # Verificar qué devuelve result.fetchall()
+            rows = result.fetchall()
+            print(f"Resultado de la consulta: {rows}")
+            
+            # Obtener los nombres de las columnas
+            columns = result.keys()  # Devuelve los nombres de las columnas
+            
+            # Convertir las filas en diccionarios
+            return [dict(zip(columns, row)) for row in rows]
+    
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+ 
     
 
 def obtener_hoteles():
@@ -66,7 +88,39 @@ def obtener_hoteles_con_imagen():
     return run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
 
 def obtener_servicios_por_reserva(id):
-    return run_get_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, {'id_reserva': id})
+    resultado = run_get_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, {'id_reserva': id})
+    
+    if resultado is None:
+        print("La consulta no devolvió resultados.")
+        return []
+
+    print(f"Resultado de la consulta: {resultado}")
+
+    columnas = ["servicio_id", "nombre", "descripcion", "url_imagen", "ubicacion", "habilitado", "categoria"] 
+    servicios = []
+    for fila in resultado:
+        servicio = {columnas[i]: fila[i] for i in range(len(columnas))}
+        servicios.append(servicio)
+    
+    return servicios
+
+
+
+def obtener_reserva_por_id(reservas_id):
+    reserva_lista = run_get_query2(QUERY_OBTENER_RESERVA_POR_ID, {'reservas_id': reservas_id})
+    
+    if reserva_lista:
+        reserva = reserva_lista[0]
+        
+        return {
+            'reservas_id': reserva.reservas_id,
+            'email': reserva.email,
+            'fecha_ingreso': reserva.fecha_ingreso.strftime('%Y-%m-%d'), 
+            'fecha_egreso': reserva.fecha_egreso.strftime('%Y-%m-%d'),
+            'hotel_id': reserva.hotel_id,
+            'habilitado': reserva.habilitado
+        }
+    return None
 
 
 
@@ -204,7 +258,6 @@ def traer_reservas_por_usuario(mail):
     try:
         # Abre una sesión
         with Session() as session:
-            # Ejecuta la consulta con el parámetro del email
             resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
             
             if not resultados:
