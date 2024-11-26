@@ -170,9 +170,7 @@ def agregar_servicio():
 
 
 
-#@app.route('/admin/obtener_servicios', methods=['GET'])
-#def obtener_servicios():
-#    return consultas.obtener_servicios()
+
 
 @app.route('/admin/obtener_servicios', methods=['GET'])
 def obtener_servicios():
@@ -196,28 +194,17 @@ def crear_reserva_servicio():
 
     if not id_reserva or not id_servicio:
         return jsonify({"error": "Faltan datos obligatorios"}), 400
-    resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
 
-    # Retornar una respuesta
-    if resultado:
-        return jsonify({"mensaje": "Reserva creada exitosamente"}), 201
-    else:
-        return jsonify({"error": "No se pudo crear la reserva"}), 500
-
-
-
-@app.route('/admin/obtener_servicios_reserva/<int:id_reserva>', methods=['GET'])
-def obtener_servicios_reserva(id_reserva):
     try:
-        servicios = consultas.obtener_servicios_por_reserva(id_reserva)
-
-        if servicios:
-            return jsonify(servicios), 200
+        resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
+        # Si la consulta fue exitosa
+        if resultado:
+            return jsonify({"mensaje": "Reserva creada exitosamente", "id_insertado": resultado}), 201
         else:
-            return jsonify({"mensaje": "No se encontraron servicios para esta reserva"}), 404
+            return jsonify({"error": "No se pudo crear la reserva"}), 500
     except Exception as e:
-        return jsonify({"error": f"Ocurrió un error: {e}"}), 500
-
+        print(f"Error al crear la reserva: {str(e)}")
+        return jsonify({"error": f"Hubo un problema al crear la reserva: {str(e)}"}), 500
 
 
 @app.route('/admin/agregar_reserva', methods=['POST'])
@@ -236,6 +223,54 @@ def agregar_reserva():
     except Exception as e:
         print(f"Error al crear la reserva: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
+
+
+@app.route('/admin/obtener_servicios_reserva/<int:id_reserva>', methods=['GET'])
+def obtener_servicios_reserva(id_reserva):
+    try:
+        servicios = consultas.obtener_servicios_por_reserva(id_reserva)
+        if servicios:
+            return jsonify(servicios), 200
+        else:
+            return jsonify({"mensaje": "No se encontraron servicios para esta reserva"}), 404
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {e}"}), 500
+
+
+@app.route('/admin/obtener_reserva/<int:reservas_id>', methods=['GET'])
+def obtener_reserva(reservas_id):
+    try:
+        print(f"Buscando reserva con ID: {reservas_id}")  # Esto te ayuda a ver si la solicitud llega bien
+        reserva = consultas.obtener_reserva_por_id(reservas_id)
+        if reserva:
+            return jsonify(reserva), 200
+        else:
+            return jsonify({"error": "Reserva no encontrada"}), 404
+    except Exception as e:
+        print(f"Error: {e}")  # Esto imprimirá el error en la consola de Flask
+        return jsonify({"error": f"Ocurrió un error: {e}"}), 500
+
+
+@app.route('/admin/eliminar_servicio_reserva/<int:servicio_id>/<int:reserva_id>', methods=['DELETE'])
+def eliminar_servicio_reserva_endpoint(servicio_id, reserva_id):
+    try:
+        # Verificar si los parámetros fueron proporcionados
+        if not servicio_id or not reserva_id:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+
+        # Llama a la función que elimina el registro
+        resultado = consultas.eliminar_servicio_reserva(servicio_id, reserva_id)
+
+        if resultado:
+            return jsonify({"mensaje": "Registro eliminado exitosamente"}), 200
+        else:
+            return jsonify({"error": "No se encontró un registro para eliminar"}), 404
+
+    except Exception as e:
+        print(f"Error al procesar la solicitud: {e}")
+        return jsonify({"error": "Ocurrió un error interno"}), 500
+
+
 
 
 def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):
