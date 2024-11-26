@@ -1,4 +1,4 @@
-package com.marma.reservashoteltpcolapinto;
+package com.marma.reservashoteltpcolapinto.clases;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,10 +7,9 @@ public class Usuario {
     private String mail;
     private List<Servicio> servicios;
 
-    public Usuario(String mail, Servicio servicio){
+    public Usuario(String mail){
         this.mail = mail;
         this.servicios = new ArrayList<>();
-        this.servicios.add(servicio);
     }
 
     public void addServicio(Servicio servicio){

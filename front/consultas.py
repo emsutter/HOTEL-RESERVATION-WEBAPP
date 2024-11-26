@@ -41,6 +41,37 @@ def run_get_all_query(query):
     with Session() as session:
         result = session.execute(text(query))
         return result.fetchall()
+      
+
+def run_get_query(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            return result.fetchall()
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+
+def run_get_query2(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+
+            # Verificar qué devuelve result.fetchall()
+            rows = result.fetchall()
+            print(f"Resultado de la consulta: {rows}")
+
+            # Obtener los nombres de las columnas
+            columns = result.keys()  # Devuelve los nombres de las columnas
+
+            # Convertir las filas en diccionarios
+            return [dict(zip(columns, row)) for row in rows]
+
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+
+
 
 
 def run_get_query(query, params=None):

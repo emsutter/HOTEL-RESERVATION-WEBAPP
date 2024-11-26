@@ -9,6 +9,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
+import com.marma.reservashoteltpcolapinto.clases.Categoria;
+import com.marma.reservashoteltpcolapinto.clases.Global;
+import com.marma.reservashoteltpcolapinto.clases.Servicio;
 
 import java.util.ArrayList;
 import java.util.List;

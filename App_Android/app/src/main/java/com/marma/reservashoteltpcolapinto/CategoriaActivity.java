@@ -5,8 +5,9 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.marma.reservashoteltpcolapinto.clases.Categoria;
+import com.marma.reservashoteltpcolapinto.clases.Global;
 import com.marma.reservashoteltpcolapinto.databinding.ActivityCategoriaBinding;
-import com.marma.reservashoteltpcolapinto.databinding.ActivityServicioBinding;
 
 public class CategoriaActivity extends AppCompatActivity {
 

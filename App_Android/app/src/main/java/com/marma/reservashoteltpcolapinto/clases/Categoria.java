@@ -1,4 +1,4 @@
-package com.marma.reservashoteltpcolapinto;
+package com.marma.reservashoteltpcolapinto.clases;
 
 import java.util.ArrayList;
 import java.util.List;

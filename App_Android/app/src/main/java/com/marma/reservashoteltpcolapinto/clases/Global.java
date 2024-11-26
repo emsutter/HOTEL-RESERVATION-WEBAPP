@@ -1,4 +1,4 @@
-package com.marma.reservashoteltpcolapinto;
+package com.marma.reservashoteltpcolapinto.clases;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,8 @@ public class Global {
     public Categoria categoria;
     public Servicio servicio;
     public List<Categoria> categorias = new ArrayList<>();
-    public Usuario usuario = new Usuario("Un mail", new Servicio("Montana", "Una descripcion", "", "Tucumán 451, C1049 Cdad. Autónoma de Buenos Aires", true));
+    public Usuario usuario = new Usuario("Un mail");
+
     public static synchronized Global getInstance(){
         if(instance == null)
             instance = new Global();
