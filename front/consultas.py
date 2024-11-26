@@ -15,6 +15,8 @@ SELECT h.*,
 FROM HOTELES h;
 """
 
+QUERY_OBTENER_RESERVA_POR_ID = "SELECT * FROM RESERVAS WHERE reservas_id = :reservas_id"
+
 QUERY_OBTENER_SERVICIOS_POR_RESERVA = """
 SELECT s.servicio_id, s.nombre, s.descripcion, s.url_imagen, s.ubicacion, s.habilitado, s.categoria
 FROM USUARIO_SERVICIOS us
@@ -56,54 +58,22 @@ def run_get_query2(query, params=None):
     try:
         with Session() as session:
             result = session.execute(text(query), params)
-
+            
             # Verificar qué devuelve result.fetchall()
             rows = result.fetchall()
             print(f"Resultado de la consulta: {rows}")
-
+            
             # Obtener los nombres de las columnas
             columns = result.keys()  # Devuelve los nombres de las columnas
-
+            
             # Convertir las filas en diccionarios
             return [dict(zip(columns, row)) for row in rows]
-
+    
     except Exception as e:
         print(f"Error al ejecutar la consulta: {e}")
         return None
-
-
-
-
-def run_get_query(query, params=None):
-    try:
-        with Session() as session:
-            result = session.execute(text(query), params)
-            return result.fetchall()
-    except Exception as e:
-        print(f"Error al ejecutar la consulta: {e}")
-        return None
-
-def run_get_query2(query, params=None):
-    try:
-        with Session() as session:
-            result = session.execute(text(query), params)
-
-            # Verificar qué devuelve result.fetchall()
-            rows = result.fetchall()
-            print(f"Resultado de la consulta: {rows}")
-
-            # Obtener los nombres de las columnas
-            columns = result.keys()  # Devuelve los nombres de las columnas
-
-            # Convertir las filas en diccionarios
-            return [dict(zip(columns, row)) for row in rows]
-
-    except Exception as e:
-        print(f"Error al ejecutar la consulta: {e}")
-        return None
-
-
-
+ 
+    
 
 def obtener_hoteles():
     return run_get_all_query(QUERY_OBTENER_HOTELES)
@@ -128,6 +98,38 @@ def obtener_hoteles_con_imagen():
 
 def obtener_servicios_por_reserva(id):
     resultado = run_get_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, {'id_reserva': id})
+    
+    if resultado is None:
+        print("La consulta no devolvió resultados.")
+        return []
+
+    print(f"Resultado de la consulta: {resultado}")
+
+    columnas = ["servicio_id", "nombre", "descripcion", "url_imagen", "ubicacion", "habilitado", "categoria"] 
+    servicios = []
+    for fila in resultado:
+        servicio = {columnas[i]: fila[i] for i in range(len(columnas))}
+        servicios.append(servicio)
+    
+    return servicios
+
+
+
+def obtener_reserva_por_id(reservas_id):
+    reserva_lista = run_get_query2(QUERY_OBTENER_RESERVA_POR_ID, {'reservas_id': reservas_id})
+    
+    if reserva_lista:
+        reserva = reserva_lista[0]
+        
+        return {
+            'reservas_id': reserva.reservas_id,
+            'email': reserva.email,
+            'fecha_ingreso': reserva.fecha_ingreso.strftime('%Y-%m-%d'), 
+            'fecha_egreso': reserva.fecha_egreso.strftime('%Y-%m-%d'),
+            'hotel_id': reserva.hotel_id,
+            'habilitado': reserva.habilitado
+        }
+    return None
 
     if resultado is None:
         print("La consulta no devolvió resultados.")
@@ -318,59 +320,7 @@ def traer_reservas_por_usuario(mail):
             # Transforma los resultados en una lista de diccionarios
             reservas = [
                 dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
-            ]
-            return reservas
-    
-    except Exception as e:
-        return {"error": f"Ocurrió un error: {str(e)}"}
 
-
-
-
-
-QUERY_ELIMINAR_SERVICIO_RESERVA = "DELETE FROM USUARIO_SERVICIOS WHERE servicio_id = :servicio_id AND reserva_id = :reserva_id"
-
-def eliminar_servicio_reserva(servicio_id, reserva_id):
-    try:
-        with Session() as session:
-            result = session.execute(
-                text(QUERY_ELIMINAR_SERVICIO_RESERVA),
-                {"servicio_id": servicio_id, "reserva_id": reserva_id}
-            )
-            session.commit()
-
-            # Verificar si se eliminaron filas
-            if result.rowcount > 0:
-                return True
-            else:
-                return False
-
-    except Exception as e:
-        print(f"Error al eliminar el servicio y la reserva: {e}")
-        return False
-
-
-
-#OBTENER
-
-
-query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
-
-def traer_reservas_por_usuario(mail):
-    """Trae todas las reservas del usuario en un diccionario."""
-    try:
-        # Abre una sesión
-        with Session() as session:
-            # Ejecuta la consulta con el parámetro del email
-            resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
-            
-            # Verifica si hay resultados
-            if not resultados:
-                return None
-
-            # Transforma los resultados en una lista de diccionarios
-            reservas = [
-                dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
             ]
             return reservas
     

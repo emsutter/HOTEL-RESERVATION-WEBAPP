@@ -370,32 +370,52 @@ def obtener_servicios():
 
 @app.route('/admin/crear_reserva_servicio', methods=['POST'])
 def crear_reserva_servicio():
-    data = request.get_json()
-    id_reserva = data.get("id_reserva")
-    id_servicio = data.get("id_servicio")
+    try:
+        data = request.get_json()
+        id_reserva = data.get("id_reserva")
+        id_servicio = data.get("id_servicio")
 
-    if not id_reserva or not id_servicio:
-        return jsonify({"error": "Faltan datos obligatorios"}), 400
-    resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
+        if not id_reserva or not id_servicio:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+        resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
 
-    # Retornar una respuesta
-    if resultado:
-        return jsonify({"mensaje": "Reserva creada exitosamente"}), 201
-    else:
-        return jsonify({"error": "No se pudo crear la reserva"}), 500
+        # Retornar una respuesta
+        if resultado:
+            return jsonify({"mensaje": "Reserva creada exitosamente"}), 201
+        else:
+            return jsonify({"error": "No se pudo crear la reserva"}), 500
+    except Exception as e:
+        return {"error": f"Ocurrió un error: {str(e)}"}
+    
 
-
+import traceback
 
 @app.route('/admin/obtener_servicios_reserva/<int:id_reserva>', methods=['GET'])
 def obtener_servicios_reserva(id_reserva):
     try:
         servicios = consultas.obtener_servicios_por_reserva(id_reserva)
-
         if servicios:
             return jsonify(servicios), 200
         else:
             return jsonify({"mensaje": "No se encontraron servicios para esta reserva"}), 404
     except Exception as e:
+        # Capturar el traceback completo
+        error_trace = traceback.format_exc()
+        print(error_trace)  # Imprimir el error en la consola del servidor
+        return jsonify({"error": f"Ocurrió un error: {error_trace}"}), 500
+
+
+@app.route('/admin/obtener_reserva/<int:reservas_id>', methods=['GET'])
+def obtener_reserva(reservas_id):
+    try:
+        print(f"Buscando reserva con ID: {reservas_id}")  # Esto te ayuda a ver si la solicitud llega bien
+        reserva = consultas.obtener_reserva_por_id(reservas_id)
+        if reserva:
+            return jsonify(reserva), 200
+        else:
+            return jsonify({"error": "Reserva no encontrada"}), 404
+    except Exception as e:
+        print(f"Error: {e}")  # Esto imprimirá el error en la consola de Flask
         return jsonify({"error": f"Ocurrió un error: {e}"}), 500
 
 
