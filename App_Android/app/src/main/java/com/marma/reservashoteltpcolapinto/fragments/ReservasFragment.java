@@ -1,4 +1,4 @@
-package com.marma.reservashoteltpcolapinto;
+package com.marma.reservashoteltpcolapinto.fragments;
 
 import android.os.Bundle;
 
@@ -8,6 +8,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.marma.reservashoteltpcolapinto.AdapterReservas;
+import com.marma.reservashoteltpcolapinto.clases.Global;
 import com.marma.reservashoteltpcolapinto.databinding.FragmentReservasBinding;
 
 public class ReservasFragment extends Fragment {

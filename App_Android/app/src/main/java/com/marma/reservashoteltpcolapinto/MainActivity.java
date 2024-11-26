@@ -10,6 +10,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.marma.reservashoteltpcolapinto.databinding.ActivityMainBinding;
+import com.marma.reservashoteltpcolapinto.fragments.ReservasFragment;
+import com.marma.reservashoteltpcolapinto.fragments.ServiciosFragment;
 
 public class MainActivity extends AppCompatActivity {
     private static final String SERVICIOS = "Servicios";

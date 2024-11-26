@@ -17,10 +17,11 @@ FROM HOTELES h;
 
 QUERY_OBTENER_SERVICIOS_POR_RESERVA = """
 SELECT s.servicio_id, s.nombre
-FROM reservas_servicios rs
-INNER JOIN servicios s ON rs.servicio_id = s.servicio_id
-WHERE rs.reserva_id = %s;
+FROM USUARIO_SERVICIOS us
+INNER JOIN SERVICIOS s ON us.servicio_id = s.servicio_id
+WHERE us.reserva_id = :id_reserva;
 """
+
 
 
 engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
@@ -32,6 +33,16 @@ def run_get_all_query(query):
         result = session.execute(text(query))
         return result.fetchall()
       
+
+def run_get_query(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            return result.fetchall() 
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+    
 
 def obtener_hoteles():
     return run_get_all_query(QUERY_OBTENER_HOTELES)
@@ -55,7 +66,8 @@ def obtener_hoteles_con_imagen():
     return run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
 
 def obtener_servicios_por_reserva(id):
-    return run_get_all_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, (id,))
+    return run_get_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, {'id_reserva': id})
+
 
 
 QUERY_AGREGAR_HOTEL = "INSERT INTO HOTELES (nombre, descripcion, ubicacion) VALUES (:nombre, :descripcion, :ubicacion)"

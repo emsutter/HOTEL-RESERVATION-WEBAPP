@@ -303,9 +303,6 @@ def obtener_servicios_reserva(id_reserva):
 
 
 
-
-
-
 def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):
     try:
         # Definir el cuerpo del correo

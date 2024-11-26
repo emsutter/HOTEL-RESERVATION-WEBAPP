@@ -1,6 +1,5 @@
 package com.marma.reservashoteltpcolapinto;
 
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,10 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.marma.reservashoteltpcolapinto.clases.Categoria;
+import com.marma.reservashoteltpcolapinto.clases.Global;
+import com.marma.reservashoteltpcolapinto.clases.Servicio;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterReservas extends RecyclerView.Adapter<AdapterReservas.ViewHolder> {
