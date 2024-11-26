@@ -34,6 +34,8 @@ public class ReservasFragment extends Fragment {
         AdapterReservas adapter = new AdapterReservas(Global.getInstance().usuario.getServicios());
         binding.recyclerView.setAdapter(adapter);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-
+        Global.getInstance().adapterReservas = adapter;
     }
+
+
 }

@@ -17,9 +17,13 @@
         android:theme="@style/Theme.ReservasHotelTPColapinto"
         tools:targetApi="31" >
 
-        <meta-data
+        <!-- <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCXlMYPlKmfVBBSB6xk8Cq6LeqeLtr-pxw" />
+-->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyASSD3DR_mi1R0cIsH4m-GP16bG57Ik7XE" />
 
         <activity
             android:name=".ServicioActivity"

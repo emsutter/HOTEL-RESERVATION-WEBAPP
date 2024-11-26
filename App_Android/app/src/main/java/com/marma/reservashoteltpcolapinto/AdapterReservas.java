@@ -1,10 +1,13 @@
 package com.marma.reservashoteltpcolapinto;
 
+import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,9 +15,15 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.marma.reservashoteltpcolapinto.clases.Categoria;
 import com.marma.reservashoteltpcolapinto.clases.Global;
+import com.marma.reservashoteltpcolapinto.clases.ReservaServicioRequest;
 import com.marma.reservashoteltpcolapinto.clases.Servicio;
 
+import java.io.IOException;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class AdapterReservas extends RecyclerView.Adapter<AdapterReservas.ViewHolder> {
 
@@ -72,20 +81,45 @@ public class AdapterReservas extends RecyclerView.Adapter<AdapterReservas.ViewHo
                     .into(this.imagen);
 
             this.nombre.setText(servicio.getNombre());
-            this.categoria.setText(getCategoria(servicio));
+            this.categoria.setText(servicio.getCategoria());
 
             this.cancelar.setOnClickListener(v -> {
                 adapter.removeItem(position);
+                removerDeBaseDeDatos(servicio.getServicio_id(), this.itemView.getContext());
             });
         }
 
-        private String getCategoria(Servicio servicio) {
-            for (Categoria categoria : Global.getInstance().categorias) {
-                if (categoria.contiene(servicio)) {
-                    return categoria.getNombre();
+        private void removerDeBaseDeDatos(int id, Context context){
+            ApiService apiService = RetrofitClient.getApiService();
+            Call<Void> call;
+
+            call = apiService.eliminarServicioReserva(id, Global.getInstance().reserva.getReservas_id());
+
+            call.enqueue(new Callback<Void>() {
+                @Override
+                public void onResponse(Call<Void> call, Response<Void> response) {
+                    if (response.isSuccessful()) {
+                            Toast.makeText(context, "Reserva borrada exitosamente", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // Obtener detalles del error
+                        String errorMessage = "Código de error: " + response.code();
+                        try {
+                            if (response.errorBody() != null) {
+                                errorMessage += "\n" + response.errorBody().string();
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        Log.e("API", errorMessage);
+                        Toast.makeText(context, "No se pudo crear la reserva: " + errorMessage, Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-            return "";
+
+                @Override
+                public void onFailure(Call<Void> call, Throwable t) {
+                    Toast.makeText(context, "Error de conexión: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
         }
     }
 }

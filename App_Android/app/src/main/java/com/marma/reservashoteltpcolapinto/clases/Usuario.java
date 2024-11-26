@@ -24,6 +24,10 @@ public class Usuario {
     }
 
     public boolean contratoSerivico(Servicio servicio){
-        return this.servicios.contains(servicio);
+        for(Servicio servicioAux : servicios){
+            if(servicio.getNombre().equals(servicioAux.getNombre()) && servicio.getCategoria().equals(servicioAux.getCategoria()))
+                return true;
+        }
+        return false;
     }
 }
