@@ -127,17 +127,14 @@ def agregar_hotel():
         nombre = data['nombre']
         descripcion = data['descripcion']
         ubicacion = data['ubicacion']
-
         hotel_id = consultas.agregar_hotel(nombre, descripcion, ubicacion)
 
         imagenes = data.get('imagenes', [])
         if imagenes:
             consultas.agregar_imagenes(hotel_id, imagenes)
 
-
-        nuevo_hotel = {"hotel_id": hotel_id, "nombre": nombre}
+        nuevo_hotel = {"hotel_id": hotel_id, "nombre": nombre, "habilitado": 1}
         return jsonify({"message": "Hotel agregado correctamente", "hotel": nuevo_hotel}), 201
-
 
     except Exception as e:
 
