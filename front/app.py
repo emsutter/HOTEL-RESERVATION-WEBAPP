@@ -159,7 +159,23 @@ def habilitar_hotel(hotel_id):
         return jsonify({"message": "Hotel habilitado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+@app.route('/admin/deshabilitar_habitacion/<int:habitacion_id>', methods=['POST'])
+def deshabilitar_habitacion(habitacion_id):
+    try:
+        consultas.deshabilitar_habitacion(habitacion_id)
+        return jsonify({"message": "habitacion deshabilitada correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
+@app.route('/admin/habilitar_habitacion/<int:habitacion_id>', methods=['POST'])
+def habilitar_habitacion(habitacion_id):
+    try:
+        consultas.habilitar_habitacion(habitacion_id)
+        return jsonify({"message": "habitacion habilitada correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/admin/agregar_habitacion', methods=['POST'])
 def agregar_habitacion():
     try:

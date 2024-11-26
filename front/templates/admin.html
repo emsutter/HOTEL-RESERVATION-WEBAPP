@@ -85,16 +85,21 @@
                         <th>ID</th>
                         <th>Capacidad</th>
                         <th>Hotel</th>
+                        <th></th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="habitaciones-table-body">
                     {% for habitacion in habitaciones %}
-                        <tr>
-                            <td>{{ habitacion.habitacion_id }}</td>
-                            <td>{{ habitacion.capacidad }}</td>
-                            <td>{{ habitacion.hotel_id }}</td>
-
-                        </tr>
+                    <tr id="habitacion-row-{{ habitacion.habitacion_id }}" class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
+                        <td>{{ habitacion.habitacion_id }}</td>
+                        <td>{{ habitacion.capacidad }}</td>
+                        <td>{{ habitacion.hotel_id }}</td>
+                        <td>
+                            <button class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}" data-habitacion-id="{{ habitacion.habitacion_id }}">
+                                {% if habitacion.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                            </button>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>

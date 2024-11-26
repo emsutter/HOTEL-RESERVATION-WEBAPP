@@ -144,7 +144,45 @@ document.addEventListener("DOMContentLoaded", function() {
             alert('Error al agregar la habitación');
         });
     });
+
+    // Aca empieza el codigo para deshabilitar habitacion
+
+    const buttons = document.getElementsByClassName('toggle-habitacion-btn');
+    
+    for (let i = 0; i < buttons.length; i++) {
+        buttons[i].addEventListener('click', function(event) {
+            const habitacionId = event.target.dataset.habitacionId;
+            toggleHabitacionStatus(habitacionId, event.target);
+        });
+    }
 });
+
+function toggleHabitacionStatus(habitacionId, button) {
+    const isDeshabilitado = button.classList.contains('deshabilitado');
+    const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
+    const confirmMessage = isDeshabilitado ? 
+        "¿Estás seguro de que quieres habilitar esta habitacion?" : 
+        "¿Estás seguro de que quieres deshabilitar esta habitacion?";
+
+    if (confirm(confirmMessage)) {
+        fetch(`/admin/${action}_habitacion/${habitacionId}`, {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.ok) {
+                alert(`habitacion ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
+                button.classList.toggle('deshabilitado');
+                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                document.getElementById(`habitacion-row-${habitacionId}`).classList.toggle('deshabilitado');
+            } else {
+                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} la habitacion`);
+            }
+        })
+        .catch(error => {
+            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} la habitacion: ` + error);
+        });
+    }
+}
 
 
 document.addEventListener("DOMContentLoaded", function() {
