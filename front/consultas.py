@@ -11,7 +11,7 @@ QUERY_OBTENER_IMAGENES = "SELECT * FROM IMAGENES"
 
 QUERY_OBTENER_HOTELES_CON_IMAGEN = """
 SELECT h.*, 
-       (SELECT MIN(i.url) FROM IMAGENES i WHERE i.hotel_id = h.id) AS url_imagen
+       (SELECT MIN(i.url) FROM IMAGENES i WHERE i.hotel_id = h.hotel_id) AS url_imagen
 FROM HOTELES h;
 """
 
