@@ -34,7 +34,7 @@ function submitReserva(event) {
     };
 
     // Enviar los datos al backend usando fetch (AJAX)
-    fetch('/admin/agregar_reserva', {
+    fetch('https://marm4.pythonanywhere.com/admin/agregar_reserva', {
        method: 'POST',
        headers: {
           'Content-Type': 'application/json'  // Indicamos que enviamos JSON
@@ -56,9 +56,9 @@ function submitReserva(event) {
     });
  }
 
- 
+
  function submitReserva(event) {
-   event.preventDefault(); 
+   event.preventDefault();
 
 
    const email = document.getElementById("Email").value;
@@ -78,7 +78,7 @@ function submitReserva(event) {
        egreso: egreso,
        hotel_id: hotelId,
    };
-   fetch("/admin/agregar_reserva", {
+   fetch("https://marm4.pythonanywhere.com/admin/agregar_reserva", {
        method: "POST",
        headers: {
            "Content-Type": "application/json",

@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
         const imagenesContainer = document.getElementById("imagenes-container");
         const nuevaImagen = document.createElement("input");
         nuevaImagen.type = "url";
-        nuevaImagen.name = "imagenes_hotel[]"; 
+        nuevaImagen.name = "imagenes_hotel[]";
         nuevaImagen.classList.add("imagen-url");
         nuevaImagen.placeholder = "https://www.buscateUnaImagenEnGoogle.com";
         imagenesContainer.appendChild(nuevaImagen);
@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-       
+
         const nombreHotel = document.getElementById('nombre_hotel').value;
         const descripcionHotel = document.getElementById('descripcion_hotel').value;
         const ubicacionHotel = document.getElementById('ubicacion_hotel').value;
@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function() {
             imagenes: imagenesHotel
         };
 
-        fetch('http://127.0.0.1:5000/admin/agregar_hotel', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_hotel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -38,11 +38,11 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(data => {
             alert(data.message);
 
-            
+
             if (data.hotel) {
                 const hotelesTable = document.getElementById('hoteles-table-body');
 
-                
+
                 const newRow = document.createElement('tr');
                 newRow.id = `hotel-row-${data.hotel.hotel_id }`;
                 // Todo: Al agregar un nuevo hotel se debe poder modificar si esta habilitado o deshabilitado
@@ -55,7 +55,7 @@ document.addEventListener("DOMContentLoaded", function() {
                             </button>
                         </td>
                 `;
-                
+
                 hotelesTable.appendChild(newRow);
             }
 
@@ -65,8 +65,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
             const imagenesContainer = document.getElementById("imagenes-container");
             const imagenesInputs = document.querySelectorAll('input[name="imagenes_hotel[]"]');
-            imagenesInputs.forEach(input => input.value = '');  
-            imagenesContainer.innerHTML = '';  
+            imagenesInputs.forEach(input => input.value = '');
+            imagenesContainer.innerHTML = '';
 
         })
         .catch((error) => {
@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Aca empieza el codigo para deshabilitar hotel
 
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
-    
+
     for (let i = 0; i < buttons.length; i++) {
         buttons[i].addEventListener('click', function(event) {
             const hotelId = event.target.dataset.hotelId;
@@ -90,8 +90,8 @@ document.addEventListener("DOMContentLoaded", function() {
 function toggleHotelStatus(hotelId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
-    const confirmMessage = isDeshabilitado ? 
-        "¿Estás seguro de que quieres habilitar este hotel?" : 
+    const confirmMessage = isDeshabilitado ?
+        "¿Estás seguro de que quieres habilitar este hotel?" :
         "¿Estás seguro de que quieres deshabilitar este hotel?";
 
     if (confirm(confirmMessage)) {
@@ -119,7 +119,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-        
+
         const capacidad = document.getElementById('capacidad').value;
         const hotelId = document.getElementById('hotel_id').value;
 
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", function() {
             hotel_id: hotelId
         };
 
-        fetch('/admin/agregar_habitacion', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_habitacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -149,21 +149,23 @@ document.addEventListener("DOMContentLoaded", function() {
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
-       
+
         const nombreServicio = document.getElementById('nombre_servicio').value;
         const descripcionServicio = document.getElementById('descripcion_servicio').value;
         const urlImagen = document.getElementById('url_imagen').value;
         const ubicacionServicio = document.getElementById('ubicacion_servicio').value;
-        
+        const categoriaServicio = document.getElementById('categoria_servicio').value;
+
 
         const data = {
             nombre: nombreServicio,
             descripcion: descripcionServicio,
             url_imagen: urlImagen,
-            ubicacion: ubicacionServicio
+            ubicacion: ubicacionServicio,
+            categoria: categoriaServicio
         };
 
-        fetch('http://127.0.0.1:5000/admin/agregar_servicio', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_servicio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -175,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function() {
             alert(data.message);
             if (data.servicio) {
                 const serviciosTable = document.getElementById('servicios-table-body');
-                
+
                 const newRow = document.createElement('tr');
                 newRow.id = `servicio-row-${data.servicio.servicio_id}`;
 
@@ -183,9 +185,10 @@ document.addEventListener("DOMContentLoaded", function() {
                     <td>${data.servicio.servicio_id}</td>
                     <td>${data.servicio.nombre}</td>
                     <td>${data.servicio.descripcion}</td>
-                
+                    <td>${categoriaServicio}</td>
+
                 `;
-                
+
                 serviciosTable.appendChild(newRow);
             }
 

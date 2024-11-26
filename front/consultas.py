@@ -10,13 +10,27 @@ QUERY_OBTENER_USUARIOS  = "SELECT * FROM USUARIOS"
 QUERY_OBTENER_IMAGENES = "SELECT * FROM IMAGENES"
 
 QUERY_OBTENER_HOTELES_CON_IMAGEN = """
-SELECT h.*, 
+SELECT h.*,
        (SELECT MIN(i.url) FROM IMAGENES i WHERE i.hotel_id = h.id) AS url_imagen
 FROM HOTELES h;
 """
 
+QUERY_OBTENER_SERVICIOS_POR_RESERVA = """
+SELECT s.servicio_id, s.nombre
+FROM USUARIO_SERVICIOS us
+INNER JOIN SERVICIOS s ON us.servicio_id = s.servicio_id
+WHERE us.reserva_id = :id_reserva;
+"""
 
-engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
+
+engine = create_engine(
+    'mysql+mysqlconnector://marm4:Moqnit-1dakte-dikbew@marm4.mysql.pythonanywhere-services.com/marm4$apc_db',
+    pool_size=10,  # Número máximo de conexiones simultáneas
+    max_overflow=20,  # Número máximo de conexiones adicionales que pueden ser creadas
+    pool_recycle=3600  # Tiempo en segundos para reciclar las conexiones
+)
+
+
 
 Session = sessionmaker(bind=engine)
 
@@ -24,7 +38,17 @@ def run_get_all_query(query):
     with Session() as session:
         result = session.execute(text(query))
         return result.fetchall()
-      
+
+
+def run_get_query(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            return result.fetchall()
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+
 
 def obtener_hoteles():
     return run_get_all_query(QUERY_OBTENER_HOTELES)
@@ -47,12 +71,17 @@ def obtener_imagenes():
 def obtener_hoteles_con_imagen():
     return run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
 
+def obtener_servicios_por_reserva(id):
+    return run_get_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, {'id_reserva': id})
+
+
 QUERY_AGREGAR_HOTEL = "INSERT INTO HOTELES (nombre, descripcion, ubicacion) VALUES (:nombre, :descripcion, :ubicacion)"
 QUERY_AGREGAR_HABITACION = "INSERT INTO HABITACIONES (capacidad, hotel_id) VALUES (:capacidad, :hotel_id)"
 QUERY_AGREGAR_RESERVA = "INSERT INTO RESERVAS (email, fecha_ingreso, fecha_egreso, hotel_id) VALUES (:email, :fecha_ingreso, :fecha_egreso, :hotel_id)"
-QUERY_AGREGAR_SERVICIO = "INSERT INTO SERVICIOS (nombre, descripcion, url_imagen, ubicacion) VALUES (:nombre, :descripcion, :url_imagen, :ubicacion)"
+QUERY_AGREGAR_SERVICIO = "INSERT INTO SERVICIOS (nombre, descripcion, url_imagen, ubicacion, categoria) VALUES (:nombre, :descripcion, :url_imagen, :ubicacion, :categoria)"
 QUERY_AGREGAR_IMAGEN = "INSERT INTO IMAGENES (hotel_id, url) VALUES (:hotel_id, :url)"
-    
+QUERY_AGREGAR_RESERVA_SERVICIO = "INSERT INTO USUARIO_SERVICIOS (servicio_id, reserva_id) VALUES (:servicio_id, :reserva_id)"
+
 def run_insert_query(query, params):
     with Session() as session:
         try:
@@ -79,8 +108,11 @@ def agregar_reserva(email, ingreso, egreso, hotel_id):
         "hotel_id": hotel_id
     })
 
-def agregar_servicio(nombre, descripcion, url_imagen, ubicacion):
-    return run_insert_query(QUERY_AGREGAR_SERVICIO, {"nombre": nombre, "descripcion": descripcion, "url_imagen": url_imagen, "ubicacion": ubicacion})
+def agregar_servicio(nombre, descripcion, url_imagen, ubicacion, categoria):
+    return run_insert_query(QUERY_AGREGAR_SERVICIO, {"nombre": nombre, "descripcion": descripcion, "url_imagen": url_imagen, "ubicacion": ubicacion, "categoria": categoria})
+
+def agregar_reserva_servicio(id_reserva, id_servicio):
+    return run_insert_query(QUERY_AGREGAR_RESERVA_SERVICIO, {"servicio_id": id_servicio, "reserva_id": id_reserva})
 
 # def agregar_usuario(nombre, email, telefono):
 #     return run_insert_query(QUERY_AGREGAR_USUARIO, {"nombre": nombre, "email": email, "telefono": telefono})
@@ -88,8 +120,8 @@ def agregar_servicio(nombre, descripcion, url_imagen, ubicacion):
 def agregar_imagenes(hotel_id, imagenes):
     for url in imagenes:
         run_insert_query(QUERY_AGREGAR_IMAGEN, {"hotel_id": hotel_id, "url": url})
-    
-        
+
+
 QUERY_DESHABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 0 WHERE hotel_id = :id"
 QUERY_DESHABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 0 WHERE habitacion_id = :id"
 QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE reserva_id = :id"
@@ -110,7 +142,7 @@ def anular_por_id(query, id):
             raise e
 
 # TODO: remake - don't remove elements but anulate them
-        
+
 def deshabilitar_hotel(id):
     anular_por_id(QUERY_DESHABILITAR_HOTEL, id)
 
@@ -150,7 +182,7 @@ def habilitar_por_id(query, id):
             raise e
 
 # TODO: remake - don't remove elements but anulate them
-        
+
 def habilitar_hotel(id):
     anular_por_id(QUERY_HABILITAR_HOTEL, id)
 
@@ -168,3 +200,28 @@ def habilitar_usuario(id):
 
 def habilitar_imagen(id):
     anular_por_id(QUERY_HABILITAR_IMAGEN, id)
+
+#OBTENER
+
+query_reservas_por_usuario = "SELECT * FROM reservas WHERE email = :mail"
+
+def traer_reservas_por_usuario(mail):
+    """Trae todas las reservas del usuario en un diccionario."""
+    try:
+        # Abre una sesión
+        with Session() as session:
+            # Ejecuta la consulta con el parámetro del email
+            resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
+
+            # Verifica si hay resultados
+            if not resultados:
+                return None
+
+            # Transforma los resultados en una lista de diccionarios
+            reservas = [
+                dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
+            ]
+            return reservas
+
+    except Exception as e:
+        return {"error": f"Ocurrió un error: {str(e)}"}
