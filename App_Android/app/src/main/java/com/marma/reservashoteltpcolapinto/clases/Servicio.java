@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Servicio {
+    private int servicio_id;
     private String nombre;
     private String descripcion;
     private String url_imagen;
@@ -14,13 +15,34 @@ public class Servicio {
     public Servicio() {
     }
 
-    public Servicio(String nombre, String descripcion, String urlImagen, String ubicacion, int habilitado, String categoria) {
+    public Servicio(int servicio_id, String nombre, String descripcion, String urlImagen, String ubicacion, int habilitado, String categoria) {
+        this.servicio_id = servicio_id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.url_imagen = urlImagen;
         this.ubicacion = ubicacion;
         this.habilitado = habilitado;
         this.categoria = categoria;
+    }
+
+    public int getServicio_id() {
+        return servicio_id;
+    }
+
+    public void setServicio_id(int servicio_id) {
+        this.servicio_id = servicio_id;
+    }
+
+    public String getUrl_imagen() {
+        return url_imagen;
+    }
+
+    public void setUrl_imagen(String url_imagen) {
+        this.url_imagen = url_imagen;
+    }
+
+    public int getHabilitado() {
+        return habilitado;
     }
 
     public String getUrlImagen() {

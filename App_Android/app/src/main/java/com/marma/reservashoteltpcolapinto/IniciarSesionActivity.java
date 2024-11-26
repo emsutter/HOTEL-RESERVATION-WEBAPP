@@ -3,11 +3,15 @@ package com.marma.reservashoteltpcolapinto;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 
 import com.marma.reservashoteltpcolapinto.clases.Categoria;
 import com.marma.reservashoteltpcolapinto.clases.Global;
+import com.marma.reservashoteltpcolapinto.clases.Reserva;
 import com.marma.reservashoteltpcolapinto.clases.Servicio;
 import com.marma.reservashoteltpcolapinto.databinding.ActivityIniciarSesionBinding;
 
@@ -27,18 +31,43 @@ public class IniciarSesionActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityIniciarSesionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
+        RetrofitClient.getApiService();
         setListeners();
 
     }
 
     private void setListeners(){
         binding.ingresar.setOnClickListener(v -> {
-            String idReserva = binding.mail.getText().toString();
+            int idReserva = Integer.parseInt(binding.mail.getText().toString());
+            binding.progressBar.setVisibility(View.VISIBLE);
+            binding.ingresar.setVisibility(View.GONE);
+            obtenerReserva(idReserva);
+        });
+    }
 
-            obtenerServicios();
+    private void obtenerReserva(int id){
+        ApiService apiService = RetrofitClient.getApiService();
+        apiService.obtenerReserva(id).enqueue(new Callback<Reserva>() {
+            @Override
+            public void onResponse(Call<Reserva> call, Response<Reserva> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    Global.getInstance().reserva = response.body();
+                    obtenerServiciosPorReserva(Global.getInstance().reserva.getReservas_id());
+                    obtenerServicios();
+                }
+                else{
+                    Toast.makeText(IniciarSesionActivity.this, "No se encontre una reserva con el ID ingresado.", Toast.LENGTH_SHORT).show();
+                    binding.progressBar.setVisibility(View.GONE);
+                    binding.ingresar.setVisibility(View.VISIBLE);
+                }
+            }
 
-            //obtenerServiciosPorReserva(idReserva);
+            @Override
+            public void onFailure(Call<Reserva> call, Throwable t) {
+                Toast.makeText(IniciarSesionActivity.this, "Error: " + t, Toast.LENGTH_SHORT).show();
+                binding.progressBar.setVisibility(View.GONE);
+                binding.ingresar.setVisibility(View.VISIBLE);
+            }
         });
     }
 
@@ -52,11 +81,10 @@ public class IniciarSesionActivity extends AppCompatActivity {
                     if (servicios.isEmpty()) {
                         Log.d("API_RESPONSE", "No se encontraron servicios para esta reserva");
                     } else {
-
                         for (Servicio servicio : servicios) {
                             Log.e("URLS", servicio.getUrlImagen());
                             if(!categoriaExiste(servicio)){
-                                Categoria categoriAux = new Categoria(servicio.getNombre(), servicio.getUrlImagen());
+                                Categoria categoriAux = new Categoria(servicio.getCategoria(), servicio.getUrlImagen());
                                 categoriAux.addSerivicio(servicio);
                                 Global.getInstance().categorias.add(categoriAux);
                             }
@@ -76,7 +104,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
         });
     }
 
-    private void obtenerServiciosPorReserva(String idReserva){
+    private void obtenerServiciosPorReserva(int idReserva){
         ApiService apiService = RetrofitClient.getApiService();
         apiService.obtenerServiciosReserva(idReserva).enqueue(new Callback<List<Servicio>>() {
             @Override
@@ -92,14 +120,7 @@ public class IniciarSesionActivity extends AppCompatActivity {
                         Log.d("API_RESPONSE", "No se encontraron servicios para esta reserva");
                     } else {
                         for (Servicio servicio : servicios) {
-                            if(categoriaExiste(servicio)){
-                                Categoria categoriAux = new Categoria(servicio.getNombre(), servicio.getUrlImagen());
-                                categoriAux.addSerivicio(servicio);
-                                Global.getInstance().categorias.add(categoriAux);
-                            }
-                            Intent intent = new Intent(IniciarSesionActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                            Global.getInstance().usuario.addServicio(servicio);
                         }
                     }
                 } else {
