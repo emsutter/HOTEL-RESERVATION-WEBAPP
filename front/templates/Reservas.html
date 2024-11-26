@@ -35,10 +35,12 @@
                   <select class="contactus" id="hotel_id" name="hotel_id">
                      <option value="" disabled {% if hotel_id is none %}selected{% endif %}>Selecciona un hotel</option>
                      {% for hotel in hoteles %}
+                        {% if hotel.habilitado %}
                          <option value="{{ hotel.hotel_id }}" data-ubicacion="{{ hotel.ubicacion }}"
-                             {% if hotel.id == hotel_id %}selected{% endif %}>
+                             {% if hotel.hotel_id == hotel_id %}selected{% endif %}>
                              {{ hotel.nombre }}
                          </option>
+                         {% endif %}
                      {% endfor %}
                  </select>
                </div>
@@ -55,7 +57,7 @@
            
 
    <script src="{{ url_for('static', filename = 'js/reservas.js') }}"></script>
-   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCSfQgPP5Nt20kWRzgOqmxFN2bIKWpvFOc&callback=initMap" async defer></script>
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCXlMYPlKmfVBBSB6xk8Cq6LeqeLtr-pxw&callback=initMap" async defer></script>
    <script src="{{ url_for('static', filename = 'js/google-map.js') }}">
     
    </script>

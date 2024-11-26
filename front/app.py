@@ -116,18 +116,15 @@ def agregar_hotel():
         nombre = data['nombre']
         descripcion = data['descripcion']
         ubicacion = data['ubicacion']
-
         hotel_id = consultas.agregar_hotel(nombre, descripcion, ubicacion)
         
         imagenes = data.get('imagenes', [])
         if imagenes:
             consultas.agregar_imagenes(hotel_id, imagenes)
-        
 
-        nuevo_hotel = {"hotel_id": hotel_id, "nombre": nombre}
+        nuevo_hotel = {"hotel_id": hotel_id, "nombre": nombre, "habilitado": 1}
         return jsonify({"message": "Hotel agregado correctamente", "hotel": nuevo_hotel}), 201
 
-    
     except Exception as e:
        
         print(f"Error al agregar el hotel: {str(e)}")
@@ -146,6 +143,38 @@ def habilitar_hotel(hotel_id):
     try:
         consultas.habilitar_hotel(hotel_id)
         return jsonify({"message": "Hotel habilitado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/admin/deshabilitar_servicio/<int:servicio_id>', methods=['POST'])
+def deshabilitar_servicio(servicio_id):
+    try:
+        consultas.deshabilitar_servicio(servicio_id)
+        return jsonify({"message": "servicio deshabilitado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/admin/habilitar_servicio/<int:servicio_id>', methods=['POST'])
+def habilitar_servicio(servicio_id):
+    try:
+        consultas.habilitar_servicio(servicio_id)
+        return jsonify({"message": "servicio habilitado correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/admin/deshabilitar_habitacion/<int:habitacion_id>', methods=['POST'])
+def deshabilitar_habitacion(habitacion_id):
+    try:
+        consultas.deshabilitar_habitacion(habitacion_id)
+        return jsonify({"message": "habitacion deshabilitada correctamente"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/admin/habilitar_habitacion/<int:habitacion_id>', methods=['POST'])
+def habilitar_habitacion(habitacion_id):
+    try:
+        consultas.habilitar_habitacion(habitacion_id)
+        return jsonify({"message": "habitacion habilitada correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -193,7 +222,9 @@ def agregar_servicio():
             "servicio_id": servicio_id,
             "nombre": nombre,
             "descripcion": descripcion,
-            "url_imagen": url_imagen
+            "url_imagen": url_imagen,
+            "categoria": categoria,
+            "habilitado": 1
         }
 
         return jsonify({"message": "Servicio agregado correctamente", "servicio": nuevo_servicio}), 201
