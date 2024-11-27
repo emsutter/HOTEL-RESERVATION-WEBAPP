@@ -23,7 +23,7 @@ WHERE rs.reserva_id = %s;
 """
 
 
-engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
+engine = create_engine('mysql+mysqlconnector://root:!Elias100gallinas@localhost:3306/apc_db')
 
 Session = sessionmaker(bind=engine)
 
@@ -186,6 +186,7 @@ def habilitar_imagen(id):
 #OBTENER
 
 query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
+query_obtener_reserva_por_id = text("SELECT * FROM RESERVAS WHERE reservas_id = :id")
 
 def traer_reservas_por_usuario(mail):
     """Trae todas las reservas del usuario en un diccionario."""
@@ -208,3 +209,30 @@ def traer_reservas_por_usuario(mail):
     
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
+
+
+def obtener_reseva_por_id(id):
+    """"trae la reserva especifica del id"""
+
+    try:
+        # Abre una sesión
+        with Session() as session:
+            # Ejecuta la consulta con el parámetro del email
+            respuesta = session.execute(query_obtener_reserva_por_id, {"id": id}).fetchall()
+            
+            if not respuesta:
+                return []
+            
+            # Transforma los resultados en una lista de diccionarios
+            reserva = [
+                dict(row._mapping) for row in respuesta  # Convierte cada fila a un diccionario
+
+            ]
+            
+            print(reserva)
+            return reserva
+    
+    except Exception as e:
+        return {"error": f"Ocurrió un error: {str(e)}"}
+
+    

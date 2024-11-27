@@ -12,7 +12,7 @@ from datetime import timedelta
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)    
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/apc_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:!Elias100gallinas@localhost:3306/apc_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
@@ -35,8 +35,8 @@ def home():
 @app.route('/prueba')
 
 def prueba():
-
-    prueba = session.get('reservas', [])
+    prueba = session.get('reserva', [])
+    
     return render_template("pruebas.html", prueba=prueba)
 
 @app.route('/NuestrosHoteles')
@@ -56,6 +56,16 @@ def Reservas():
     
     return render_template("Reservas.html", hoteles=hoteles, hotel_id=hotel_id, endpoint=request.endpoint)
 
+def appendear_reservas_session(reservas):
+    if "reserva" not in session:
+        session['reserva'] = []
+
+    for reserva in reservas:
+        if reserva not in session['reserva']:
+
+            session['reserva'].append(reserva)
+
+
 @app.route('/ConsultaReserva', methods=['GET', 'POST'])
 def ConsultaReserva():
 
@@ -66,7 +76,7 @@ def ConsultaReserva():
         
         if 'error' not in reservas_por_usuario:
             session['email'] = email  
-            session['reservas'] = reservas_por_usuario.get('data')
+            appendear_reservas_session(reservas_por_usuario.get('data'))
             session.permanent = True 
             return redirect('/mis_reservas')  
         else:
@@ -82,7 +92,7 @@ def mis_reservas():
     mail = session.get('email')
 
     if  mail:
-        reservas = session.get('reservas', [])
+        reservas = session.get('reserva', [])
         return render_template("mis_reservas.html", reservas = reservas)
     else:
         return redirect('/ConsultaReserva')
@@ -234,8 +244,12 @@ def agregar_servicio():
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
 @app.route('/admin/agregar_reserva', methods=['POST'])
+
+
+
 def agregar_reserva():
     try: 
+
         data = request.get_json()
         email = data.get('email')
         ingreso = data.get('ingreso')
@@ -243,6 +257,14 @@ def agregar_reserva():
         hotel_id = data.get('hotel_id')
 
         reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id)
+
+        reserva = consultas.obtener_reseva_por_id(reserva_id)
+        
+        # Actualizar las reservas en la sesión
+        appendear_reservas_session(reserva)
+
+
+
         enviar_correo(email, reserva_id, ingreso, egreso, hotel_id)
         return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
     
