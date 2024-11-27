@@ -45,7 +45,7 @@ def cancelar_reserva(id):
 
     reserva = consultas.obtener_reseva_por_id(id)
 
-    hotel_id = reserva[0]['hotel_id']           #recordar que se deshabilita cuando es 0
+    hotel_id = reserva[0]['hotel_id']           #recordar que se deshabilita cuando es 0 (falta que se vaya de la pestania consultas )
 
     hotel = consultas.obtener_hotel_por_id(hotel_id)
 
@@ -53,9 +53,10 @@ def cancelar_reserva(id):
     if request.method == 'POST':
 
         borrar_reserva(id)
-        redirect('/mis_reservas')
+        
+        return redirect('/mis_reservas')
 
-        return 
+        
 
     
     return render_template('cancelacion.html', reserva = reserva[0], hotel = hotel)
@@ -277,16 +278,15 @@ def agregar_reserva():
         ingreso = data.get('ingreso')
         egreso = data.get('egreso')
         hotel_id = data.get('hotel_id')
+        habitacion_id = data.get('habitacion_id')
 
-        reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id)
-
+        
+        reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id, habitacion_id)
         reserva = consultas.obtener_reseva_por_id(reserva_id)
         
         appendear_reservas_session(reserva)
 
-
-
-        enviar_correo(email, reserva_id, ingreso, egreso, hotel_id)
+        enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id)
         return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
     
     except Exception as e:
@@ -331,27 +331,37 @@ def buscar_usuario(mail):
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
 
-
-
+@app.route('/admin/obtener_habitaciones/<int:hotel_id>', methods=['GET'])
+def obtener_habitaciones(hotel_id):
+    try:
+        habitaciones = consultas.obtener_habitaciones_por_hotel(hotel_id)
+        return jsonify(habitaciones), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/admin/obtener_servicios', methods=['GET'])
 def obtener_servicios():
     return consultas.obtener_servicios()
 
 @app.route('/admin/crear_reserva_servicio', methods=['POST'])
 def crear_reserva_servicio():
-    data = request.get_json()
-    id_reserva = data.get("id_reserva")
-    id_servicio = data.get("id_servicio")
+    try:
+        data = request.get_json()
+        id_reserva = data.get("id_reserva")
+        id_servicio = data.get("id_servicio")
 
-    if not id_reserva or not id_servicio:
-        return jsonify({"error": "Faltan datos obligatorios"}), 400
-    resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
+        if not id_reserva or not id_servicio:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+        resultado = consultas.agregar_reserva_servicio(id_reserva, id_servicio)
 
-    # Retornar una respuesta
-    if resultado:
-        return jsonify({"mensaje": "Reserva creada exitosamente"}), 201
-    else:
-        return jsonify({"error": "No se pudo crear la reserva"}), 500
+        # Retornar una respuesta
+        if resultado:
+            return jsonify({"mensaje": "Reserva creada exitosamente"}), 201
+        else:
+            return jsonify({"error": "No se pudo crear la reserva"}), 500
+    except Exception as e:
+        return {"error": f"Ocurrió un error: {str(e)}"}
+    
 
 
 
@@ -359,7 +369,6 @@ def crear_reserva_servicio():
 def obtener_servicios_reserva(id_reserva):
     try:
         servicios = consultas.obtener_servicios_por_reserva(id_reserva)
-
         if servicios:
             return jsonify(servicios), 200
         else:
@@ -368,12 +377,45 @@ def obtener_servicios_reserva(id_reserva):
         return jsonify({"error": f"Ocurrió un error: {e}"}), 500
 
 
+@app.route('/admin/obtener_reserva/<int:reservas_id>', methods=['GET'])
+def obtener_reserva(reservas_id):
+    try:
+        print(f"Buscando reserva con ID: {reservas_id}")  # Esto te ayuda a ver si la solicitud llega bien
+        reserva = consultas.obtener_reserva_por_id(reservas_id)
+        if reserva:
+            return jsonify(reserva), 200
+        else:
+            return jsonify({"error": "Reserva no encontrada"}), 404
+    except Exception as e:
+        print(f"Error: {e}")  # Esto imprimirá el error en la consola de Flask
+        return jsonify({"error": f"Ocurrió un error: {e}"}), 500
+
+
+@app.route('/admin/eliminar_servicio_reserva', methods=['DELETE'])
+def eliminar_servicio_reserva_endpoint():
+    try:
+        data = request.get_json()
+        reserva_id = data.get("reserva_id")
+        servicio_id = data.get("servicio_id")
+
+        if not reserva_id or not servicio_id:
+            return jsonify({"error": "Faltan datos obligatorios"}), 400
+
+        # Llama a la función que elimina el registro
+        resultado = consultas.eliminar_servicio_reserva(servicio_id, reserva_id)
+
+        if resultado:
+            return jsonify({"mensaje": "Registro eliminado exitosamente"}), 200
+        else:
+            return jsonify({"error": "No se encontró un registro para eliminar"}), 404
+
+    except Exception as e:
+        print(f"Error al procesar la solicitud: {e}")
+        return jsonify({"error": "Ocurrió un error interno"}), 500
 
 
 
-
-
-def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):
+def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id):
     try:
         # Definir el cuerpo del correo
         cuerpo_html = f"""
@@ -417,6 +459,7 @@ def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):
                     <p><strong>Fecha de Ingreso:</strong> {ingreso}</p>
                     <p><strong>Fecha de Egreso:</strong> {egreso}</p>
                     <p><strong>Hotel:</strong> {hotel_id}</p>
+                    <p><strong>Habitación:</strong> {habitacion_id}</p>
                 </div>
             </body>
         </html>

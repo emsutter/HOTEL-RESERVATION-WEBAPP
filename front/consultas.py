@@ -15,13 +15,16 @@ SELECT h.*,
 FROM HOTELES h;
 """
 
+QUERY_OBTENER_RESERVA_POR_ID = "SELECT * FROM RESERVAS WHERE reservas_id = :reservas_id"
+
 QUERY_OBTENER_SERVICIOS_POR_RESERVA = """
-SELECT s.servicio_id, s.nombre
-FROM reservas_servicios rs
-INNER JOIN servicios s ON rs.servicio_id = s.servicio_id
-WHERE rs.reserva_id = %s;
+SELECT s.servicio_id, s.nombre, s.descripcion, s.url_imagen, s.ubicacion, s.habilitado, s.categoria
+FROM USUARIO_SERVICIOS us
+INNER JOIN SERVICIOS s ON us.servicio_id = s.servicio_id
+WHERE us.reserva_id = :id_reserva;
 """
 
+OBTENER_HABITACION_POR_HOTEL = "SELECT * FROM HABITACIONES WHERE hotel_id = :hotel_id AND habilitado = 1"
 
 engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
 
@@ -32,6 +35,35 @@ def run_get_all_query(query):
         result = session.execute(text(query))
         return result.fetchall()
       
+def run_get_query(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            return result.fetchall() 
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+
+def run_get_query2(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            
+            # Verificar qué devuelve result.fetchall()
+            rows = result.fetchall()
+            print(f"Resultado de la consulta: {rows}")
+            
+            # Obtener los nombres de las columnas
+            columns = result.keys()  # Devuelve los nombres de las columnas
+            
+            # Convertir las filas en diccionarios
+            return [dict(zip(columns, row)) for row in rows]
+    
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+ 
+    
 
 def obtener_hoteles():
     return run_get_all_query(QUERY_OBTENER_HOTELES)
@@ -55,12 +87,44 @@ def obtener_hoteles_con_imagen():
     return run_get_all_query(QUERY_OBTENER_HOTELES_CON_IMAGEN)
 
 def obtener_servicios_por_reserva(id):
-    return run_get_all_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, (id,))
+    resultado = run_get_query(QUERY_OBTENER_SERVICIOS_POR_RESERVA, {'id_reserva': id})
+    
+    if resultado is None:
+        print("La consulta no devolvió resultados.")
+        return []
 
+    print(f"Resultado de la consulta: {resultado}")
+
+    columnas = ["servicio_id", "nombre", "descripcion", "url_imagen", "ubicacion", "habilitado", "categoria"] 
+    servicios = []
+    for fila in resultado:
+        servicio = {columnas[i]: fila[i] for i in range(len(columnas))}
+        servicios.append(servicio)
+    
+    return servicios
+
+def obtener_reserva_por_id(reservas_id):
+    reserva_lista = run_get_query2(QUERY_OBTENER_RESERVA_POR_ID, {'reservas_id': reservas_id})
+    
+    if reserva_lista:
+        reserva = reserva_lista[0]
+        
+        return {
+            'reservas_id': reserva.reservas_id,
+            'email': reserva.email,
+            'fecha_ingreso': reserva.fecha_ingreso.strftime('%Y-%m-%d'), 
+            'fecha_egreso': reserva.fecha_egreso.strftime('%Y-%m-%d'),
+            'hotel_id': reserva.hotel_id,
+            'habilitado': reserva.habilitado
+        }
+    return None
+
+def obtener_habitaciones_por_hotel(hotel_id):
+    return run_get_query2(OBTENER_HABITACION_POR_HOTEL, {"hotel_id": hotel_id})
 
 QUERY_AGREGAR_HOTEL = "INSERT INTO HOTELES (nombre, descripcion, ubicacion) VALUES (:nombre, :descripcion, :ubicacion)"
 QUERY_AGREGAR_HABITACION = "INSERT INTO HABITACIONES (capacidad, hotel_id) VALUES (:capacidad, :hotel_id)"
-QUERY_AGREGAR_RESERVA = "INSERT INTO RESERVAS (email, fecha_ingreso, fecha_egreso, hotel_id) VALUES (:email, :fecha_ingreso, :fecha_egreso, :hotel_id)"
+QUERY_AGREGAR_RESERVA = "INSERT INTO RESERVAS (email, fecha_ingreso, fecha_egreso, hotel_id, habitacion_id) VALUES (:email, :fecha_ingreso, :fecha_egreso, :hotel_id, :habitacion_id)"
 QUERY_AGREGAR_SERVICIO = "INSERT INTO SERVICIOS (nombre, descripcion, url_imagen, ubicacion, categoria) VALUES (:nombre, :descripcion, :url_imagen, :ubicacion, :categoria)"
 QUERY_AGREGAR_IMAGEN = "INSERT INTO IMAGENES (hotel_id, url) VALUES (:hotel_id, :url)"
 QUERY_AGREGAR_RESERVA_SERVICIO = "INSERT INTO USUARIO_SERVICIOS (servicio_id, reserva_id) VALUES (:servicio_id, :reserva_id)"
@@ -82,12 +146,13 @@ def agregar_hotel(nombre, descripcion, ubicacion):
 def agregar_habitacion(capacidad, hotel_id):
     return run_insert_query(QUERY_AGREGAR_HABITACION, {"capacidad": capacidad, "hotel_id": hotel_id})
 
-def agregar_reserva(email, ingreso, egreso, hotel_id):
+def agregar_reserva(email, ingreso, egreso, hotel_id, habitacion_id):
     return run_insert_query(QUERY_AGREGAR_RESERVA, {
         "email": email,
         "fecha_ingreso": ingreso,
         "fecha_egreso": egreso,
-        "hotel_id": hotel_id
+        "hotel_id": hotel_id,
+        "habitacion_id": habitacion_id
     })
 
 def agregar_servicio(nombre, descripcion, url_imagen, ubicacion, categoria):
@@ -183,6 +248,28 @@ def habilitar_usuario(id):
 def habilitar_imagen(id):
     anular_por_id(QUERY_HABILITAR_IMAGEN, id)
 
+
+QUERY_ELIMINAR_SERVICIO_RESERVA = "DELETE FROM USUARIO_SERVICIOS WHERE servicio_id = :servicio_id AND reserva_id = :reserva_id"
+
+def eliminar_servicio_reserva(servicio_id, reserva_id):
+    try:
+        with Session() as session:
+            result = session.execute(
+                text(QUERY_ELIMINAR_SERVICIO_RESERVA),
+                {"servicio_id": servicio_id, "reserva_id": reserva_id}
+            )
+            session.commit()
+
+            # Verificar si se eliminaron filas
+            if result.rowcount > 0:
+                return True
+            else:
+                return False
+
+    except Exception as e:
+        print(f"Error al eliminar el servicio y la reserva: {e}")
+        return False
+
 #OBTENER
 
 query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
@@ -194,7 +281,6 @@ def traer_reservas_por_usuario(mail):
     try:
         # Abre una sesión
         with Session() as session:
-            # Ejecuta la consulta con el parámetro del email
             resultados = session.execute(query_reservas_por_usuario, {"mail": mail}).fetchall()
             
             if not resultados:
