@@ -12,7 +12,7 @@ import os
 from flask import session
 from flask import redirect
 app = Flask(__name__)
-CORS(app)  # Activa CORS para todos los endpoints
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5000", "https://marm4.pythonanywhere.com"]}})  # Activa CORS para todos los endpoints
 
 from datetime import timedelta
 
@@ -267,26 +267,6 @@ def agregar_servicio():
     except Exception as e:
         print(f"Error al agregar la habitacion: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
-
-
-
-
-
-@app.route('/admin/obtener_servicios', methods=['GET'])
-def obtener_servicios():
-    try:
-        # Supongamos que consultas.obtener_servicios() devuelve una lista de objetos Row
-        servicios = consultas.obtener_servicios()
-
-        # Convertimos el resultado de la consulta a una lista de diccionarios
-        servicios_list = [row._asdict() for row in servicios]
-
-        return jsonify(servicios_list)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-
 
 @app.route('/admin/agregar_reserva', methods=['POST'])
 def agregar_reserva():
