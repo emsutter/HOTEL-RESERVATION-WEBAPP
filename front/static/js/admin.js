@@ -138,6 +138,15 @@ document.addEventListener("DOMContentLoaded", function() {
             body: JSON.stringify(data)
         })
         .then(response => response.json())
+        .then(result => {
+            if (result.habitacion) {
+                alert('Habitación agregada correctamente');
+                addHabitacionRow(result.habitacion);
+                form.reset();
+            } else {
+                alert('Error al agregar la habitación');
+            }
+        })
         .catch((error) => {
             console.error('Error:', error);
             alert('Error al agregar la habitación');
@@ -155,6 +164,33 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 });
+
+function addHabitacionRow(habitacion) {
+    console.log(habitacion);
+    const tableBody = document.getElementById('habitaciones-table-body');
+    const row = document.createElement('tr');
+    row.id = `habitacion-row-${habitacion.id}`;
+    const buttonText = 'Deshabilitar';
+
+    row.innerHTML = `
+        <td>${habitacion.id}</td>
+        <td>${habitacion.capacidad}</td>
+        <td>${habitacion.hotel.id}</td>
+        <td>
+            <button class="toggle-habitacion-btn" data-habitacion-id="${habitacion.id}">
+                ${buttonText}
+            </button>
+        </td>   
+    `;  
+
+    tableBody.appendChild(row);
+
+    const button = row.querySelector('.toggle-habitacion-btn');
+    button.addEventListener('click', function(event) {
+        const habitacionId = event.target.dataset.habitacionId; 
+        toggleHabitacionStatus(habitacionId, event.target);
+    });
+}
 
 function toggleHabitacionStatus(habitacionId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
