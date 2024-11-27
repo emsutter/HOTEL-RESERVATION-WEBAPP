@@ -3,56 +3,56 @@
 {% block title %}Inicio - Mi Página Web{% endblock %}
 
 {% block content %}
-      <!-- end header inner -->
-      <!-- end header -->
-      <div class="back_re">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="title">
-                     <h2>Consulte su reserva</h2>
-                  </div>
-               </div>
+<!-- end header inner -->
+<!-- end header -->
+<div class="back_re">
+   <div class="container">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="title">
+               <h2>Consulte su reserva</h2>
             </div>
          </div>
       </div>
-      <!-- about -->
-      <div class="about">
-         <div class="container-fluid">
-            <div class="row">
-               <div class="col-md-5">
-                  <div class="titlepage">
-                     <div class="cons_reserva">
-                        <h1>A continuación, ingrese los datos solicitados</h1>
-                        <br>
-                        <label for="email">Ingrese su mail para ver sus reservas:</label>
-                        <form method="POST">
-                           <input type="text" id="email" name="email" required>
-                           <button type="submit" class="submit-button">Consultar Reserva</button>
-                        </form>
-                        <br>
-                        <br>
-                     </div>
-                  
-
-                  {% if error %}
-                     <div class="alert alert-danger" role="alert">
-                        {{ error }}
-                     </div>
-                  {% endif %}
-
-                  </div>
+   </div>
+</div>
+<!-- about -->
+<div class="about">
+   <div class="container-fluid">
+      <div class="row">
+         <div class="col-md-5">
+            <div class="titlepage">
+               <div class="cons_reserva">
+                  <h1>A continuación, ingrese los datos solicitados</h1>
+                  <br>
+                  <label for="email">Ingrese su mail para ver sus reservas:</label>
+                  <form method="POST">
+                     <input type="text" id="email" name="email" required>
+                     <button type="submit" class="submit-button">Consultar Reserva</button>
+                  </form>
+                  <br>
+                  <br>
                </div>
-               <div class="col-md-7">
-                  <div class="about_img">
-                     <figure><img src="{{ url_for('static', filename = 'images/singapur.jpg')  }}" alt="#"/></figure>
-                  </div>
+
+
+               {% if error %}
+               <div class="alert alert-danger" role="alert">
+                  {{ error }}
                </div>
+               {% endif %}
+
+            </div>
+         </div>
+         <div class="col-md-7">
+            <div class="about_img">
+               <figure><img src="{{ url_for('static', filename = 'images/singapur.jpg')  }}" alt="#" /></figure>
             </div>
          </div>
       </div>
-      <!-- end about -->
-     
+   </div>
+</div>
+<!-- end about -->
 
-      <!--  footer -->
-      {% endblock %}	
+
+<!--  footer -->
+{% endblock %}

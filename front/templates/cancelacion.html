@@ -5,6 +5,7 @@
 
 {% block content %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -78,9 +79,9 @@
         .cancelar-btn:focus {
             outline: none;
         }
-
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Detalles de la Reserva</h1>
@@ -97,7 +98,7 @@
                 <span class="info-label">Hotel:</span>
                 <span class="info-value">{{ hotel.ubicacion }}</span>
             </div>
-            
+
             <div class="info-item">
                 <span class="info-label">Número de Reserva:</span>
                 <span class="info-value">{{ reserva.reservas_id }}</span>
@@ -107,10 +108,9 @@
         <form method="POST" action="{{ url_for('cancelar_reserva', id=reserva.reservas_id) }}">
             <button type="submit" class="cancelar-btn">Cancelar Reserva</button>
         </form>
-        
+
     </div>
 </body>
+
 </html>
 {% endblock %}
-
-

@@ -40,27 +40,15 @@ def prueba():
     return render_template("pruebas.html", prueba=prueba)
 
 @app.route('/cancelar_reserva/<int:id>', methods = ['GET','POST']) 
-
 def cancelar_reserva(id):
-
     reserva = consultas.obtener_reseva_por_id(id)
-
     hotel_id = reserva[0]['hotel_id']           #recordar que se deshabilita cuando es 0 (falta que se vaya de la pestania consultas )
-
     hotel = consultas.obtener_hotel_por_id(hotel_id)
 
-
     if request.method == 'POST':
-
         borrar_reserva(id)
-        
         return redirect('/mis_reservas')
-
-        
-
-    
     return render_template('cancelacion.html', reserva = reserva[0], hotel = hotel)
-
 
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
@@ -82,19 +70,15 @@ def Reservas():
 def appendear_reservas_session(reservas):
     if "reserva" not in session:
         session['reserva'] = []
-
     for reserva in reservas:
         if reserva not in session['reserva']:
-
             session['reserva'].append(reserva)
 
 
 @app.route('/ConsultaReserva', methods=['GET', 'POST'])
 def ConsultaReserva():
-
     if request.method == 'POST':  
         email = request.form.get("email")  
-
         reservas_por_usuario = buscar_usuario(email)
         
         if 'error' not in reservas_por_usuario:
@@ -269,7 +253,6 @@ def agregar_servicio():
 @app.route('/admin/agregar_reserva', methods=['POST'])
 def agregar_reserva():
     try: 
-
         data = request.get_json()
         email = data.get('email')
         ingreso = data.get('ingreso')
@@ -277,7 +260,6 @@ def agregar_reserva():
         hotel_id = data.get('hotel_id')
         habitacion_id = data.get('habitacion_id')
 
-        
         reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id, habitacion_id)
         reserva = consultas.obtener_reseva_por_id(reserva_id)
         
@@ -304,15 +286,11 @@ def borrar_reserva(id):
             if reserva['reservas_id'] == id:
                 session['reserva'].remove(reserva)
 
-        
         session.modified = True
 
         return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
-        
-        
-
 
 @app.route('/admin/buscar_usuario/<mail>', methods = ['GET']) 
 def buscar_usuario(mail):

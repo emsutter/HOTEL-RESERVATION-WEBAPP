@@ -1,8 +1,8 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const hotelSelect = document.getElementById('hotel_id');
     const habitacionSelect = document.getElementById('habitacion_id');
 
-    hotelSelect.addEventListener('change', function() {
+    hotelSelect.addEventListener('change', function () {
         const hotelId = this.value;
         fetch(`/admin/obtener_habitaciones/${hotelId}`)
             .then(response => response.json())
@@ -58,18 +58,18 @@ function submitReserva(event) {
         },
         body: JSON.stringify(data),
     })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            alert('Reserva creada exitosamente.');
-            const form = document.getElementById('request');
-            form.reset();
-        } else {
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Reserva creada exitosamente.');
+                const form = document.getElementById('request');
+                form.reset();
+            } else {
+                alert('Hubo un problema al crear la reserva.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
             alert('Hubo un problema al crear la reserva.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Hubo un problema al crear la reserva.');
-    });
+        });
 }

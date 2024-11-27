@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Administración</title>
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
-    
+
 </head>
+
 <body class="admin">
     <header class="admin_header">
-        <h1>Panel de Administración</h1>                      
+        <h1>Panel de Administración</h1>
     </header>
 
     <main>
@@ -17,7 +19,7 @@
             <h2>Gestión de Hoteles</h2>
             <form id="form-agregar-hotel">
                 <input type="hidden" name="action" value="add_hotel">
-            
+
                 <label for="nombre_hotel">Nombre del Hotel:</label>
                 <input type="text" id="nombre_hotel" name="nombre_hotel" required>
 
@@ -26,7 +28,7 @@
 
                 <label for="ubicacion_hotel">Ubicación:</label>
                 <input type="text" id="ubicacion_hotel" name="ubicacion_hotel" required>
-            
+
                 <label for="imagenes_hotel">URLs de las Imágenes del Hotel:</label>
                 <div id="imagenes-container"></div>
                 <button type="button" id="agregar-imagen">Agregar más imágenes</button>
@@ -44,11 +46,13 @@
                 </thead>
                 <tbody id="hoteles-table-body">
                     {% for hotel in hoteles %}
-                    <tr id="hotel-row-{{ hotel.hotel_id }}" class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
-                        <td>{{ hotel.hotel_id  }}</td>
+                    <tr id="hotel-row-{{ hotel.hotel_id }}"
+                        class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
+                        <td>{{ hotel.hotel_id }}</td>
                         <td>{{ hotel.nombre }}</td>
                         <td>
-                            <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}" data-hotel-id="{{ hotel.hotel_id  }}">
+                            <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}"
+                                data-hotel-id="{{ hotel.hotel_id  }}">
                                 {% if hotel.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
                             </button>
                         </td>
@@ -71,7 +75,7 @@
                     {% for hotel in hoteles %}
                     <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
                     {% endfor %}
-        
+
                 </select>
                 <button type="submit">Agregar Habitación</button>
             </form>
@@ -88,12 +92,15 @@
                 </thead>
                 <tbody id="habitaciones-table-body">
                     {% for habitacion in habitaciones %}
-                    <tr id="habitacion-row-{{ habitacion.habitacion_id }}" class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
+                    <tr id="habitacion-row-{{ habitacion.habitacion_id }}"
+                        class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
                         <td>{{ habitacion.habitacion_id }}</td>
                         <td>{{ habitacion.capacidad }}</td>
                         <td>{{ habitacion.hotel_id }}</td>
                         <td>
-                            <button class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}" data-habitacion-id="{{ habitacion.habitacion_id }}">
+                            <button
+                                class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}"
+                                data-habitacion-id="{{ habitacion.habitacion_id }}">
                                 {% if habitacion.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
                             </button>
                         </td>
@@ -103,7 +110,7 @@
             </table>
         </section>
 
-        
+
         <!-- Sección Servicios -->
         <section id="servicios">
             <h2>Gestión de Servicios</h2>
@@ -140,23 +147,25 @@
                 </thead>
                 <tbody id="servicios-table-body">
                     {% for servicio in servicios %}
-                        <tr id="servicio-row-{{ servicio.servicio_id }}">
-                            <td>{{ servicio.servicio_id  }}</td>
-                            <td>{{ servicio.nombre }}</td>
-                            <td>{{ servicio.descripcion }}</td>
-                            <td>{{ servicio.categoria }}</td>
-                            <td>
-                                <button class="toggle-servicio-btn {% if not servicio.habilitado %}deshabilitado{% endif %}" data-servicio-id="{{ servicio.servicio_id }}">
-                                    {% if servicio.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
-                                </button>
-                            </td>
-                        </tr>
+                    <tr id="servicio-row-{{ servicio.servicio_id }}">
+                        <td>{{ servicio.servicio_id }}</td>
+                        <td>{{ servicio.nombre }}</td>
+                        <td>{{ servicio.descripcion }}</td>
+                        <td>{{ servicio.categoria }}</td>
+                        <td>
+                            <button class="toggle-servicio-btn {% if not servicio.habilitado %}deshabilitado{% endif %}"
+                                data-servicio-id="{{ servicio.servicio_id }}">
+                                {% if servicio.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                            </button>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
-                
+
             </table>
         </section>
     </main>
-    <script src=  "{{ url_for('static', filename = 'js/admin.js')  }}"></script>
+    <script src="{{ url_for('static', filename = 'js/admin.js')  }}"></script>
 </body>
+
 </html>
