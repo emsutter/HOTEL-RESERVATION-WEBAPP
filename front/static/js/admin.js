@@ -11,13 +11,26 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Add event listener to the form to handle hotel addition
     const form = document.getElementById('form-agregar-hotel');
+
+    document.getElementById("agregar-imagen").addEventListener("click", function() {
+        const imagenesContainer = document.getElementById("imagenes-container");
+        const nuevaImagen = document.createElement("input");
+        nuevaImagen.type = "url";
+        nuevaImagen.name = "imagenes_hotel[]";
+        nuevaImagen.classList.add("imagen-url");
+        nuevaImagen.placeholder = "https://www.buscateUnaImagenEnGoogle.com";
+        imagenesContainer.appendChild(nuevaImagen);
+    });
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
         const formData = new FormData(form);
+        const imagenesImputs = document.querySelectorAll('input[name="imagenes_hotel[]"]');
         const data = {
             nombre: formData.get('nombre_hotel'),
             descripcion: formData.get('descripcion_hotel'),
-            ubicacion: formData.get('ubicacion_hotel')
+            ubicacion: formData.get('ubicacion_hotel'),
+            imagenesHotel: Array.from(imagenesImputs).map(input => input.value.trim())
         };
 
         fetch('/admin/agregar_hotel', {
@@ -169,7 +182,6 @@ function toggleHabitacionStatus(habitacionId, button) {
         });
     }
 }
-
 
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.getElementById('form-agregar-servicio');

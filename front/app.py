@@ -151,7 +151,7 @@ def agregar_hotel():
         ubicacion = data['ubicacion']
         hotel_id = consultas.agregar_hotel(nombre, descripcion, ubicacion)
         
-        imagenes = data.get('imagenes', [])
+        imagenes = data.get('imagenesHotel', [])
         if imagenes:
             consultas.agregar_imagenes(hotel_id, imagenes)
 
