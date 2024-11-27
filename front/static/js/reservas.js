@@ -27,9 +27,6 @@ document.addEventListener("DOMContentLoaded", function() {
                 console.error('Error fetching habitaciones:', error);
             });
     });
-
-    const form = document.getElementById('request');
-    form.addEventListener('submit', submitReserva);
 });
 
 function submitReserva(event) {
@@ -65,6 +62,7 @@ function submitReserva(event) {
     .then(result => {
         if (result.success) {
             alert('Reserva creada exitosamente.');
+            const form = document.getElementById('request');
             form.reset();
         } else {
             alert('Hubo un problema al crear la reserva.');

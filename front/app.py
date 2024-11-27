@@ -267,9 +267,6 @@ def agregar_servicio():
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
 @app.route('/admin/agregar_reserva', methods=['POST'])
-
-
-
 def agregar_reserva():
     try: 
 
