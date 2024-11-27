@@ -23,7 +23,7 @@ WHERE rs.reserva_id = %s;
 """
 
 
-engine = create_engine('mysql+mysqlconnector://root:!Elias100gallinas@localhost:3306/apc_db')
+engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
 
 Session = sessionmaker(bind=engine)
 

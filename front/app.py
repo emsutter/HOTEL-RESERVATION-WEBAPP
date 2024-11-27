@@ -12,7 +12,7 @@ from datetime import timedelta
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)    
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:!Elias100gallinas@localhost:3306/apc_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/apc_db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
@@ -45,7 +45,7 @@ def cancelar_reserva(id):
 
     reserva = consultas.obtener_reseva_por_id(id)
 
-    hotel_id = reserva[0]['hotel_id']
+    hotel_id = reserva[0]['hotel_id']           #recordar que se deshabilita cuando es 0
 
     hotel = consultas.obtener_hotel_por_id(hotel_id)
 
