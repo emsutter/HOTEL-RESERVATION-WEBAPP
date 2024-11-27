@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+{% extends "bloque.html" %}
+
+{% block title %}Detalles de Reserva - Mi Página Web{% endblock %}
+
+{% block content %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles de Reserva</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .reserva-info {
+            margin-top: 30px;
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .info-item:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .info-value {
+            color: #333;
+        }
+
+        .cancelar-btn {
+            display: block;
+            width: 100%;
+            margin-top: 30px;
+            padding: 12px;
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .cancelar-btn:hover {
+            background-color: #ff1a1a;
+        }
+
+        .cancelar-btn:focus {
+            outline: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Detalles de la Reserva</h1>
+        <div class="reserva-info">
+            <div class="info-item">
+                <span class="info-label">Fecha de Ingreso:</span>
+                <span class="info-value">{{ reserva.fecha_ingreso }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Fecha de Egreso:</span>
+                <span class="info-value">{{ reserva.fecha_egreso }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Hotel:</span>
+                <span class="info-value">{{ hotel.ubicacion }}</span>
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Número de Reserva:</span>
+                <span class="info-value">{{ reserva.reservas_id }}</span>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('cancelar_reserva', id=reserva.reservas_id) }}">
+            <button type="submit" class="cancelar-btn">Cancelar Reserva</button>
+        </form>
+
+    </div>
+</body>
+
+</html>
+{% endblock %}

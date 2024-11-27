@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
 
 </head>
+
 <body class="admin">
     <header class="admin_header">
         <h1>Panel de Administración</h1>
@@ -44,11 +46,13 @@
                 </thead>
                 <tbody id="hoteles-table-body">
                     {% for hotel in hoteles %}
-                    <tr id="hotel-row-{{ hotel.hotel_id }}" class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
-                        <td>{{ hotel.hotel_id  }}</td>
+                    <tr id="hotel-row-{{ hotel.hotel_id }}"
+                        class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
+                        <td>{{ hotel.hotel_id }}</td>
                         <td>{{ hotel.nombre }}</td>
                         <td>
-                            <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}" data-hotel-id="{{ hotel.hotel_id  }}">
+                            <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}"
+                                data-hotel-id="{{ hotel.hotel_id  }}">
                                 {% if hotel.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
                             </button>
                         </td>
@@ -69,7 +73,7 @@
                 <label for="hotel_id">ID del Hotel:</label>
                 <select id="hotel_id" name="hotel_id">
                     {% for hotel in hoteles %}
-                    <option value="{{ hotel.hotel_id  }}">{{ hotel.nombre }}</option>
+                    <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
                     {% endfor %}
 
                 </select>
@@ -88,12 +92,15 @@
                 </thead>
                 <tbody id="habitaciones-table-body">
                     {% for habitacion in habitaciones %}
-                    <tr id="habitacion-row-{{ habitacion.habitacion_id }}" class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
+                    <tr id="habitacion-row-{{ habitacion.habitacion_id }}"
+                        class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
                         <td>{{ habitacion.habitacion_id }}</td>
                         <td>{{ habitacion.capacidad }}</td>
                         <td>{{ habitacion.hotel_id }}</td>
                         <td>
-                            <button class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}" data-habitacion-id="{{ habitacion.habitacion_id }}">
+                            <button
+                                class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}"
+                                data-habitacion-id="{{ habitacion.habitacion_id }}">
                                 {% if habitacion.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
                             </button>
                         </td>
@@ -140,23 +147,25 @@
                 </thead>
                 <tbody id="servicios-table-body">
                     {% for servicio in servicios %}
-                        <tr id="servicio-row-{{ servicio.servicio_id }}">
-                            <td>{{ servicio.servicio_id  }}</td>
-                            <td>{{ servicio.nombre }}</td>
-                            <td>{{ servicio.descripcion }}</td>
-                            <td>{{ servicio.categoria }}</td>
-                            <td>
-                                <button class="toggle-servicio-btn {% if not servicio.habilitado %}deshabilitado{% endif %}" data-servicio-id="{{ servicio.servicio_id }}">
-                                    {% if servicio.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
-                                </button>
-                            </td>
-                        </tr>
+                    <tr id="servicio-row-{{ servicio.servicio_id }}">
+                        <td>{{ servicio.servicio_id }}</td>
+                        <td>{{ servicio.nombre }}</td>
+                        <td>{{ servicio.descripcion }}</td>
+                        <td>{{ servicio.categoria }}</td>
+                        <td>
+                            <button class="toggle-servicio-btn {% if not servicio.habilitado %}deshabilitado{% endif %}"
+                                data-servicio-id="{{ servicio.servicio_id }}">
+                                {% if servicio.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                            </button>
+                        </td>
+                    </tr>
                     {% endfor %}
                 </tbody>
 
             </table>
         </section>
     </main>
-    <script src=  "{{ url_for('static', filename = 'js/admin.js')  }}"></script>
+    <script src="{{ url_for('static', filename = 'js/admin.js')  }}"></script>
 </body>
+
 </html>

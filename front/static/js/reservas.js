@@ -1,111 +1,75 @@
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('/get_google_maps_api_key')
-        .then(response => response.json())
-        .then(data => {
-            const apiKey = data.api_key;
-            const script = document.createElement('script');
-            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
-        })
-        .catch(error => {
-            console.error('Error fetching the Google Maps API key:', error);
-        });
+document.addEventListener("DOMContentLoaded", function () {
+    const hotelSelect = document.getElementById('hotel_id');
+    const habitacionSelect = document.getElementById('habitacion_id');
+
+    hotelSelect.addEventListener('change', function () {
+        const hotelId = this.value;
+        fetch(`/admin/obtener_habitaciones/${hotelId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log('Rooms fetched:', data);
+                // Clear previous options
+                habitacionSelect.innerHTML = '<option value="" disabled selected>Selecciona una habitación</option>';
+                // Check if data is an array
+                if (Array.isArray(data)) {
+                    // Populate new options
+                    data.forEach(habitacion => {
+                        const option = document.createElement('option');
+                        option.value = habitacion.habitacion_id;
+                        option.textContent = `Habitación ${habitacion.habitacion_id} - Capacidad: ${habitacion.capacidad}`;
+                        habitacionSelect.appendChild(option);
+                    });
+                } else {
+                    console.error('Expected an array but got:', data);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching habitaciones:', error);
+            });
+    });
 });
 
 function submitReserva(event) {
-    event.preventDefault(); // Evitar el envío tradicional del formulario
+    event.preventDefault();
 
-    // Obtener los valores del formulario
-    const nombre = document.getElementById('Name').value;
     const email = document.getElementById('Email').value;
     const ingreso = document.getElementById('Ingreso').value;
     const egreso = document.getElementById('Egreso').value;
     const hotelId = document.getElementById('hotel_id').value;
+    const habitacionId = document.getElementById('habitacion_id').value;
 
-    // Crear el objeto con los datos del formulario
-    const formData = {
-       Name: nombre,
-       Email: email,
-       Ingreso: ingreso,
-       Egreso: egreso,
-       hotel_id: hotelId
+    if (!email || !ingreso || !egreso || !hotelId || !habitacionId) {
+        alert('Por favor, completa todos los campos.');
+        return;
+    }
+
+    const data = {
+        email: email,
+        ingreso: ingreso,
+        egreso: egreso,
+        hotel_id: hotelId,
+        habitacion_id: habitacionId
     };
 
-    // Enviar los datos al backend usando fetch (AJAX)
-    fetch('https://marm4.pythonanywhere.com/admin/agregar_reserva', {
-       method: 'POST',
-       headers: {
-          'Content-Type': 'application/json'  // Indicamos que enviamos JSON
-       },
-       body: JSON.stringify(formData)  // Convertir el objeto a JSON
+    fetch('/admin/agregar_reserva', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
     })
-    .then(response => response.json())  // Parsear la respuesta como JSON
-    .then(data => {
-       if (data.success) {
-          alert('Reserva realizada con éxito');
-          // Opcionalmente, redirigir a otra página o hacer algo más
-       } else {
-          alert('Hubo un error al procesar la reserva');
-       }
-    })
-    .catch(error => {
-       console.error('Error:', error);
-       alert('Hubo un problema con el envío de la reserva');
-    });
- }
-
-
- function submitReserva(event) {
-   event.preventDefault();
-
-
-   const email = document.getElementById("Email").value;
-   const ingreso = document.getElementById("Ingreso").value;
-   const egreso = document.getElementById("Egreso").value;
-   const hotelId = document.getElementById("hotel_id").value;
-
- 
-   if (!email ){
-    alert("Por favor, completa todos los campos email.");} if (!ingreso){
-        alert("Por favor, completa todos los campos.");}
-    
-    if (!egreso){
-        alert("Por favor, completa todos los campos Egreso.");
-    }   
-    if (!hotelId) {
-       alert("Por favor, completa todos los campos hotel.");
-    
-       return;
-   }
-
-   const data = {
-       email: email,
-       ingreso: ingreso,
-       egreso: egreso,
-       hotel_id: hotelId,
-   };
-   fetch("https://marm4.pythonanywhere.com/admin/agregar_reserva", {
-       method: "POST",
-       headers: {
-           "Content-Type": "application/json",
-       },
-       body: JSON.stringify(data),
-   })
-   .then((response) => {
-       if (response.ok) {
-           return response.json();
-       } else {
-           throw new Error("Error al enviar la reserva.");
-       }
-   })
-   .then((result) => {
-       alert("Reserva creada exitosamente.");
-       console.log(result);
-   })
-   .catch((error) => {
-       console.error(error);
-       alert("Hubo un problema al crear la reserva.");
-   });
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                alert('Reserva creada exitosamente.');
+                const form = document.getElementById('request');
+                form.reset();
+            } else {
+                alert('Hubo un problema al crear la reserva.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Hubo un problema al crear la reserva.');
+        });
 }

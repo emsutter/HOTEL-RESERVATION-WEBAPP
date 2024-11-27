@@ -5,6 +5,7 @@
 
 {% block content %}
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,37 +19,46 @@
             border-radius: 8px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
         h1 {
             text-align: center;
             color: #333;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
         }
+
         th {
             background-color: #f4f4f4;
             font-weight: bold;
             color: #555;
         }
+
         tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+
         tr:hover {
             background-color: #f1f1f1;
         }
+
         .no-reservas {
             text-align: center;
             color: #888;
             font-style: italic;
             margin-top: 20px;
         }
+
         .cancelar-btn {
             background-color: #ff4d4d;
             color: white;
@@ -57,11 +67,13 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
         .cancelar-btn:hover {
             background-color: #ff1a1a;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Tus Reservas</h1>
@@ -85,12 +97,11 @@
                     <td>{{ reserva.fecha_ingreso }}</td>
                     <td>{{ reserva.habilitado }}</td>
                     <td>{{ reserva.hotel_id }}</td>
-                    <td>{{ reserva.reservas_id }}</td>    
+                    <td>{{ reserva.reservas_id }}</td>
                     <td>
-                        <form method="POST" action="/cancelar_reserva">
-                            <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
-                            <button type="submit" class="cancelar-btn">Cancelar Reserva</button>
-                        </form>
+                        <a href="{{url_for('cancelar_reserva', id=reserva.reservas_id)}}" class="cancelar-btn"> Cancelar
+                            reserva
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -103,6 +114,7 @@
             <button type="submit" class="logout-btn">Cerrar sesión</button>
         </form>
     </div>
+    {% endblock %}
 </body>
+
 </html>
-{% endblock %}

@@ -1,9 +1,9 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     // Add event listener to all toggle buttons
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
-    
+
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener('click', function(event) {
+        buttons[i].addEventListener('click', function (event) {
             const hotelId = event.target.dataset.hotelId;
             toggleHotelStatus(hotelId, event.target);
         });
@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Add event listener to the form to handle hotel addition
     const form = document.getElementById('form-agregar-hotel');
 
-    document.getElementById("agregar-imagen").addEventListener("click", function() {
+    document.getElementById("agregar-imagen").addEventListener("click", function () {
         const imagenesContainer = document.getElementById("imagenes-container");
         const nuevaImagen = document.createElement("input");
         nuevaImagen.type = "url";
@@ -22,13 +22,15 @@ document.addEventListener("DOMContentLoaded", function() {
         imagenesContainer.appendChild(nuevaImagen);
     });
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
         const formData = new FormData(form);
+        const imagenesImputs = document.querySelectorAll('input[name="imagenes_hotel[]"]');
         const data = {
             nombre: formData.get('nombre_hotel'),
             descripcion: formData.get('descripcion_hotel'),
-            ubicacion: formData.get('ubicacion_hotel')
+            ubicacion: formData.get('ubicacion_hotel'),
+            imagenesHotel: Array.from(imagenesImputs).map(input => input.value.trim())
         };
 
         fetch('https://marm4.pythonanywhere.com/admin/agregar_hotel', {
@@ -120,7 +122,7 @@ function addHotelRow(hotel) {
 document.addEventListener("DOMContentLoaded", function() {
     const form = document.querySelector('form[action="admin_actions.php"]');
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
 
         const capacidad = document.getElementById('capacidad').value;
@@ -138,57 +140,92 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Error al agregar la habitación');
-        });
+            .then(response => response.json())
+            .then(result => {
+                if (result.habitacion) {
+                    alert('Habitación agregada correctamente');
+                    addHabitacionRow(result.habitacion);
+                    form.reset();
+                } else {
+                    alert('Error al agregar la habitación');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al agregar la habitación');
+            });
     });
 
     // Aca empieza el codigo para deshabilitar habitacion
 
     const buttons = document.getElementsByClassName('toggle-habitacion-btn');
-    
+
     for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener('click', function(event) {
+        buttons[i].addEventListener('click', function (event) {
             const habitacionId = event.target.dataset.habitacionId;
             toggleHabitacionStatus(habitacionId, event.target);
         });
     }
 });
 
+function addHabitacionRow(habitacion) {
+    console.log(habitacion);
+    const tableBody = document.getElementById('habitaciones-table-body');
+    const row = document.createElement('tr');
+    row.id = `habitacion-row-${habitacion.id}`;
+    const buttonText = 'Deshabilitar';
+
+    row.innerHTML = `
+        <td>${habitacion.id}</td>
+        <td>${habitacion.capacidad}</td>
+        <td>${habitacion.hotel.id}</td>
+        <td>
+            <button class="toggle-habitacion-btn" data-habitacion-id="${habitacion.id}">
+                ${buttonText}
+            </button>
+        </td>   
+    `;
+
+    tableBody.appendChild(row);
+
+    const button = row.querySelector('.toggle-habitacion-btn');
+    button.addEventListener('click', function (event) {
+        const habitacionId = event.target.dataset.habitacionId;
+        toggleHabitacionStatus(habitacionId, event.target);
+    });
+}
+
 function toggleHabitacionStatus(habitacionId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
-    const confirmMessage = isDeshabilitado ? 
-        "¿Estás seguro de que quieres habilitar esta habitacion?" : 
+    const confirmMessage = isDeshabilitado ?
+        "¿Estás seguro de que quieres habilitar esta habitacion?" :
         "¿Estás seguro de que quieres deshabilitar esta habitacion?";
 
     if (confirm(confirmMessage)) {
         fetch(`/admin/${action}_habitacion/${habitacionId}`, {
             method: 'POST',
         })
-        .then(response => {
-            if (response.ok) {
-                alert(`habitacion ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
-                button.classList.toggle('deshabilitado');
-                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
-                document.getElementById(`habitacion-row-${habitacionId}`).classList.toggle('deshabilitado');
-            } else {
-                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} la habitacion`);
-            }
-        })
-        .catch(error => {
-            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} la habitacion: ` + error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    alert(`habitacion ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
+                    button.classList.toggle('deshabilitado');
+                    button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                    document.getElementById(`habitacion-row-${habitacionId}`).classList.toggle('deshabilitado');
+                } else {
+                    alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} la habitacion`);
+                }
+            })
+            .catch(error => {
+                alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} la habitacion: ` + error);
+            });
     }
 }
 
-
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('form-agregar-servicio');
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault();
 
         const nombreServicio = document.getElementById('nombre_servicio').value;
@@ -212,19 +249,19 @@ document.addEventListener("DOMContentLoaded", function() {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            if (data.servicio) {
-                addServicioRow(data.servicio);
-                form.reset();
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                if (data.servicio) {
+                    addServicioRow(data.servicio);
+                    form.reset();
+                }
             }
-        }
-        )
-        .catch((error) => {
-            console.error('Error:', error);
-            alert('Error al agregar el servicio');
-        });
+            )
+            .catch((error) => {
+                console.error('Error:', error);
+                alert('Error al agregar el servicio');
+            });
     }
     );
 });
@@ -254,7 +291,7 @@ function addServicioRow(servicio) {
 
     // Attach event listener to the new button
     const button = row.querySelector('.toggle-servicio-btn');
-    button.addEventListener('click', function(event) {
+    button.addEventListener('click', function (event) {
         const servicioId = event.target.dataset.servicioId;
         toggleServicioStatus(servicioId, event.target);
     });
@@ -263,26 +300,26 @@ function addServicioRow(servicio) {
 function toggleServicioStatus(servicioId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
-    const confirmMessage = isDeshabilitado ? 
-        "¿Estás seguro de que quieres habilitar este servicio?" : 
+    const confirmMessage = isDeshabilitado ?
+        "¿Estás seguro de que quieres habilitar este servicio?" :
         "¿Estás seguro de que quieres deshabilitar este servicio?";
 
     if (confirm(confirmMessage)) {
         fetch(`/admin/${action}_servicio/${servicioId}`, {
             method: 'POST',
         })
-        .then(response => {
-            if (response.ok) {
-                alert(`servicio ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
-                button.classList.toggle('deshabilitado');
-                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
-                document.getElementById(`servicio-row-${servicioId}`).classList.toggle('deshabilitado');
-            } else {
-                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el servicio`);
-            }
-        })
-        .catch(error => {
-            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el servicio: ` + error);
-        });
+            .then(response => {
+                if (response.ok) {
+                    alert(`servicio ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
+                    button.classList.toggle('deshabilitado');
+                    button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                    document.getElementById(`servicio-row-${servicioId}`).classList.toggle('deshabilitado');
+                } else {
+                    alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el servicio`);
+                }
+            })
+            .catch(error => {
+                alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el servicio: ` + error);
+            });
     }
 }
