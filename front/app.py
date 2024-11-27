@@ -3,6 +3,8 @@ from flask_sqlalchemy import SQLAlchemy
 import consultas
 from flask_mail import Mail, Message
 from flask_cors import CORS, cross_origin
+from flask import session
+from flask import redirect
 import os
 #from dotenv import load_dotenv
 
@@ -15,7 +17,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://marm4:Moqnit-1da
 
 from datetime import timedelta
 
-app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)    
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -69,23 +71,23 @@ def Reservas():
 @app.route('/ConsultaReserva', methods=['GET', 'POST'])
 def ConsultaReserva():
 
-    if request.method == 'POST':  
-        email = request.form.get("email")  
+    if request.method == 'POST':
+        email = request.form.get("email")
 
         reservas_por_usuario = buscar_usuario(email)
-        
+
         if 'error' not in reservas_por_usuario:
-            session['email'] = email  
+            session['email'] = email
             session['reservas'] = reservas_por_usuario.get('data')
-            session.permanent = True 
-            return redirect('/mis_reservas')  
+            session.permanent = True
+            return redirect('/mis_reservas')
         else:
             error = f"mail incorrecto {str(reservas_por_usuario[1])}"
             return render_template("ConsultaReserva.html", error=error)
 
     if not 'email' in session:
         return render_template("ConsultaReserva.html")
-    return redirect('/mis_reservas')    
+    return redirect('/mis_reservas')
 
 @app.route('/mis_reservas')
 def mis_reservas():
@@ -96,10 +98,10 @@ def mis_reservas():
         return render_template("mis_reservas.html", reservas = reservas)
     else:
         return redirect('/ConsultaReserva')
-    
+
 @app.route('/logout', methods = ['POST'])
 def logout():
-    session.clear() 
+    session.clear()
     return redirect('/')
 
 @app.route('/contact')
@@ -156,7 +158,7 @@ def habilitar_hotel(hotel_id):
         return jsonify({"message": "Hotel habilitado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 @app.route('/admin/deshabilitar_servicio/<int:servicio_id>', methods=['POST'])
 def deshabilitar_servicio(servicio_id):
     try:
@@ -172,7 +174,7 @@ def habilitar_servicio(servicio_id):
         return jsonify({"message": "servicio habilitado correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 @app.route('/admin/deshabilitar_habitacion/<int:habitacion_id>', methods=['POST'])
 def deshabilitar_habitacion(habitacion_id):
     try:
@@ -188,7 +190,7 @@ def habilitar_habitacion(habitacion_id):
         return jsonify({"message": "habitacion habilitada correctamente"}), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-    
+
 @app.route('/admin/agregar_habitacion', methods=['POST'])
 def agregar_habitacion():
     try:
@@ -308,7 +310,7 @@ def obtener_reserva(reservas_id):
         return jsonify({"error": f"Ocurrió un error: {e}"}), 500
 
 
-@app.route('/admin/buscar_usuario/<mail>', methods = ['GET']) 
+@app.route('/admin/buscar_usuario/<mail>', methods = ['GET'])
 def buscar_usuario(mail):
     """Trae el usuario de la base de datos junto a todas las reservas del mismo."""
     try:
@@ -316,9 +318,9 @@ def buscar_usuario(mail):
 
         if "error" in data:
             return {"error": data["error"]}  # Devuelve un diccionario con el error
-    
+
         return {"data": data}  # Devuelve un diccionario con los datos
-        
+
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
 
@@ -342,7 +344,7 @@ def crear_reserva_servicio():
             return jsonify({"error": "No se pudo crear la reserva"}), 500
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
-    
+
 
 
 @app.route('/admin/eliminar_servicio_reserva', methods=['DELETE'])
