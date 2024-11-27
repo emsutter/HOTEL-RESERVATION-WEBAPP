@@ -39,6 +39,28 @@ def prueba():
     
     return render_template("pruebas.html", prueba=prueba)
 
+@app.route('/cancelar_reserva/<int:id>', methods = ['GET','POST']) 
+
+def cancelar_reserva(id):
+
+    reserva = consultas.obtener_reseva_por_id(id)
+
+    hotel_id = reserva[0]['hotel_id']
+
+    hotel = consultas.obtener_hotel_por_id(hotel_id)
+
+
+    if request.method == 'POST':
+
+        borrar_reserva(id)
+        redirect('/mis_reservas')
+
+        return 
+
+    
+    return render_template('cancelacion.html', reserva = reserva[0], hotel = hotel)
+
+
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
     hoteles = consultas.obtener_hoteles_con_imagen()
@@ -260,7 +282,6 @@ def agregar_reserva():
 
         reserva = consultas.obtener_reseva_por_id(reserva_id)
         
-        # Actualizar las reservas en la sesión
         appendear_reservas_session(reserva)
 
 
@@ -271,6 +292,30 @@ def agregar_reserva():
     except Exception as e:
         print(f"Error al crear la reserva: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
+    
+@app.route('/admin/borrar_reserva/<id>', methods =['POST'])
+
+def borrar_reserva(id):
+    """borra la reserva atraves del ID"""
+    try:
+        consultas.deshabilitar_reserva(id)
+
+        if not 'reserva' in session:
+            return jsonify({'error': "No existe la reserva que quiere eliminar"}), 404
+        
+        for reserva in session['reserva']:
+            if reserva['reservas_id'] == id:
+                session['reserva'].remove(reserva)
+
+        
+        session.modified = True
+
+        return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
+    except Exception as e:
+        return jsonify({"error": f"Ocurrió un error: {str(e)}"})
+        
+        
+
 
 @app.route('/admin/buscar_usuario/<mail>', methods = ['GET']) 
 def buscar_usuario(mail):

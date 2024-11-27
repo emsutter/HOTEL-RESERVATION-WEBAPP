@@ -187,6 +187,7 @@ def habilitar_imagen(id):
 
 query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
 query_obtener_reserva_por_id = text("SELECT * FROM RESERVAS WHERE reservas_id = :id")
+query_obtener_hotel_por_id = text("SELECT * FROM HOTELES WHERE hotel_id = :hotel_id")
 
 def traer_reservas_por_usuario(mail):
     """Trae todas las reservas del usuario en un diccionario."""
@@ -199,9 +200,9 @@ def traer_reservas_por_usuario(mail):
             if not resultados:
                 return []
             
-            # Transforma los resultados en una lista de diccionarios
+            
             reservas = [
-                dict(row._mapping) for row in resultados  # Convierte cada fila a un diccionario
+                dict(row._mapping) for row in resultados  
 
             ]
             
@@ -234,5 +235,32 @@ def obtener_reseva_por_id(id):
     
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
+    
+
+def obtener_hotel_por_id(hotel_id):
+
+    try:
+        # Abre una sesión
+        with Session() as session:
+            # Ejecuta la consulta con el parámetro del email
+            respuesta = session.execute(query_obtener_hotel_por_id, {"hotel_id": hotel_id}).fetchall()
+            
+            if not respuesta:
+                return []
+            
+            # Transforma los resultados en una lista de diccionarios
+            reserva = [
+                dict(row._mapping) for row in respuesta  # Convierte cada fila a un diccionario
+
+            ]
+            
+            print(reserva)
+            return reserva[0]
+    
+    except Exception as e:
+        return {"error": f"Ocurrió un error: {str(e)}"}
+    
+
+
 
     

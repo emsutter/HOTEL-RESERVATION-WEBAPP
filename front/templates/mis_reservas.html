@@ -87,10 +87,8 @@
                     <td>{{ reserva.hotel_id }}</td>
                     <td>{{ reserva.reservas_id }}</td>    
                     <td>
-                        <form method="POST" action="/cancelar_reserva">
-                            <input type="hidden" name="reserva_id" value="{{ reserva.id }}">
-                            <button type="submit" class="cancelar-btn">Cancelar Reserva</button>
-                        </form>
+                        <a href="{{url_for('cancelar_reserva', id=reserva.reservas_id)}}" class="cancelar-btn"> Cancelar reserva 
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}
@@ -103,6 +101,7 @@
             <button type="submit" class="logout-btn">Cerrar sesión</button>
         </form>
     </div>
+    {% endblock %}
 </body>
 </html>
-{% endblock %}
+
