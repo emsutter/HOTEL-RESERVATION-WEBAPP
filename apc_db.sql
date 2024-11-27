@@ -109,10 +109,13 @@ CREATE TABLE `RESERVAS` (
   `fecha_ingreso` date NOT NULL,
   `fecha_egreso` date NOT NULL,
   `hotel_id` int NOT NULL,
+  `habitacion_id` int NOT NULL,
   `habilitado` tinyint(1) NOT NULL DEFAULT TRUE,
   PRIMARY KEY (`reservas_id`),
   KEY `hotel_id` (`hotel_id`),
-  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`hotel_id`)
+  CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`hotel_id`) REFERENCES `HOTELES` (`hotel_id`),
+  KEY `habitacion_id` (`habitacion_id`),
+  CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`habitacion_id`) REFERENCES `HABITACIONES` (`habitacion_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

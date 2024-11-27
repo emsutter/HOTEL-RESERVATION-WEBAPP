@@ -241,9 +241,10 @@ def agregar_reserva():
         ingreso = data.get('ingreso')
         egreso = data.get('egreso')
         hotel_id = data.get('hotel_id')
+        habitacion_id = data.get('habitacion_id')
 
-        reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id)
-        enviar_correo(email, reserva_id, ingreso, egreso, hotel_id)
+        reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id, habitacion_id)
+        enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id)
         return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
     
     except Exception as e:
@@ -264,8 +265,14 @@ def buscar_usuario(mail):
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
 
-
-
+@app.route('/admin/obtener_habitaciones/<int:hotel_id>', methods=['GET'])
+def obtener_habitaciones(hotel_id):
+    try:
+        habitaciones = consultas.obtener_habitaciones_por_hotel(hotel_id)
+        return jsonify(habitaciones), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 @app.route('/admin/obtener_servicios', methods=['GET'])
 def obtener_servicios():
     return consultas.obtener_servicios()
@@ -342,7 +349,7 @@ def eliminar_servicio_reserva_endpoint():
 
 
 
-def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):
+def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id):
     try:
         # Definir el cuerpo del correo
         cuerpo_html = f"""
@@ -386,6 +393,7 @@ def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id):
                     <p><strong>Fecha de Ingreso:</strong> {ingreso}</p>
                     <p><strong>Fecha de Egreso:</strong> {egreso}</p>
                     <p><strong>Hotel:</strong> {hotel_id}</p>
+                    <p><strong>Habitación:</strong> {habitacion_id}</p>
                 </div>
             </body>
         </html>

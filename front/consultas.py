@@ -24,7 +24,7 @@ INNER JOIN SERVICIOS s ON us.servicio_id = s.servicio_id
 WHERE us.reserva_id = :id_reserva;
 """
 
-
+OBTENER_HABITACION_POR_HOTEL = "SELECT * FROM HABITACIONES WHERE hotel_id = :hotel_id AND habilitado = 1"
 
 engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
 
@@ -35,7 +35,6 @@ def run_get_all_query(query):
         result = session.execute(text(query))
         return result.fetchall()
       
-
 def run_get_query(query, params=None):
     try:
         with Session() as session:
@@ -104,8 +103,6 @@ def obtener_servicios_por_reserva(id):
     
     return servicios
 
-
-
 def obtener_reserva_por_id(reservas_id):
     reserva_lista = run_get_query2(QUERY_OBTENER_RESERVA_POR_ID, {'reservas_id': reservas_id})
     
@@ -122,11 +119,12 @@ def obtener_reserva_por_id(reservas_id):
         }
     return None
 
-
+def obtener_habitaciones_por_hotel(hotel_id):
+    return run_get_query2(OBTENER_HABITACION_POR_HOTEL, {"hotel_id": hotel_id})
 
 QUERY_AGREGAR_HOTEL = "INSERT INTO HOTELES (nombre, descripcion, ubicacion) VALUES (:nombre, :descripcion, :ubicacion)"
 QUERY_AGREGAR_HABITACION = "INSERT INTO HABITACIONES (capacidad, hotel_id) VALUES (:capacidad, :hotel_id)"
-QUERY_AGREGAR_RESERVA = "INSERT INTO RESERVAS (email, fecha_ingreso, fecha_egreso, hotel_id) VALUES (:email, :fecha_ingreso, :fecha_egreso, :hotel_id)"
+QUERY_AGREGAR_RESERVA = "INSERT INTO RESERVAS (email, fecha_ingreso, fecha_egreso, hotel_id, habitacion_id) VALUES (:email, :fecha_ingreso, :fecha_egreso, :hotel_id, :habitacion_id)"
 QUERY_AGREGAR_SERVICIO = "INSERT INTO SERVICIOS (nombre, descripcion, url_imagen, ubicacion, categoria) VALUES (:nombre, :descripcion, :url_imagen, :ubicacion, :categoria)"
 QUERY_AGREGAR_IMAGEN = "INSERT INTO IMAGENES (hotel_id, url) VALUES (:hotel_id, :url)"
 QUERY_AGREGAR_RESERVA_SERVICIO = "INSERT INTO USUARIO_SERVICIOS (servicio_id, reserva_id) VALUES (:servicio_id, :reserva_id)"
@@ -148,12 +146,13 @@ def agregar_hotel(nombre, descripcion, ubicacion):
 def agregar_habitacion(capacidad, hotel_id):
     return run_insert_query(QUERY_AGREGAR_HABITACION, {"capacidad": capacidad, "hotel_id": hotel_id})
 
-def agregar_reserva(email, ingreso, egreso, hotel_id):
+def agregar_reserva(email, ingreso, egreso, hotel_id, habitacion_id):
     return run_insert_query(QUERY_AGREGAR_RESERVA, {
         "email": email,
         "fecha_ingreso": ingreso,
         "fecha_egreso": egreso,
-        "hotel_id": hotel_id
+        "hotel_id": hotel_id,
+        "habitacion_id": habitacion_id
     })
 
 def agregar_servicio(nombre, descripcion, url_imagen, ubicacion, categoria):
