@@ -1,3 +1,5 @@
+    // Envia la informacion del hotel a la API para agregarlo a la base de datos
+
 document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
 
@@ -53,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+    // Cambia el estado del hotel (habilitado/deshabilitado) en la base de datos
+
 function toggleHotelStatus(hotelId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
@@ -85,6 +89,8 @@ function toggleHotelStatus(hotelId, button) {
     }
 }
 
+    // Agrega el hotel recien creado a la tabla de hoteles
+
 function addHotelRow(hotel) {
     const tableBody = document.getElementById('hoteles-table-body');
     const row = document.createElement('tr');
@@ -112,6 +118,8 @@ function addHotelRow(hotel) {
         toggleHotelStatus(hotelId, event.target);
     });
 }
+
+    // Envia la informacion de la habitacion a la API para agregarla a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector('form[action="admin_actions.php"]');
@@ -162,6 +170,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+    // Agrega la habitacion recien creada a la tabla de habitaciones
+
 function addHabitacionRow(habitacion) {
     console.log(habitacion);
     const tableBody = document.getElementById('habitaciones-table-body');
@@ -189,6 +199,8 @@ function addHabitacionRow(habitacion) {
     });
 }
 
+    // Cambia el estado de la habitacion (habilitado/deshabilitado) en la base de datos
+
 function toggleHabitacionStatus(habitacionId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
@@ -215,6 +227,8 @@ function toggleHabitacionStatus(habitacionId, button) {
             });
     }
 }
+
+    // Envia la informacion del servicio a la API para agregarlo a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('form-agregar-servicio');
@@ -260,6 +274,8 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 });
 
+    // Agrerga el servicio recien creado a la tabla de servicios
+
 function addServicioRow(servicio) {
     const tableBody = document.getElementById('servicios-table-body');
     const row = document.createElement('tr');
@@ -289,6 +305,8 @@ function addServicioRow(servicio) {
         toggleServicioStatus(servicioId, event.target);
     });
 }
+
+    // Cambia el estado del servicio (habilitado/deshabilitado) en la base de datos
 
 function toggleServicioStatus(servicioId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
