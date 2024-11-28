@@ -1,5 +1,6 @@
+    // Envia la informacion del hotel a la API para agregarlo a la base de datos
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Add event listener to all toggle buttons
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
 
     for (let i = 0; i < buttons.length; i++) {
@@ -9,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Add event listener to the form to handle hotel addition
     const form = document.getElementById('form-agregar-hotel');
 
     document.getElementById("agregar-imagen").addEventListener("click", function () {
@@ -33,27 +33,29 @@ document.addEventListener("DOMContentLoaded", function () {
             imagenesHotel: Array.from(imagenesImputs).map(input => input.value.trim())
         };
 
-        fetch('/admin/agregar_hotel', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_hotel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-            .then(response => response.json())
-            .then(result => {
-                if (result.hotel) {
-                    addHotelRow(result.hotel);
-                    form.reset();
-                } else {
-                    alert(result.error || 'Error al agregar el hotel');
-                }
-            })
-            .catch(error => {
-                alert('Error al agregar el hotel: ' + error);
-            });
+        .then(response => response.json())
+        .then(result => {
+            if (result.hotel) {
+                addHotelRow(result.hotel);
+                form.reset();
+            } else {
+                alert(result.error || 'Error al agregar el hotel');
+            }
+        })
+        .catch(error => {
+            alert('Error al agregar el hotel: ' + error);
+        });
     });
 });
+
+    // Cambia el estado del hotel (habilitado/deshabilitado) en la base de datos
 
 function toggleHotelStatus(hotelId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
@@ -62,30 +64,35 @@ function toggleHotelStatus(hotelId, button) {
         "¿Estás seguro de que quieres habilitar este hotel?" :
         "¿Estás seguro de que quieres deshabilitar este hotel?";
 
+    
+        
+
     if (confirm(confirmMessage)) {
         fetch(`/admin/${action}_hotel/${hotelId}`, {
             method: 'POST',
         })
-            .then(response => {
-                if (response.ok) {
-                    alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
-                    button.classList.toggle('deshabilitado');
-                    button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
-                    const row = document.getElementById(`hotel-row-${hotelId}`);
-                    if (row) {
-                        row.classList.toggle('deshabilitado');
-                    } else {
-                        console.error(`Row with ID hotel-row-${hotelId} not found`);
-                    }
+        .then(response => {
+            if (response.ok) {
+                alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
+                button.classList.toggle('deshabilitado');
+                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                const row = document.getElementById(`hotel-row-${hotelId}`);
+                if (row) {
+                    row.classList.toggle('deshabilitado');
                 } else {
-                    alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
+                    console.error(`Row with ID hotel-row-${hotelId} not found`);
                 }
-            })
-            .catch(error => {
-                alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
-            });
+            } else {
+                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
+            }
+        })
+        .catch(error => {
+            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
+        });
     }
 }
+
+    // Agrega el hotel recien creado a la tabla de hoteles
 
 function addHotelRow(hotel) {
     const tableBody = document.getElementById('hoteles-table-body');
@@ -108,13 +115,14 @@ function addHotelRow(hotel) {
 
     tableBody.appendChild(row);
 
-    // Attach event listener to the new button
     const button = row.querySelector('.toggle-hotel-btn');
-    button.addEventListener('click', function (event) {
+    button.addEventListener('click', function(event) {
         const hotelId = event.target.dataset.hotelId;
         toggleHotelStatus(hotelId, event.target);
     });
 }
+
+    // Envia la informacion de la habitacion a la API para agregarla a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector('form[action="admin_actions.php"]');
@@ -130,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
             hotel_id: hotelId
         };
 
-        fetch('/admin/agregar_habitacion', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_habitacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -165,6 +173,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
+    // Agrega la habitacion recien creada a la tabla de habitaciones
+
 function addHabitacionRow(habitacion) {
     console.log(habitacion);
     const tableBody = document.getElementById('habitaciones-table-body');
@@ -191,6 +201,8 @@ function addHabitacionRow(habitacion) {
         toggleHabitacionStatus(habitacionId, event.target);
     });
 }
+
+    // Cambia el estado de la habitacion (habilitado/deshabilitado) en la base de datos
 
 function toggleHabitacionStatus(habitacionId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
@@ -219,6 +231,8 @@ function toggleHabitacionStatus(habitacionId, button) {
     }
 }
 
+    // Envia la informacion del servicio a la API para agregarlo a la base de datos
+
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('form-agregar-servicio');
 
@@ -239,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
             categoria: categoriaServicio
         };
 
-        fetch('http://127.0.0.1:5000/admin/agregar_servicio', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_servicio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -262,6 +276,8 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     );
 });
+
+    // Agrerga el servicio recien creado a la tabla de servicios
 
 function addServicioRow(servicio) {
     const tableBody = document.getElementById('servicios-table-body');
@@ -286,13 +302,14 @@ function addServicioRow(servicio) {
 
     tableBody.appendChild(row);
 
-    // Attach event listener to the new button
     const button = row.querySelector('.toggle-servicio-btn');
     button.addEventListener('click', function (event) {
         const servicioId = event.target.dataset.servicioId;
         toggleServicioStatus(servicioId, event.target);
     });
 }
+
+    // Cambia el estado del servicio (habilitado/deshabilitado) en la base de datos
 
 function toggleServicioStatus(servicioId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
