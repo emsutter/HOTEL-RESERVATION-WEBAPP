@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Add event listener to all toggle buttons
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
 
     for (let i = 0; i < buttons.length; i++) {
@@ -9,7 +8,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Add event listener to the form to handle hotel addition
     const form = document.getElementById('form-agregar-hotel');
 
     document.getElementById("agregar-imagen").addEventListener("click", function () {
@@ -108,7 +106,6 @@ function addHotelRow(hotel) {
 
     tableBody.appendChild(row);
 
-    // Attach event listener to the new button
     const button = row.querySelector('.toggle-hotel-btn');
     button.addEventListener('click', function (event) {
         const hotelId = event.target.dataset.hotelId;
@@ -286,7 +283,6 @@ function addServicioRow(servicio) {
 
     tableBody.appendChild(row);
 
-    // Attach event listener to the new button
     const button = row.querySelector('.toggle-servicio-btn');
     button.addEventListener('click', function (event) {
         const servicioId = event.target.dataset.servicioId;

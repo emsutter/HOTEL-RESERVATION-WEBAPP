@@ -8,11 +8,8 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json())
             .then(data => {
                 console.log('Rooms fetched:', data);
-                // Clear previous options
                 habitacionSelect.innerHTML = '<option value="" disabled selected>Selecciona una habitación</option>';
-                // Check if data is an array
                 if (Array.isArray(data)) {
-                    // Populate new options
                     data.forEach(habitacion => {
                         const option = document.createElement('option');
                         option.value = habitacion.habitacion_id;
