@@ -12,7 +12,8 @@ import os
 from flask import session
 from flask import redirect
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": ["http://localhost:5000", "https://marm4.pythonanywhere.com"]}})  # Activa CORS para todos los endpoints
+
+CORS(app)  # Habilita CORS para todas las rutas
 
 from datetime import timedelta
 
@@ -59,7 +60,7 @@ def prueba():
 @app.route('/cancelar_reserva/<int:id>', methods = ['GET','POST']) 
 def cancelar_reserva(id):
     reserva = consultas.obtener_reseva_por_id(id)
-    hotel_id = reserva[0]['hotel_id']           #recordar que se deshabilita cuando es 0 (falta que se vaya de la pestania consultas )
+    hotel_id = reserva[0]['hotel_id']   #recordar que se deshabilita cuando es 0 (falta que se vaya de la pestania consultas )
     hotel = consultas.obtener_hotel_por_id(hotel_id)
 
     if request.method == 'POST':

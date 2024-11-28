@@ -1,5 +1,6 @@
+    // Envia la informacion del hotel a la API para agregarlo a la base de datos
+
 document.addEventListener("DOMContentLoaded", function () {
-    // Add event listener to all toggle buttons
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
 
     for (let i = 0; i < buttons.length; i++) {
@@ -9,7 +10,6 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // Add event listener to the form to handle hotel addition
     const form = document.getElementById('form-agregar-hotel');
 
     document.getElementById("agregar-imagen").addEventListener("click", function () {
@@ -55,6 +55,8 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+    // Cambia el estado del hotel (habilitado/deshabilitado) en la base de datos
+
 function toggleHotelStatus(hotelId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
@@ -90,6 +92,8 @@ function toggleHotelStatus(hotelId, button) {
     }
 }
 
+    // Agrega el hotel recien creado a la tabla de hoteles
+
 function addHotelRow(hotel) {
     const tableBody = document.getElementById('hoteles-table-body');
     const row = document.createElement('tr');
@@ -111,7 +115,6 @@ function addHotelRow(hotel) {
 
     tableBody.appendChild(row);
 
-    // Attach event listener to the new button
     const button = row.querySelector('.toggle-hotel-btn');
     button.addEventListener('click', function(event) {
         const hotelId = event.target.dataset.hotelId;
@@ -119,7 +122,9 @@ function addHotelRow(hotel) {
     });
 }
 
-document.addEventListener("DOMContentLoaded", function() {
+    // Envia la informacion de la habitacion a la API para agregarla a la base de datos
+
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector('form[action="admin_actions.php"]');
 
     form.addEventListener('submit', function (event) {
@@ -168,6 +173,8 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 
+    // Agrega la habitacion recien creada a la tabla de habitaciones
+
 function addHabitacionRow(habitacion) {
     console.log(habitacion);
     const tableBody = document.getElementById('habitaciones-table-body');
@@ -195,6 +202,8 @@ function addHabitacionRow(habitacion) {
     });
 }
 
+    // Cambia el estado de la habitacion (habilitado/deshabilitado) en la base de datos
+
 function toggleHabitacionStatus(habitacionId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
@@ -221,6 +230,8 @@ function toggleHabitacionStatus(habitacionId, button) {
             });
     }
 }
+
+    // Envia la informacion del servicio a la API para agregarlo a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('form-agregar-servicio');
@@ -266,6 +277,8 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 });
 
+    // Agrerga el servicio recien creado a la tabla de servicios
+
 function addServicioRow(servicio) {
     const tableBody = document.getElementById('servicios-table-body');
     const row = document.createElement('tr');
@@ -289,13 +302,14 @@ function addServicioRow(servicio) {
 
     tableBody.appendChild(row);
 
-    // Attach event listener to the new button
     const button = row.querySelector('.toggle-servicio-btn');
     button.addEventListener('click', function (event) {
         const servicioId = event.target.dataset.servicioId;
         toggleServicioStatus(servicioId, event.target);
     });
 }
+
+    // Cambia el estado del servicio (habilitado/deshabilitado) en la base de datos
 
 function toggleServicioStatus(servicioId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');

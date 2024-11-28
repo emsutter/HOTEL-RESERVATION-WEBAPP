@@ -1105,6 +1105,7 @@ line-height: 35px;
      background-color: #912415;
  }
 
+ /* Estilo de la fila al estar deshabilitada */
  .deshabilitado {
      background-color: #da1212;
      color: white;

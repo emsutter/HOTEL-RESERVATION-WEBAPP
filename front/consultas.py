@@ -204,9 +204,6 @@ def agregar_servicio(nombre, descripcion, url_imagen, ubicacion, categoria):
 def agregar_reserva_servicio(id_reserva, id_servicio):
     return run_insert_query2(QUERY_AGREGAR_RESERVA_SERVICIO, {"servicio_id": id_servicio, "reserva_id": id_reserva})
 
-# def agregar_usuario(nombre, email, telefono):
-#     return run_insert_query(QUERY_AGREGAR_USUARIO, {"nombre": nombre, "email": email, "telefono": telefono})
-
 def agregar_imagenes(hotel_id, imagenes):
     for url in imagenes:
         run_insert_query(QUERY_AGREGAR_IMAGEN, {"hotel_id": hotel_id, "url": url})
@@ -224,14 +221,11 @@ def anular_por_id(query, id):
         try:
             session.execute(text(query), {"id": id})
             session.commit()
-            # TODO: Anulate instead of removing
             print(f"Elemento con id {id} deshabilitado correctamente.")
         except Exception as e:
             session.rollback()
             print(f"Error al deshabilitar el elemento con id {id}: {str(e)}")
             raise e
-
-# TODO: remake - don't remove elements but anulate them
 
 def deshabilitar_hotel(id):
     anular_por_id(QUERY_DESHABILITAR_HOTEL, id)
@@ -264,14 +258,11 @@ def habilitar_por_id(query, id):
         try:
             session.execute(text(query), {"id": id})
             session.commit()
-            # TODO: Anulate instead of removing
             print(f"Elemento con id {id} habilitado correctamente.")
         except Exception as e:
             session.rollback()
             print(f"Error al habilitar el elemento con id {id}: {str(e)}")
             raise e
-
-# TODO: remake - don't remove elements but anulate them
 
 def habilitar_hotel(id):
     anular_por_id(QUERY_HABILITAR_HOTEL, id)
@@ -293,6 +284,8 @@ def habilitar_imagen(id):
 
 
 QUERY_ELIMINAR_SERVICIO_RESERVA = "DELETE FROM USUARIO_SERVICIOS WHERE servicio_id = :servicio_id AND reserva_id = :reserva_id"
+
+    # TODO: Cambiar eliminar por anular
 
 def eliminar_servicio_reserva(servicio_id, reserva_id):
     try:

@@ -1,6 +1,8 @@
 let map;
 let marker;
 
+   // Inicializa el mapa
+
 function initMap() {
    const defaultLocation = { lat: -34.6037, lng: -58.3816 };
 
@@ -27,6 +29,8 @@ function initMap() {
    hotelSelect.addEventListener("change", updateMap);
 }
 
+   // Actualiza el mapa cuando se selecciona un hotel
+
 function updateMap() {
    const hotelSelect = document.getElementById("hotel_id");
    const selectedOption = hotelSelect.options[hotelSelect.selectedIndex];
@@ -36,6 +40,7 @@ function updateMap() {
       geocodeAddress(ubicacion);
    }
 }
+   // Busca la dirección en el mapa y centra el mapa en esa dirección
 
 function geocodeAddress(address) {
    const geocoder = new google.maps.Geocoder();
