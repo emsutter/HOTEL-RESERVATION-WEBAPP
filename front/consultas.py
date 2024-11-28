@@ -26,6 +26,8 @@ WHERE us.reserva_id = :id_reserva;
 
 OBTENER_HABITACION_POR_HOTEL = "SELECT * FROM HABITACIONES WHERE hotel_id = :hotel_id AND habilitado = 1"
 
+
+
 engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
 
 Session = sessionmaker(bind=engine)
@@ -110,12 +112,12 @@ def obtener_reserva_por_id(reservas_id):
         reserva = reserva_lista[0]
         
         return {
-            'reservas_id': reserva.reservas_id,
-            'email': reserva.email,
-            'fecha_ingreso': reserva.fecha_ingreso.strftime('%Y-%m-%d'), 
-            'fecha_egreso': reserva.fecha_egreso.strftime('%Y-%m-%d'),
-            'hotel_id': reserva.hotel_id,
-            'habilitado': reserva.habilitado
+            'reservas_id': reserva['reservas_id'],  # Acceso mediante clave
+            'email': reserva['email'],
+            'fecha_ingreso': reserva['fecha_ingreso'].strftime('%Y-%m-%d'),
+            'fecha_egreso': reserva['fecha_egreso'].strftime('%Y-%m-%d'),
+            'hotel_id': reserva['hotel_id'],
+            'habilitado': reserva['habilitado']
         }
     return None
 
@@ -171,7 +173,7 @@ def agregar_imagenes(hotel_id, imagenes):
         
 QUERY_DESHABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 0 WHERE hotel_id = :id"
 QUERY_DESHABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 0 WHERE habitacion_id = :id"
-QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE reserva_id = :id"
+QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE reservas_id = :id"
 QUERY_DESHABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 0 WHERE servicio_id = :id"
 QUERY_DESHABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 0 WHERE usuario_iid = :id"
 QUERY_DESHABILITAR_IMAGEN = "UPDATE IMAGENES SET habilitado = 0 WHERE imagen_id = :id"

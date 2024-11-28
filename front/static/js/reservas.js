@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 } else {
                     console.error('Expected an array but got:', data);
                 }
-            })
+            })  
             .catch(error => {
                 console.error('Error fetching habitaciones:', error);
             });
