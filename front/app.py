@@ -2,7 +2,13 @@ from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import consultas
 from flask_mail import Mail, Message
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
+from flask import session
+from flask import redirect
+import os
+#from dotenv import load_dotenv
+
+#load_dotenv()  # Carga las variables de entorno desde .env
 from flask import session
 from flask import redirect
 app = Flask(__name__)
@@ -13,19 +19,30 @@ from datetime import timedelta
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)    
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/apc_db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://marm4:Moqnit-1dakte-dikbew@marm4.mysql.pythonanywhere-services.com/marm4$apc_db'
+
+from datetime import timedelta
+
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config['MAIL_SERVER'] = 'smtp.gmail.com' 
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USE_SSL'] = True
-app.config['MAIL_USERNAME'] = 'marcomasciullidev@gmail.com' 
+app.config['MAIL_USERNAME'] = 'marcomasciullidev@gmail.com'
 app.config['MAIL_PASSWORD'] = 'cisx vxak ezgy htga'
 app.config['MAIL_DEFAULT_SENDER'] = 'noreply@argentinaporcolpinto.com'
 app.config['SECRET_KEY'] = 'colapinto'
 
 mail = Mail(app)
 db = SQLAlchemy(app)
+
+GOOGLE_MAPS_API_KEY = os.getenv('GOOGLE_MAPS_API_KEY')
+
+@app.route('/get_google_maps_api_key')
+def get_google_maps_api_key():
+    return jsonify({'api_key': GOOGLE_MAPS_API_KEY})
 
 @app.route('/')
 def home():
@@ -65,7 +82,7 @@ def Galeria():
 def Reservas():
     hoteles = consultas.obtener_hoteles()
     hotel_id = request.args.get('hotel_id')
-    
+
     return render_template("Reservas.html", hoteles=hoteles, hotel_id=hotel_id, endpoint=request.endpoint)
 
 def appendear_reservas_session(reservas):
@@ -125,12 +142,13 @@ def admin():
     return render_template('admin.html', hoteles=hoteles, habitaciones=habitaciones, reservas=reservas, servicios=servicios, usuarios=usuarios)
 
 @app.route('/admin/agregar_hotel', methods=['POST'])
+@cross_origin(origins="https://marm4.pythonanywhere.com")
 def agregar_hotel():
     try:
         data = request.get_json()
         if 'nombre' not in data:
             return jsonify({"error": "El campo 'nombre' es obligatorio"}), 400
-        
+
         nombre = data['nombre']
         descripcion = data['descripcion']
         ubicacion = data['ubicacion']
@@ -144,7 +162,7 @@ def agregar_hotel():
         return jsonify({"message": "Hotel agregado correctamente", "hotel": nuevo_hotel}), 201
 
     except Exception as e:
-       
+
         print(f"Error al agregar el hotel: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
@@ -200,7 +218,7 @@ def habilitar_habitacion(habitacion_id):
 def agregar_habitacion():
     try:
         data = request.get_json()
-        
+
         if 'capacidad' not in data or 'hotel_id' not in data:
             return jsonify({"error": "Los campos 'capacidad' y 'hotel_id' son obligatorios"}), 400
 
@@ -213,13 +231,13 @@ def agregar_habitacion():
             "id": habitacion_id,
             "capacidad": capacidad,
             "hotel": {
-                "id": hotel_id, 
+                "id": hotel_id,
                 "nombre": "metodo obtener nombre hotel por id./admin/agregar_habitacion"
             }
         }
 
         return jsonify({"message": "Habitación agregada correctamente", "habitacion": nueva_habitacion}), 201
-    
+
     except Exception as e:
         print(f"Error al agregar la habitación: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
@@ -246,14 +264,14 @@ def agregar_servicio():
         }
 
         return jsonify({"message": "Servicio agregado correctamente", "servicio": nuevo_servicio}), 201
-    
+
     except Exception as e:
         print(f"Error al agregar la habitacion: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
 
 @app.route('/admin/agregar_reserva', methods=['POST'])
 def agregar_reserva():
-    try: 
+    try:
         data = request.get_json()
         email = data.get('email')
         ingreso = data.get('ingreso')
@@ -268,7 +286,7 @@ def agregar_reserva():
 
         enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id)
         return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
-    
+
     except Exception as e:
         print(f"Error al crear la reserva: {str(e)}")
         return jsonify({"error": f"Error interno: {str(e)}"}), 500
@@ -461,6 +479,7 @@ def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id):
     except Exception as e:
         print(f"Error al enviar el correo: {str(e)}")
 
-    
-if __name__ == "__main__":
-    app.run("127.0.0.1", port="5000", debug=True)
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)  
+

@@ -65,6 +65,36 @@ def run_get_query2(query, params=None):
  
     
 
+def run_get_query(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+            return result.fetchall()
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+
+def run_get_query2(query, params=None):
+    try:
+        with Session() as session:
+            result = session.execute(text(query), params)
+
+            # Verificar qué devuelve result.fetchall()
+            rows = result.fetchall()
+            print(f"Resultado de la consulta: {rows}")
+
+            # Obtener los nombres de las columnas
+            columns = result.keys()  # Devuelve los nombres de las columnas
+
+            # Convertir las filas en diccionarios
+            return [dict(zip(columns, row)) for row in rows]
+
+    except Exception as e:
+        print(f"Error al ejecutar la consulta: {e}")
+        return None
+
+
+
 def obtener_hoteles():
     return run_get_all_query(QUERY_OBTENER_HOTELES)
 
@@ -140,6 +170,19 @@ def run_insert_query(query, params):
             print(f"Error al ejecutar la consulta: {str(e)}")
             raise e
 
+def run_insert_query2(query, params):
+    with Session() as session:
+        try:
+            session.execute(text(query), params)
+            session.commit()
+            # No es necesario devolver nada, solo confirmamos la inserción exitosa
+            return True
+        except Exception as e:
+            session.rollback()
+            print(f"Error al ejecutar la consulta: {str(e)}")
+            raise e
+
+
 def agregar_hotel(nombre, descripcion, ubicacion):
     return run_insert_query(QUERY_AGREGAR_HOTEL, {"nombre": nombre, "descripcion": descripcion, "ubicacion": ubicacion})
 
@@ -159,13 +202,13 @@ def agregar_servicio(nombre, descripcion, url_imagen, ubicacion, categoria):
     return run_insert_query(QUERY_AGREGAR_SERVICIO, {"nombre": nombre, "descripcion": descripcion, "url_imagen": url_imagen, "ubicacion": ubicacion, "categoria": categoria})
 
 def agregar_reserva_servicio(id_reserva, id_servicio):
-    return run_insert_query(QUERY_AGREGAR_RESERVA_SERVICIO, {"servicio_id": id_servicio, "reserva_id": id_reserva})
+    return run_insert_query2(QUERY_AGREGAR_RESERVA_SERVICIO, {"servicio_id": id_servicio, "reserva_id": id_reserva})
 
 def agregar_imagenes(hotel_id, imagenes):
     for url in imagenes:
         run_insert_query(QUERY_AGREGAR_IMAGEN, {"hotel_id": hotel_id, "url": url})
-    
-        
+
+
 QUERY_DESHABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 0 WHERE hotel_id = :id"
 QUERY_DESHABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 0 WHERE habitacion_id = :id"
 QUERY_DESHABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 0 WHERE reserva_id = :id"
@@ -183,7 +226,7 @@ def anular_por_id(query, id):
             session.rollback()
             print(f"Error al deshabilitar el elemento con id {id}: {str(e)}")
             raise e
-        
+
 def deshabilitar_hotel(id):
     anular_por_id(QUERY_DESHABILITAR_HOTEL, id)
 
@@ -204,7 +247,7 @@ def deshabilitar_imagen(id):
 
 
 QUERY_HABILITAR_HOTEL = "UPDATE HOTELES SET habilitado = 1 WHERE hotel_id = :id"
-QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE habitacion_id = :id"
+QUERY_HABILITAR_HABITACION = "UPDATE HABITACIONES SET habilitado = 1 WHERE habitacion_id = :iid"
 QUERY_HABILITAR_RESERVA = "UPDATE RESERVAS SET habilitado = 1 WHERE reserva_id = :id"
 QUERY_HABILITAR_SERVICIO = "UPDATE SERVICIOS SET habilitado = 1 WHERE servicio_id = :id"
 QUERY_HABILITAR_USUARIO = "UPDATE USUARIOS SET habilitado = 1 WHERE usuario_id = :id"
@@ -220,7 +263,7 @@ def habilitar_por_id(query, id):
             session.rollback()
             print(f"Error al habilitar el elemento con id {id}: {str(e)}")
             raise e
-        
+
 def habilitar_hotel(id):
     anular_por_id(QUERY_HABILITAR_HOTEL, id)
 

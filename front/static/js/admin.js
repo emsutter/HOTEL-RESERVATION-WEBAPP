@@ -33,25 +33,25 @@ document.addEventListener("DOMContentLoaded", function () {
             imagenesHotel: Array.from(imagenesImputs).map(input => input.value.trim())
         };
 
-        fetch('/admin/agregar_hotel', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_hotel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data)
         })
-            .then(response => response.json())
-            .then(result => {
-                if (result.hotel) {
-                    addHotelRow(result.hotel);
-                    form.reset();
-                } else {
-                    alert(result.error || 'Error al agregar el hotel');
-                }
-            })
-            .catch(error => {
-                alert('Error al agregar el hotel: ' + error);
-            });
+        .then(response => response.json())
+        .then(result => {
+            if (result.hotel) {
+                addHotelRow(result.hotel);
+                form.reset();
+            } else {
+                alert(result.error || 'Error al agregar el hotel');
+            }
+        })
+        .catch(error => {
+            alert('Error al agregar el hotel: ' + error);
+        });
     });
 });
 
@@ -64,28 +64,31 @@ function toggleHotelStatus(hotelId, button) {
         "¿Estás seguro de que quieres habilitar este hotel?" :
         "¿Estás seguro de que quieres deshabilitar este hotel?";
 
+    
+        
+
     if (confirm(confirmMessage)) {
         fetch(`/admin/${action}_hotel/${hotelId}`, {
             method: 'POST',
         })
-            .then(response => {
-                if (response.ok) {
-                    alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
-                    button.classList.toggle('deshabilitado');
-                    button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
-                    const row = document.getElementById(`hotel-row-${hotelId}`);
-                    if (row) {
-                        row.classList.toggle('deshabilitado');
-                    } else {
-                        console.error(`Row with ID hotel-row-${hotelId} not found`);
-                    }
+        .then(response => {
+            if (response.ok) {
+                alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
+                button.classList.toggle('deshabilitado');
+                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                const row = document.getElementById(`hotel-row-${hotelId}`);
+                if (row) {
+                    row.classList.toggle('deshabilitado');
                 } else {
-                    alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
+                    console.error(`Row with ID hotel-row-${hotelId} not found`);
                 }
-            })
-            .catch(error => {
-                alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
-            });
+            } else {
+                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
+            }
+        })
+        .catch(error => {
+            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
+        });
     }
 }
 
@@ -113,7 +116,7 @@ function addHotelRow(hotel) {
     tableBody.appendChild(row);
 
     const button = row.querySelector('.toggle-hotel-btn');
-    button.addEventListener('click', function (event) {
+    button.addEventListener('click', function(event) {
         const hotelId = event.target.dataset.hotelId;
         toggleHotelStatus(hotelId, event.target);
     });
@@ -135,7 +138,7 @@ document.addEventListener("DOMContentLoaded", function () {
             hotel_id: hotelId
         };
 
-        fetch('/admin/agregar_habitacion', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_habitacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -250,7 +253,7 @@ document.addEventListener("DOMContentLoaded", function () {
             categoria: categoriaServicio
         };
 
-        fetch('http://127.0.0.1:5000/admin/agregar_servicio', {
+        fetch('https://marm4.pythonanywhere.com/admin/agregar_servicio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
