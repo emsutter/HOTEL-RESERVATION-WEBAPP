@@ -4,10 +4,13 @@ from flask_mail import Mail, Message
 from flask_cors import CORS, cross_origin
 from flask import session
 from flask import redirect
+import dotenv
 import consultas
 import os
 
 app = Flask(__name__)
+
+dotenv.load_dotenv("myenv/.env")
 
 CORS(app)  # Habilita CORS para todas las rutas 
 from datetime import timedelta
