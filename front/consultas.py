@@ -26,9 +26,7 @@ WHERE us.reserva_id = :id_reserva;
 
 OBTENER_HABITACION_POR_HOTEL = "SELECT * FROM HABITACIONES WHERE hotel_id = :hotel_id AND habilitado = 1"
 
-
-
-engine = create_engine('mysql+mysqlconnector://marm4:Moqnit-1dakte-dikbew@marm4.mysql.pythonanywhere-services.com/marm4$apc_db')
+engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
 
 Session = sessionmaker(bind=engine)
 
