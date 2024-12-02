@@ -1,4 +1,4 @@
-    // Envia la informacion del hotel a la API para agregarlo a la base de datos
+// Envia la informacion del hotel a la API para agregarlo a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const buttons = document.getElementsByClassName('toggle-hotel-btn');
@@ -40,59 +40,53 @@ document.addEventListener("DOMContentLoaded", function () {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(result => {
-            if (result.hotel) {
-                addHotelRow(result.hotel);
-                form.reset();
-            } else {
-                alert(result.error || 'Error al agregar el hotel');
-            }
-        })
-        .catch(error => {
-            alert('Error al agregar el hotel: ' + error);
-        });
+            .then(response => response.json())
+            .then(result => {
+                if (result.hotel) {
+                    addHotelRow(result.hotel);
+                    form.reset();
+                } else {
+                    alert(result.error || 'Error al agregar el hotel');
+                }
+            })
+            .catch(error => {
+                alert('Error al agregar el hotel: ' + error);
+            });
     });
 });
 
-    // Cambia el estado del hotel (habilitado/deshabilitado) en la base de datos
+// Cambia el estado del hotel (habilitado/deshabilitado) en la base de datos
 
 function toggleHotelStatus(hotelId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
-    const confirmMessage = isDeshabilitado ?
-        "¿Estás seguro de que quieres habilitar este hotel?" :
-        "¿Estás seguro de que quieres deshabilitar este hotel?";
 
-    
-        
-
-    if (confirm(confirmMessage)) {
+    if (confirm(`¿Estás seguro de que quieres ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} este hotel?`)) {
         fetch(`/admin/${action}_hotel/${hotelId}`, {
             method: 'POST',
         })
-        .then(response => {
-            if (response.ok) {
-                alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
-                button.classList.toggle('deshabilitado');
-                button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
-                const row = document.getElementById(`hotel-row-${hotelId}`);
-                if (row) {
-                    row.classList.toggle('deshabilitado');
+            .then(response => {
+                if (response.ok) {
+                    alert(`Hotel ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
+                    button.classList.toggle('deshabilitado');
+                    button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
+                    const row = document.getElementById(`hotel-row-${hotelId}`);
+                    if (row) {
+                        row.classList.toggle('deshabilitado');
+                    } else {
+                        console.error(`Row with ID hotel-row-${hotelId} not found`);
+                    }
                 } else {
-                    console.error(`Row with ID hotel-row-${hotelId} not found`);
+                    alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
                 }
-            } else {
-                alert(`Hubo un error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel`);
-            }
-        })
-        .catch(error => {
-            alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
-        });
+            })
+            .catch(error => {
+                alert(`Error al ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} el hotel: ` + error);
+            });
     }
 }
 
-    // Agrega el hotel recien creado a la tabla de hoteles
+// Agrega el hotel recien creado a la tabla de hoteles
 
 function addHotelRow(hotel) {
     const tableBody = document.getElementById('hoteles-table-body');
@@ -116,13 +110,13 @@ function addHotelRow(hotel) {
     tableBody.appendChild(row);
 
     const button = row.querySelector('.toggle-hotel-btn');
-    button.addEventListener('click', function(event) {
+    button.addEventListener('click', function (event) {
         const hotelId = event.target.dataset.hotelId;
         toggleHotelStatus(hotelId, event.target);
     });
 }
 
-    // Envia la informacion de la habitacion a la API para agregarla a la base de datos
+// Envia la informacion de la habitacion a la API para agregarla a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector('form[action="admin_actions.php"]');
@@ -173,7 +167,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-    // Agrega la habitacion recien creada a la tabla de habitaciones
+// Agrega la habitacion recien creada a la tabla de habitaciones
 
 function addHabitacionRow(habitacion) {
     console.log(habitacion);
@@ -202,16 +196,13 @@ function addHabitacionRow(habitacion) {
     });
 }
 
-    // Cambia el estado de la habitacion (habilitado/deshabilitado) en la base de datos
+// Cambia el estado de la habitacion (habilitado/deshabilitado) en la base de datos
 
 function toggleHabitacionStatus(habitacionId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
-    const confirmMessage = isDeshabilitado ?
-        "¿Estás seguro de que quieres habilitar esta habitacion?" :
-        "¿Estás seguro de que quieres deshabilitar esta habitacion?";
 
-    if (confirm(confirmMessage)) {
+    if (confirm(`¿Estás seguro de que quieres ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} esta habitacion?`)) {
         fetch(`/admin/${action}_habitacion/${habitacionId}`, {
             method: 'POST',
         })
@@ -231,7 +222,7 @@ function toggleHabitacionStatus(habitacionId, button) {
     }
 }
 
-    // Envia la informacion del servicio a la API para agregarlo a la base de datos
+// Envia la informacion del servicio a la API para agregarlo a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById('form-agregar-servicio');
@@ -277,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 });
 
-    // Agrerga el servicio recien creado a la tabla de servicios
+// Agrerga el servicio recien creado a la tabla de servicios
 
 function addServicioRow(servicio) {
     const tableBody = document.getElementById('servicios-table-body');
@@ -309,16 +300,13 @@ function addServicioRow(servicio) {
     });
 }
 
-    // Cambia el estado del servicio (habilitado/deshabilitado) en la base de datos
+// Cambia el estado del servicio (habilitado/deshabilitado) en la base de datos
 
 function toggleServicioStatus(servicioId, button) {
     const isDeshabilitado = button.classList.contains('deshabilitado');
     const action = isDeshabilitado ? 'habilitar' : 'deshabilitar';
-    const confirmMessage = isDeshabilitado ?
-        "¿Estás seguro de que quieres habilitar este servicio?" :
-        "¿Estás seguro de que quieres deshabilitar este servicio?";
 
-    if (confirm(confirmMessage)) {
+    if (confirm(`¿Estás seguro de que quieres ${isDeshabilitado ? 'habilitar' : 'deshabilitar'} este servicio?`)) {
         fetch(`/admin/${action}_servicio/${servicioId}`, {
             method: 'POST',
         })
