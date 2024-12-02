@@ -28,7 +28,7 @@ OBTENER_HABITACION_POR_HOTEL = "SELECT * FROM HABITACIONES WHERE hotel_id = :hot
 
 
 
-engine = create_engine('mysql+mysqlconnector://root@localhost:3306/apc_db')
+engine = create_engine('mysql+mysqlconnector://marm4:Moqnit-1dakte-dikbew@marm4.mysql.pythonanywhere-services.com/marm4$apc_db')
 
 Session = sessionmaker(bind=engine)
 
@@ -310,7 +310,10 @@ def eliminar_servicio_reserva(servicio_id, reserva_id):
 
 #OBTENER
 
-query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
+query_reservas_por_usuario = text(
+    "SELECT * FROM RESERVAS WHERE email = :mail AND habilitado = 1"
+)
+
 query_obtener_reserva_por_id = text("SELECT * FROM RESERVAS WHERE reservas_id = :id")
 query_obtener_hotel_por_id = text("SELECT * FROM HOTELES WHERE hotel_id = :hotel_id")
 
