@@ -4,16 +4,12 @@ from flask_mail import Mail, Message
 from flask_cors import CORS, cross_origin
 from flask import session
 from flask import redirect
-from flask import session
-from flask import redirect
 import consultas
 import os
 
 app = Flask(__name__)
 
 CORS(app)  # Habilita CORS para todas las rutas 
-
-MAIL_ADMIN = "admin@gmail.com"
 from datetime import timedelta
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
@@ -78,32 +74,32 @@ def borrar_reserva_en_sesion(id):
 def cancelar_reserva(id):
     reserva = consultas.obtener_reserva_por_id(id)
     if not reserva:
-        return redirect('/mis_reservas')  # Redirige si la reserva no existe.
+        return redirect('/MisReservas')  # Redirige si la reserva no existe.
     
 
     hotel_id = reserva.get("hotel_id")
     hotel = consultas.obtener_hotel_por_id(hotel_id)
     if not hotel:
-        return redirect('/mis_reservas') 
+        return redirect('/MisReservas') 
 
     if request.method == 'POST':
         print(id)
         consultas.deshabilitar_reserva(id)
         borrar_reserva_en_sesion(id)
-        return redirect('/mis_reservas')
+        return redirect('/MisReservas')
     return render_template('cancelacion.html', reserva = reserva, hotel = hotel)
 
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
     hoteles = consultas.obtener_hoteles_con_imagen()
     
-    return render_template("NuestrosHoteles.html", hoteles=hoteles, endpoint=request.endpoint)
+    return render_template("nuestrosHoteles.html", hoteles=hoteles, endpoint=request.endpoint)
 
 @app.route('/Galeria')
 def Galeria():
     imagenes = consultas.obtener_imagenes()
     
-    return render_template("Galeria.html", imagenes=imagenes, endpoint=request.endpoint)
+    return render_template("galeria.html", imagenes=imagenes, endpoint=request.endpoint)
 
 @app.route('/Reservas', methods=['GET', 'POST'])
 def Reservas():
@@ -113,7 +109,7 @@ def Reservas():
 
     
     return render_template(
-        "Reservas.html",
+        "reservas.html",
         hoteles=hoteles,
         hotel_id=hotel_id,
         endpoint=request.endpoint,
@@ -138,12 +134,14 @@ def appendear_reservas_session(email, reservas):
 
 
 
-@app.route('/ConsultaReserva', methods=['GET', 'POST'])
-def ConsultaReserva():
+@app.route('/IniciarSesion', methods=['GET', 'POST'])
+def IniciarSesion():
 
     if request.method == 'POST':  
         email = request.form.get("email")
-        if email == MAIL_ADMIN:
+        if email == "admin@admin.com":
+            session['email'] = email 
+            session.permanent = True 
             return redirect('/admin')
         
         reservas_por_usuario = buscar_usuario(email)
@@ -152,27 +150,28 @@ def ConsultaReserva():
             session['email'] = email  
             appendear_reservas_session(email, reservas_por_usuario.get('data'))
             session.permanent = True  
-            return redirect('/mis_reservas')  
+            return redirect('/MisReservas')  
         else:
             error = f"Correo incorrecto: {str(reservas_por_usuario['error'])}"
-            return render_template("ConsultaReserva.html", error=error)
+            return render_template("iniciarSesion.html", error=error)
 
     if 'email' not in session:
-        return render_template("ConsultaReserva.html")
-    
-    return redirect('/mis_reservas')    
+        return render_template("IniciarSesion.html")
+   
+    return redirect('/MisReservas')    
+  
 
 
-@app.route('/mis_reservas')
-def mis_reservas():
+@app.route('/MisReservas')
+def MisReservas():
     email = session.get('email')
 
     if email:
         
         reservas = session.get("reservas", {}).get(email, [])
-        return render_template("mis_reservas.html", reservas=reservas)
+        return render_template("misReservas.html", reservas=reservas)
     else:
-        return redirect('/ConsultaReserva')
+        return redirect('/IniciarSesion')
     
 
 @app.route('/logout', methods=['POST'])
@@ -181,6 +180,11 @@ def logout():
     
     return redirect('/')
 
+@app.context_processor
+def inject_session():
+    return dict(session=session)
+
+
 
 @app.route('/contact')
 def contact():
@@ -188,6 +192,11 @@ def contact():
 
 @app.route('/admin')
 def admin():
+    # Verifica si el usuario tiene sesión iniciada y es admin
+    if 'email' not in session or session['email'] != 'admin@admin.com':
+        return redirect('/IniciarSesion')  # Redirigir si no es admin
+    
+    # Obtener datos necesarios
     hoteles = consultas.obtener_hoteles()
     habitaciones = consultas.obtener_habitaciones()
     reservas = consultas.obtener_reservas()
@@ -523,5 +532,5 @@ def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id):
         print(f"Error al enviar el correo: {str(e)}")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=5001, debug=True)
 
