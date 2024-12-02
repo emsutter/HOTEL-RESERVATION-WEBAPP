@@ -1,171 +1,196 @@
-<!DOCTYPE html>
-<html lang="es">
+{% extends "bloque.html" %}
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename = 'css/style.css')}}">
+{% block title %}Inicio - Mi Página Web{% endblock %}
 
-</head>
+{% block content %}
+<div class="admin">
+    <section id="hoteles">
+        <div class="back_re">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="title">
+                        <h2>Gestión de hoteles</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+        
+        <form id="form-agregar-hotel">
+            <input type="hidden" name="action" value="add_hotel">
 
-<body class="admin">
-    <header class="admin_header">
-        <h1>Panel de Administración</h1>
-    </header>
+            <label for="nombre_hotel">Nombre del Hotel:</label>
+            <input type="text" id="nombre_hotel" name="nombre_hotel" required>
 
-    <main>
-        <section id="hoteles">
-            <h2>Gestión de Hoteles</h2>
-            <form id="form-agregar-hotel">
-                <input type="hidden" name="action" value="add_hotel">
+            <label for="descripcion_hotel">Descripción:</label>
+            <input type="text" id="descripcion_hotel" name="descripcion_hotel" required>
 
-                <label for="nombre_hotel">Nombre del Hotel:</label>
-                <input type="text" id="nombre_hotel" name="nombre_hotel" required>
+            <label for="ubicacion_hotel">Ubicación:</label>
+            <input type="text" id="ubicacion_hotel" name="ubicacion_hotel" required>
 
-                <label for="descripcion_hotel">Descripción:</label>
-                <input type="text" id="descripcion_hotel" name="descripcion_hotel" required>
+            <label for="imagenes_hotel">URLs de las Imágenes del Hotel:</label>
+            <div id="imagenes-container"></div>
+            <button type="button" id="agregar-imagen">Agregar más imágenes</button>
+            <button type="submit">Agregar Hotel</button>
+        </form>
 
-                <label for="ubicacion_hotel">Ubicación:</label>
-                <input type="text" id="ubicacion_hotel" name="ubicacion_hotel" required>
+        <!-- Tabla de Hoteles -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="hoteles-table-body">
+                {% for hotel in hoteles %}
+                <tr id="hotel-row-{{ hotel.hotel_id }}"
+                    class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
+                    <td>{{ hotel.hotel_id }}</td>
+                    <td>{{ hotel.nombre }}</td>
+                    <td>
+                        <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}"
+                            data-hotel-id="{{ hotel.hotel_id  }}">
+                            {% if hotel.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
-                <label for="imagenes_hotel">URLs de las Imágenes del Hotel:</label>
-                <div id="imagenes-container"></div>
-                <button type="button" id="agregar-imagen">Agregar más imágenes</button>
-                <button type="submit">Agregar Hotel</button>
-            </form>
+    <!-- Sección Habitaciones -->
+    <section id="habitaciones">
+        <div class="back_re">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="title">
+                        <h2>Gestión de habitaciones</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+        <!-- Formulario para agregar/editar habitación -->
+        <form action="admin_actions.php" method="POST">
+            <input type="hidden" name="action" value="add_habitacion">
+            <label for="capacidad">Capacidad:</label>
+            <input type="number" id="capacidad" name="capacidad" required>
+            <label for="hotel_id">ID del Hotel:</label>
+            <select id="hotel_id" name="hotel_id">
+                {% for hotel in hoteles %}
+                <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
+                {% endfor %}
 
-            <!-- Tabla de Hoteles -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="hoteles-table-body">
-                    {% for hotel in hoteles %}
-                    <tr id="hotel-row-{{ hotel.hotel_id }}"
-                        class="{% if not hotel.habilitado %}deshabilitado{% endif %}">
-                        <td>{{ hotel.hotel_id }}</td>
-                        <td>{{ hotel.nombre }}</td>
-                        <td>
-                            <button class="toggle-hotel-btn {% if not hotel.habilitado %}deshabilitado{% endif %}"
-                                data-hotel-id="{{ hotel.hotel_id  }}">
-                                {% if hotel.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+            </select>
+            <button type="submit">Agregar Habitación</button>
+        </form>
 
-        <!-- Sección Habitaciones -->
-        <section id="habitaciones">
-            <h2>Gestión de Habitaciones</h2>
-            <!-- Formulario para agregar/editar habitación -->
-            <form action="admin_actions.php" method="POST">
-                <input type="hidden" name="action" value="add_habitacion">
-                <label for="capacidad">Capacidad:</label>
-                <input type="number" id="capacidad" name="capacidad" required>
-                <label for="hotel_id">ID del Hotel:</label>
-                <select id="hotel_id" name="hotel_id">
-                    {% for hotel in hoteles %}
-                    <option value="{{ hotel.hotel_id }}">{{ hotel.nombre }}</option>
-                    {% endfor %}
-
-                </select>
-                <button type="submit">Agregar Habitación</button>
-            </form>
-
-            <!-- Tabla de Habitaciones -->
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Capacidad</th>
-                        <th>Hotel</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="habitaciones-table-body">
-                    {% for habitacion in habitaciones %}
-                    <tr id="habitacion-row-{{ habitacion.habitacion_id }}"
-                        class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
-                        <td>{{ habitacion.habitacion_id }}</td>
-                        <td>{{ habitacion.capacidad }}</td>
-                        <td>{{ habitacion.hotel_id }}</td>
-                        <td>
-                            <button
-                                class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}"
-                                data-habitacion-id="{{ habitacion.habitacion_id }}">
-                                {% if habitacion.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+        <!-- Tabla de Habitaciones -->
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Capacidad</th>
+                    <th>Hotel</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="habitaciones-table-body">
+                {% for habitacion in habitaciones %}
+                <tr id="habitacion-row-{{ habitacion.habitacion_id }}"
+                    class="{% if not habitacion.habilitado %}deshabilitado{% endif %}">
+                    <td>{{ habitacion.habitacion_id }}</td>
+                    <td>{{ habitacion.capacidad }}</td>
+                    <td>{{ habitacion.hotel_id }}</td>
+                    <td>
+                        <button
+                            class="toggle-habitacion-btn {% if not habitacion.habilitado %}deshabilitado{% endif %}"
+                            data-habitacion-id="{{ habitacion.habitacion_id }}">
+                            {% if habitacion.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
 
 
-        <!-- Sección Servicios -->
-        <section id="servicios">
-            <h2>Gestión de Servicios</h2>
-            <form id="form-agregar-servicio">
-                <input type="hidden" name="action" value="add_servicio">
+    <!-- Sección Servicios -->
+    <section id="servicios">
+        <div class="back_re">
+            <div class="container">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="title">
+                        <h2>Gestión de servicios</h2>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+        <form id="form-agregar-servicio">
+            <input type="hidden" name="action" value="add_servicio">
 
-                <label for="nombre_servicio">Nombre del Servicio:</label>
-                <input type="text" id="nombre_servicio" name="nombre_servicio" required>
+            <label for="nombre_servicio">Nombre del Servicio:</label>
+            <input type="text" id="nombre_servicio" name="nombre_servicio" required>
 
-                <label for="descripcion_servicio">Descripción:</label>
-                <textarea id="descripcion_servicio" name="descripcion_servicio" required></textarea>
+            <label for="descripcion_servicio">Descripción:</label>
+            <textarea id="descripcion_servicio" name="descripcion_servicio" required></textarea>
 
-                <label for="url_imagen">URL de Imagen:</label>
-                <input type="text" id="url_imagen" name="url_imagen" required>
+            <label for="url_imagen">URL de Imagen:</label>
+            <input type="text" id="url_imagen" name="url_imagen" required>
 
-                <label for="ubicacion_servicio">Ubicación:</label>
-                <input type="text" id="ubicacion_servicio" name="ubicacion_servicio" required>
+            <label for="ubicacion_servicio">Ubicación:</label>
+            <input type="text" id="ubicacion_servicio" name="ubicacion_servicio" required>
 
-                <label for="categoria_servicio">Categoria:</label>
-                <input type="text" id="categoria_servicio" name="categoria_servicio" required>
+            <label for="categoria_servicio">Categoria:</label>
+            <input type="text" id="categoria_servicio" name="categoria_servicio" required>
 
-                <button type="submit">Agregar Servicio</button>
-            </form>
+            <button type="submit">Agregar Servicio</button>
+        </form>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Categoria</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody id="servicios-table-body">
-                    {% for servicio in servicios %}
-                    <tr id="servicio-row-{{ servicio.servicio_id }}">
-                        <td>{{ servicio.servicio_id }}</td>
-                        <td>{{ servicio.nombre }}</td>
-                        <td>{{ servicio.descripcion }}</td>
-                        <td>{{ servicio.categoria }}</td>
-                        <td>
-                            <button class="toggle-servicio-btn {% if not servicio.habilitado %}deshabilitado{% endif %}"
-                                data-servicio-id="{{ servicio.servicio_id }}">
-                                {% if servicio.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
-                            </button>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Categoria</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="servicios-table-body">
+                {% for servicio in servicios %}
+                <tr id="servicio-row-{{ servicio.servicio_id }}">
+                    <td>{{ servicio.servicio_id }}</td>
+                    <td>{{ servicio.nombre }}</td>
+                    <td>{{ servicio.descripcion }}</td>
+                    <td>{{ servicio.categoria }}</td>
+                    <td>
+                        <button class="toggle-servicio-btn {% if not servicio.habilitado %}deshabilitado{% endif %}"
+                            data-servicio-id="{{ servicio.servicio_id }}">
+                            {% if servicio.habilitado %}Deshabilitar{% else %}Habilitar{% endif %}
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
 
-            </table>
-        </section>
-    </main>
+        </table>
+    </section>
+
+    <div class="form-cerrar-sesion" >
+        <form method="POST" action="{{url_for('logout')}}">
+            <button type="submit" class="logout-btn">Cerrar sesión</button>
+        </form>
+    </div>
+</div>
+        
     <script src="{{ url_for('static', filename = 'js/admin.js')  }}"></script>
-</body>
-
-</html>
+    {% endblock %}

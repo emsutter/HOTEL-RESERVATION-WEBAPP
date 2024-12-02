@@ -77,9 +77,19 @@
                            <li class="nav-item {% if endpoint == 'Reservas' %}active{% endif %}">
                               <a class="nav-link" href="{{ url_for('Reservas') }}">Reservar</a>
                            </li>
-                           <li class="nav-item {% if endpoint == 'ConsultaReserva' %}active{% endif %}">
-                              <a class="nav-link" , href="{{ url_for('ConsultaReserva') }}">Tus Reservas</a>
-                           </li>
+                           <li class="nav-item {% if endpoint == 'IniciarSesion' or endpoint == 'MisReservas' or endpoint == 'admin' %}active{% endif %}">
+                              {% if 'email' in session %}
+                              
+                                  {% if session['email'] == 'admin@admin.com' %}
+                                    <a class="nav-link" href="{{ url_for('admin') }}">Admin</a>
+                                  {% else %}
+                                    <a class="nav-link" href="{{ url_for('MisReservas') }}">Mis Reservas</a>
+                                  {% endif %}
+                              {% else %}
+                                  <!-- Si no hay usuario iniciado, mostrar el enlace de iniciar sesión -->
+                                  <a class="nav-link" href="{{ url_for('IniciarSesion') }}">Iniciar Sesión</a>
+                              {% endif %}
+                          </li>
                            <!--<li class="nav-item {% if endpoint == 'contact' %}active{% endif %}">
                                  <a class="nav-link" href="{{ url_for('contact') }}">Contáctenos</a>
                               </li>-->
