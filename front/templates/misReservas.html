@@ -1,0 +1,62 @@
+
+{% extends "bloque.html" %}
+
+{% block title %}Mis reservas{% endblock %}
+
+{% block content %}
+    <div class="mis-reservas">
+        <div class="top-half" style="flex: 2;">
+            <div class="back_re">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="title">
+                                <h2>TUS RESEVAS</h2>
+                                <div style="height: 5px;"></div>
+                            </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="tabla-reservas">
+            {% if reservas|length > 0 %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Fecha</th>
+                        <th>Habitación</th>
+                        <th>Hotel</th>
+                        <th>Reserva</th>
+                        <th>Accion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reserva in reservas %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ reserva.fecha_ingreso }}</td>
+                        <td>{{ reserva.habilitado }}</td>
+                        <td>{{ reserva.hotel_id }}</td>
+                        <td>{{ reserva.reservas_id }}</td>
+                        <td>
+                            <a href="{{url_for('cancelar_reserva', id=reserva.reservas_id)}}" class="cancelar-btn"> Cancelar
+                                reserva
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+                <p class="no-reservas">No tienes reservas registradas.</p>
+            {% endif %}
+            <div class="form-cerrar-sesion" >
+                <form method="POST" action="{{url_for('logout')}}">
+                    <button type="submit" class="logout-btn">Cerrar sesión</button>
+                </form>
+            </div>
+        </div>
+        
+        
+    </div>
+    {% endblock %}
