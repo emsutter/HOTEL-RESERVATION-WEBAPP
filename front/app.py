@@ -5,8 +5,6 @@ from flask_cors import CORS, cross_origin
 from dotenv import load_dotenv
 from flask import session
 from flask import redirect
-from flask import session
-from flask import redirect
 import consultas
 import os
 
@@ -15,7 +13,6 @@ load_dotenv("myenv/.env")
 app = Flask(__name__)
 
 CORS(app)  # Habilita CORS para todas las rutas 
-
 from datetime import timedelta
 
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
@@ -49,84 +46,148 @@ def home():
 
 @app.route('/prueba')
 def prueba():
-    prueba = session.get('reserva', [])
+    prueba = session["reservas"]["gianluccalord723@gmail.com"]
 
-    return render_template("pruebas.html", prueba=prueba)
+    nueva_reserva = [reserva for reserva in prueba if reserva["reservas_id"] != 17 ]
+    
+    return render_template("pruebas.html", prueba=prueba, nueva_reserva=nueva_reserva)
+
+def borrar_reserva_en_sesion(id):
+    """
+    Borra la reserva de la sesión si existe.
+    """
+    if "reservas" not in session:
+        return
+
+    email = session.get("email")
+
+    if not email or email not in session["reservas"]:
+        return
+
+    reservas_usuario = session["reservas"][email]
+
+
+    nueva_reserva = [reserva for reserva in reservas_usuario if reserva["reservas_id"] != id ]
+    
+    session["reservas"][email] = nueva_reserva
+    session.modified = True
+
 
 @app.route('/cancelar_reserva/<int:id>', methods = ['GET','POST']) 
 def cancelar_reserva(id):
-    reserva = consultas.obtener_reseva_por_id(id)
-    hotel_id = reserva[0]['hotel_id']   #recordar que se deshabilita cuando es 0 (falta que se vaya de la pestania consultas )
+    reserva = consultas.obtener_reserva_por_id(id)
+    if not reserva:
+        return redirect('/MisReservas')  # Redirige si la reserva no existe.
+    
+
+    hotel_id = reserva.get("hotel_id")
     hotel = consultas.obtener_hotel_por_id(hotel_id)
-    
+    if not hotel:
+        return redirect('/MisReservas') 
+
     if request.method == 'POST':
-        borrar_reserva(id)
-        return redirect('/mis_reservas')
-    
-    return render_template('cancelacion.html', reserva = reserva[0], hotel = hotel)
+        print(id)
+        consultas.deshabilitar_reserva(id)
+        borrar_reserva_en_sesion(id)
+        return redirect('/MisReservas')
+    return render_template('cancelacion.html', reserva = reserva, hotel = hotel)
 
 @app.route('/NuestrosHoteles')
 def NuestrosHoteles():
     hoteles = consultas.obtener_hoteles_con_imagen()
     
-    return render_template("NuestrosHoteles.html", hoteles=hoteles, endpoint=request.endpoint)
+    return render_template("nuestrosHoteles.html", hoteles=hoteles, endpoint=request.endpoint)
 
 @app.route('/Galeria')
 def Galeria():
     imagenes = consultas.obtener_imagenes()
     
-    return render_template("Galeria.html", imagenes=imagenes, endpoint=request.endpoint)
+    return render_template("galeria.html", imagenes=imagenes, endpoint=request.endpoint)
 
-@app.route('/Reservas', methods = ['GET', 'POST'])
+@app.route('/Reservas', methods=['GET', 'POST'])
 def Reservas():
     hoteles = consultas.obtener_hoteles()
     hotel_id = request.args.get('hotel_id')
     
-    return render_template("Reservas.html", hoteles=hoteles, hotel_id=hotel_id, endpoint=request.endpoint)
 
-def appendear_reservas_session(reservas):
-    if "reserva" not in session:
-        session['reserva'] = []
-        
+    
+    return render_template(
+        "reservas.html",
+        hoteles=hoteles,
+        hotel_id=hotel_id,
+        endpoint=request.endpoint,
+    )
+
+def appendear_reservas_session(email, reservas):
+    """
+    Almacena las reservas de un usuario específico en la sesión.
+    """
+    if "reservas" not in session:
+        session["reservas"] = {} 
+
+    
+    usuario_reservas = session["reservas"].get(email, [])
+
+    
     for reserva in reservas:
-        if reserva not in session['reserva']:
-            session['reserva'].append(reserva)
+        if reserva not in usuario_reservas:
+            usuario_reservas.append(reserva)
 
-@app.route('/ConsultaReserva', methods=['GET', 'POST'])
-def ConsultaReserva():
+    session["reservas"][email] = usuario_reservas
+
+
+
+@app.route('/IniciarSesion', methods=['GET', 'POST'])
+def IniciarSesion():
+
     if request.method == 'POST':  
-        email = request.form.get("email")  
+        email = request.form.get("email")
+        if email == "admin@admin.com":
+            session['email'] = email 
+            session.permanent = True 
+            return redirect('/admin')
+        
         reservas_por_usuario = buscar_usuario(email)
         
         if 'error' not in reservas_por_usuario:
             session['email'] = email  
-            appendear_reservas_session(reservas_por_usuario.get('data'))
-            session.permanent = True 
-            return redirect('/mis_reservas')  
+            appendear_reservas_session(email, reservas_por_usuario.get('data'))
+            session.permanent = True  
+            return redirect('/MisReservas')  
         else:
-            error = f"mail incorrecto {str(reservas_por_usuario[1])}"
-            return render_template("ConsultaReserva.html", error=error)
-        
-    if not 'email' in session:
-        return render_template("ConsultaReserva.html")
-    
-    return redirect('/mis_reservas')    
+            error = f"Correo incorrecto: {str(reservas_por_usuario['error'])}"
+            return render_template("iniciarSesion.html", error=error)
 
-@app.route('/mis_reservas')
-def mis_reservas():
-    mail = session.get('email')
-    
-    if  mail:
-        reservas = session.get('reserva', [])
-        return render_template("mis_reservas.html", reservas = reservas)
+    if 'email' not in session:
+        return render_template("IniciarSesion.html")
+   
+    return redirect('/MisReservas')    
+  
+
+
+@app.route('/MisReservas')
+def MisReservas():
+    email = session.get('email')
+
+    if email:
+        
+        reservas = session.get("reservas", {}).get(email, [])
+        return render_template("misReservas.html", reservas=reservas)
     else:
-        return redirect('/ConsultaReserva')
+        return redirect('/IniciarSesion')
     
-@app.route('/logout', methods = ['POST'])
+
+@app.route('/logout', methods=['POST'])
 def logout():
     session.clear() 
     
     return redirect('/')
+
+@app.context_processor
+def inject_session():
+    return dict(session=session)
+
+
 
 @app.route('/contact')
 def contact():
@@ -134,6 +195,11 @@ def contact():
 
 @app.route('/admin')
 def admin():
+    # Verifica si el usuario tiene sesión iniciada y es admin
+    if 'email' not in session or session['email'] != 'admin@admin.com':
+        return redirect('/IniciarSesion')  # Redirigir si no es admin
+    
+    # Obtener datos necesarios
     hoteles = consultas.obtener_hoteles()
     habitaciones = consultas.obtener_habitaciones()
     reservas = consultas.obtener_reservas()
@@ -279,7 +345,10 @@ def agregar_reserva():
         habitacion_id = data.get('habitacion_id')
         reserva_id = consultas.agregar_reserva(email, ingreso, egreso, hotel_id, habitacion_id)
         reserva = consultas.obtener_reseva_por_id(reserva_id)
-        appendear_reservas_session(reserva)
+        
+        if reserva:
+            appendear_reservas_session(email, reserva)
+
         enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id)
         return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
     except Exception as e:
@@ -293,16 +362,9 @@ def borrar_reserva(id):
     try:
         consultas.deshabilitar_reserva(id)
 
-        if not 'reserva' in session:
-            return jsonify({'error': "No existe la reserva que quiere eliminar"}), 404
-        
-        for reserva in session['reserva']:
-            if reserva['reservas_id'] == id:
-                session['reserva'].remove(reserva)
+        borrar_reserva_en_sesion(id)
 
-        session.modified = True
-
-        return jsonify({'success': True, 'message': 'Reserva realizada con éxito'}), 200
+        return jsonify({'success': True, 'message': 'Reserva eliminada con exito'}), 200
     except Exception as e:
         return jsonify({"error": f"Ocurrió un error: {str(e)}"})
 
@@ -310,12 +372,12 @@ def borrar_reserva(id):
 def buscar_usuario(mail):
     """Trae el usuario de la base de datos junto a todas las reservas del mismo."""
     try:
-        data = consultas.traer_reservas_por_usuario(mail)  # Llama directamente a la consulta
+        data = consultas.traer_reservas_por_usuario(mail)  
 
         if "error" in data:
-            return {"error": data["error"]}  # Devuelve un diccionario con el error
+            return {"error": data["error"]} 
     
-        return {"data": data}  # Devuelve un diccionario con los datos
+        return {"data": data}  
         
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
@@ -368,7 +430,7 @@ def obtener_servicios_reserva(id_reserva):
 @app.route('/admin/obtener_reserva/<int:reservas_id>', methods=['GET'])
 def obtener_reserva(reservas_id):
     try:
-        print(f"Buscando reserva con ID: {reservas_id}")  # Esto te ayuda a ver si la solicitud llega bien
+        print(f"Buscando reserva con ID: {reservas_id}")
         reserva = consultas.obtener_reserva_por_id(reservas_id)
         
         if reserva:
@@ -377,7 +439,7 @@ def obtener_reserva(reservas_id):
             return jsonify({"error": "Reserva no encontrada"}), 404
         
     except Exception as e:
-        print(f"Error: {e}")  # Esto imprimirá el error en la consola de Flask
+        print(f"Error: {e}")  
         return jsonify({"error": f"Ocurrió un error: {e}"}), 500
 
 @app.route('/admin/eliminar_servicio_reserva', methods=['DELETE'])
@@ -473,5 +535,5 @@ def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id):
         print(f"Error al enviar el correo: {str(e)}")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(host='0.0.0.0', port=5001, debug=True)
 

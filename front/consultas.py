@@ -140,12 +140,12 @@ def obtener_reserva_por_id(reservas_id):
         reserva = reserva_lista[0]
         
         return {
-            'reservas_id': reserva.reservas_id,
-            'email': reserva.email,
-            'fecha_ingreso': reserva.fecha_ingreso.strftime('%Y-%m-%d'), 
-            'fecha_egreso': reserva.fecha_egreso.strftime('%Y-%m-%d'),
-            'hotel_id': reserva.hotel_id,
-            'habilitado': reserva.habilitado
+            'reservas_id': reserva['reservas_id'],  # Acceso mediante clave
+            'email': reserva['email'],
+            'fecha_ingreso': reserva['fecha_ingreso'].strftime('%Y-%m-%d'),
+            'fecha_egreso': reserva['fecha_egreso'].strftime('%Y-%m-%d'),
+            'hotel_id': reserva['hotel_id'],
+            'habilitado': reserva['habilitado']
         }
     return None
 
@@ -308,7 +308,10 @@ def eliminar_servicio_reserva(servicio_id, reserva_id):
 
 #OBTENER
 
-query_reservas_por_usuario = text("SELECT * FROM RESERVAS WHERE email = :mail")
+query_reservas_por_usuario = text(
+    "SELECT * FROM RESERVAS WHERE email = :mail AND habilitado = 1"
+)
+
 query_obtener_reserva_por_id = text("SELECT * FROM RESERVAS WHERE reservas_id = :id")
 query_obtener_hotel_por_id = text("SELECT * FROM HOTELES WHERE hotel_id = :hotel_id")
 
@@ -338,15 +341,15 @@ def obtener_reseva_por_id(id):
     """"trae la reserva especifica del id"""
 
     try:
-        # Abre una sesión
+        
         with Session() as session:
-            # Ejecuta la consulta con el parámetro del email
+            
             respuesta = session.execute(query_obtener_reserva_por_id, {"id": id}).fetchall()
             
             if not respuesta:
                 return []
             
-            # Transforma los resultados en una lista de diccionarios
+            
             reserva = [
                 dict(row._mapping) for row in respuesta  # Convierte cada fila a un diccionario
 
@@ -362,17 +365,17 @@ def obtener_reseva_por_id(id):
 def obtener_hotel_por_id(hotel_id):
 
     try:
-        # Abre una sesión
+        
         with Session() as session:
-            # Ejecuta la consulta con el parámetro del email
+            
             respuesta = session.execute(query_obtener_hotel_por_id, {"hotel_id": hotel_id}).fetchall()
             
             if not respuesta:
                 return []
             
-            # Transforma los resultados en una lista de diccionarios
+            
             reserva = [
-                dict(row._mapping) for row in respuesta  # Convierte cada fila a un diccionario
+                dict(row._mapping) for row in respuesta  
 
             ]
             

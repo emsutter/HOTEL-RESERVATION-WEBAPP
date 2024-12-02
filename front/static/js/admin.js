@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function () {
             imagenesHotel: Array.from(imagenesImputs).map(input => input.value.trim())
         };
 
-        fetch('https://marm4.pythonanywhere.com/admin/agregar_hotel', {
+        fetch('/admin/agregar_hotel', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -132,7 +132,7 @@ document.addEventListener("DOMContentLoaded", function () {
             hotel_id: hotelId
         };
 
-        fetch('https://marm4.pythonanywhere.com/admin/agregar_habitacion', {
+        fetch('/admin/agregar_habitacion', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
             categoria: categoriaServicio
         };
 
-        fetch('https://marm4.pythonanywhere.com/admin/agregar_servicio', {
+        fetch('/admin/agregar_servicio', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
