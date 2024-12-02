@@ -532,5 +532,5 @@ def enviar_correo(email, reserva_id, ingreso, egreso, hotel_id, habitacion_id):
         print(f"Error al enviar el correo: {str(e)}")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
 
