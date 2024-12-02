@@ -381,8 +381,3 @@ def obtener_hotel_por_id(hotel_id):
     
     except Exception as e:
         return {"error": f"Ocurrió un error: {str(e)}"}
-    
-
-
-
-    

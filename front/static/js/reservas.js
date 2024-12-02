@@ -1,3 +1,19 @@
+document.addEventListener("DOMContentLoaded", function() {
+    fetch('/get_google_maps_api_key')
+        .then(response => response.json())
+        .then(data => {
+            const apiKey = data.api_key;
+            const script = document.createElement('script');
+            script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap`;
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        })
+        .catch(error => {
+            console.error('Error fetching the Google Maps API key:', error);
+        });
+});
+
     // Busca las habitaciones disponibles para un hotel y las muestra en el selector de reservas
 
 document.addEventListener("DOMContentLoaded", function () {

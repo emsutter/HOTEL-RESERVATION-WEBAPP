@@ -10,6 +10,7 @@ mysql-connector-python = "*"
 requests = "*"
 flask-mail = "*"
 flask-cors = "*"
+"python.dotenv" = "*"
 
 [dev-packages]
 

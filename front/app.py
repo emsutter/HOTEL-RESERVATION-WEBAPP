@@ -2,12 +2,15 @@ from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from flask_cors import CORS, cross_origin
+from dotenv import load_dotenv
 from flask import session
 from flask import redirect
 from flask import session
 from flask import redirect
 import consultas
 import os
+
+load_dotenv("myenv/.env")
 
 app = Flask(__name__)
 
