@@ -109,7 +109,7 @@ def Reservas():
 
     
     return render_template(
-        "reservas.html",
+        "Reservas.html",
         hoteles=hoteles,
         hotel_id=hotel_id,
         endpoint=request.endpoint,
@@ -156,7 +156,7 @@ def IniciarSesion():
             return render_template("iniciarSesion.html", error=error)
 
     if 'email' not in session:
-        return render_template("IniciarSesion.html")
+        return render_template("iniciarSesion.html")
    
     return redirect('/MisReservas')    
   
