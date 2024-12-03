@@ -1,6 +1,6 @@
 {% extends "bloque.html" %}
 
-{% block title %}Inicio - Mi Página Web{% endblock %}
+{% block title %}Reservas{% endblock %}
 
 {% block content %}
 <div class="page-container" style="display: flex; flex-direction: column; height: 100vh;">
@@ -18,30 +18,28 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row form-map-container">
+        <div class="col-md-6 form-container">
             <form id="request" class="main_form" onsubmit="submitReserva(event)">
                 <div class="row">
                     <div class="col-md-12">
                         <input class="contactus" placeholder="Email" type="email" name="Email" id="Email" required>
                     </div>
                     <div class="col-md-12">
-                        <input class="contactus" placeholder="Fecha de ingreso" type="date" id="Ingreso" name="Ingreso"
-                            required>
+                        <input class="contactus" placeholder="Fecha de ingreso" type="date" id="Ingreso" name="Ingreso" required>
                     </div>
                     <div class="col-md-12">
-                        <input class="contactus" placeholder="Fecha de egreso" type="date" id="Egreso" name="Egreso"
-                            required>
+                        <input class="contactus" placeholder="Fecha de egreso" type="date" id="Egreso" name="Egreso" required>
                     </div>
                     <div class="col-md-12">
                         <select class="contactus" id="hotel_id" name="hotel_id" required>
-                            <option value="" disabled selected>Selecciona un hotel</option>
+                            <option value="">Selecciona un hotel</option>
                             {% for hotel in hoteles %}
-                            {% if hotel.habilitado %}
-                            <option value="{{ hotel.hotel_id }}" data-ubicacion="{{ hotel.ubicacion }}">
-                                {{ hotel.nombre }}
-                            </option>
-                            {% endif %}
+                                {% if hotel.habilitado %}
+                                    <option value="{{ hotel.hotel_id }}" data-ubicacion="{{ hotel.ubicacion }}" {% if hotel.hotel_id == hotel_id %}selected{% endif %}>
+                                        {{ hotel.nombre }}
+                                    </option>
+                                {% endif %}
                             {% endfor %}
                         </select>
                     </div>
@@ -56,12 +54,12 @@
                 </div>
             </form>
         </div>
-        <div class="col-md-6 padding-top">
+        <div class="col-md-6 map-container">
             <div id="map" style="width: 100%; height: 100%;"></div>
         </div>
     </div>
 </div>
+
 <script src="{{ url_for('static', filename = 'js/reservas.js') }}"></script>
 <script src="{{ url_for('static', filename = 'js/google-map.js') }}"></script>
-
 {% endblock %}

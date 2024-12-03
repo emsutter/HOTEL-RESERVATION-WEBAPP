@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="title">
-                                <h2>TUS RESEVAS</h2>
+                                <h2>TUS RESERVAS</h2>
                                 <div style="height: 5px;"></div>
                             </div>
                         </div>
@@ -34,7 +34,7 @@
                     {% for reserva in reservas %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ reserva.fecha_ingreso }}</td>
+                        <td>{{ reserva.fecha_ingreso }} - {{ reserva.fecha_egreso }}</td>
                         <td>{{ reserva.habilitado }}</td>
                         <td>{{ reserva.hotel_id }}</td>
                         <td>{{ reserva.reservas_id }}</td>
