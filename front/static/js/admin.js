@@ -1,15 +1,6 @@
     // Envia la informacion del hotel a la API para agregarlo a la base de datos
 
 document.addEventListener("DOMContentLoaded", function () {
-    const buttons = document.getElementsByClassName('toggle-hotel-btn');
-
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener('click', function (event) {
-            const hotelId = event.target.dataset.hotelId;
-            toggleHotelStatus(hotelId, event.target);
-        });
-    }
-
     const form = document.getElementById('form-agregar-hotel');
 
     document.getElementById("agregar-imagen").addEventListener("click", function () {
@@ -63,9 +54,6 @@ function toggleHotelStatus(hotelId, button) {
     const confirmMessage = isDeshabilitado ?
         "¿Estás seguro de que quieres habilitar este hotel?" :
         "¿Estás seguro de que quieres deshabilitar este hotel?";
-
-    
-        
 
     if (confirm(confirmMessage)) {
         fetch(`/admin/${action}_hotel/${hotelId}`, {
@@ -160,17 +148,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 alert('Error al agregar la habitación');
             });
     });
-
-    // Aca empieza el codigo para deshabilitar habitacion
-
-    const buttons = document.getElementsByClassName('toggle-habitacion-btn');
-
-    for (let i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener('click', function (event) {
-            const habitacionId = event.target.dataset.habitacionId;
-            toggleHabitacionStatus(habitacionId, event.target);
-        });
-    }
 });
 
     // Agrega la habitacion recien creada a la tabla de habitaciones
@@ -283,10 +260,6 @@ function addServicioRow(servicio) {
     const tableBody = document.getElementById('servicios-table-body');
     const row = document.createElement('tr');
     row.id = `servicio-row-${servicio.servicio_id}`;
-    row.className = servicio.habilitado ? '' : 'deshabilitado';
-
-    const habilitadoClass = servicio.habilitado ? '' : 'deshabilitado';
-    const buttonText = servicio.habilitado ? 'Deshabilitar' : 'Habilitar';
 
     row.innerHTML = `
         <td>${servicio.servicio_id}</td>
@@ -294,8 +267,8 @@ function addServicioRow(servicio) {
         <td>${servicio.descripcion}</td>
         <td>${servicio.categoria}</td>
         <td>
-            <button class="toggle-servicio-btn ${habilitadoClass}" data-servicio-id="${servicio.servicio_id}">
-                ${buttonText}
+            <button class="toggle-servicio-btn" data-servicio-id="${servicio.servicio_id}">
+                Deshabilitar
             </button>
         </td>
         `;
@@ -324,7 +297,7 @@ function toggleServicioStatus(servicioId, button) {
         })
             .then(response => {
                 if (response.ok) {
-                    alert(`servicio ${isDeshabilitado ? 'habilitada' : 'deshabilitada'} correctamente`);
+                    alert(`servicio ${isDeshabilitado ? 'habilitado' : 'deshabilitado'} correctamente`);
                     button.classList.toggle('deshabilitado');
                     button.textContent = isDeshabilitado ? 'Deshabilitar' : 'Habilitar';
                     document.getElementById(`servicio-row-${servicioId}`).classList.toggle('deshabilitado');
@@ -337,3 +310,32 @@ function toggleServicioStatus(servicioId, button) {
             });
     }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    const buttons_hotel = document.getElementsByClassName('toggle-hotel-btn');
+
+    for (let i = 0; i < buttons_hotel.length; i++) {
+        buttons_hotel[i].addEventListener('click', function (event) {
+            const hotelId = event.target.dataset.hotelId;
+            toggleHotelStatus(hotelId, event.target);
+        });
+    }
+
+    const buttons_serivicio = document.getElementsByClassName('toggle-servicio-btn');
+
+    for (let i = 0; i < buttons_serivicio.length; i++) {
+        buttons_serivicio[i].addEventListener('click', function (event) {
+            const servicioId = event.target.dataset.servicioId;
+            toggleServicioStatus(servicioId, event.target);
+        });
+    }
+
+    const buttons_habitacion = document.getElementsByClassName('toggle-habitacion-btn');
+
+    for (let i = 0; i < buttons_habitacion.length; i++) {
+        buttons_habitacion[i].addEventListener('click', function (event) {
+            const habitacionId = event.target.dataset.habitacionId;
+            toggleHabitacionStatus(habitacionId, event.target);
+        });
+    }
+});

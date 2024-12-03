@@ -50,7 +50,7 @@
                   <div class="full">
                      <div class="center-desk">
                         <div class="logo">
-                           <a href="#" id="logo">
+                           <a href="{{ url_for('home') }}" id="logo">
                               <img src="{{ url_for('static', filename='images/logo_hotel.png') }}" alt="#" />
                            </a>
                         </div>
@@ -136,7 +136,7 @@
    <!-- sidebar -->
    <script src="{{ url_for('static', filename = 'js/jquery.mCustomScrollbar.concat.min.js')  }}"></script>
    <script src="{{ url_for('static', filename = 'js/custom.js')  }}"></script>
-   <script>
+   <!-- <script>
       let clickCount = 0;
       const logoElement = document.getElementById("logo");
 
@@ -152,7 +152,7 @@
             console.log(`Haz hecho clic ${clickCount} veces`);
          }
       });
-   </script>
+   </script> -->
 
 </body>
 
